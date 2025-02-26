@@ -23,7 +23,7 @@ onMounted(() => {
         'sub-title-bg-color': '主题色1',
       },
       modules: {
-        'toolbar': TOOLBAR_CONFIG,
+        toolbar: TOOLBAR_CONFIG,
       },
     })
   })

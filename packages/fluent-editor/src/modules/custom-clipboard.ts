@@ -1,5 +1,3 @@
-import type { Parchment as TypeParchment } from 'quill'
-import type TypeBlock from 'quill/blots/block'
 import type TypeClipboard from 'quill/modules/clipboard'
 import type FluentEditor from '../fluent-editor'
 import Quill from 'quill'
@@ -160,7 +158,7 @@ class CustomClipboard extends Clipboard {
     const [line, offset] = this.quill.getLine(range.index)
 
     const handlePasteContent = (content: any) => {
-      let pastedContent = content
+      const pastedContent = content
 
       const oldDelta = new Delta().retain(linePos.index).delete(linePos.length)
       const delta = oldDelta.concat(pastedContent)

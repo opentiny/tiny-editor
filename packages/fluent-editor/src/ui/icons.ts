@@ -28,7 +28,6 @@ import {
   REDO_ICON,
   SCREENSHOT_ICON,
   STRIKE_ICON,
-  TABLE_ICON,
   UNDERLINE_ICON,
   UNDO_ICON,
 } from './icons.config'

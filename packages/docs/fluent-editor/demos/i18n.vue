@@ -13,13 +13,13 @@ onMounted(() => {
     editor = new FluentEditor(editorRef.value, {
       theme: 'snow',
       modules: {
-        'toolbar': [
+        toolbar: [
           ['bold', 'italic', 'strike', 'underline'],
           ['link', 'image'],
           [{ color: [] }, { background: [] }],
         ],
-        'counter': true,
-        'i18n': {
+        counter: true,
+        i18n: {
           lang: lang.value,
         },
       },

@@ -1,6 +1,6 @@
 import { fileURLToPath, URL } from 'node:url'
-import { demoPreviewPlugin } from '@vitepress-code-preview/plugin'
 import packageJson from '@opentiny/fluent-editor/package.json' with { type: 'json'}
+import { demoPreviewPlugin } from '@vitepress-code-preview/plugin'
 import { defineConfig, loadEnv } from 'vitepress'
 import { sidebar } from './sidebar'
 

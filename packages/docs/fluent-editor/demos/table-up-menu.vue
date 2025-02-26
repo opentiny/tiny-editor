@@ -1,11 +1,4 @@
 <script setup lang="ts">
-import {
-  defaultCustomSelect,
-  TableMenuContextmenu,
-  TableMenuSelect,
-  TableSelection,
-  TableUp,
-} from 'quill-table-up'
 import { onMounted, ref } from 'vue'
 import 'quill-table-up/index.css'
 import 'quill-table-up/table-creator.css'
@@ -25,7 +18,13 @@ const TOOLBAR_CONFIG = [
 
 onMounted(() => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
-  import('@opentiny/fluent-editor').then(({ default: FluentEditor, generateTableUp }) => {
+  Promise.all([
+    import('@opentiny/fluent-editor'),
+    import('quill-table-up'),
+  ]).then(([
+    { default: FluentEditor, generateTableUp, generateTableUpShortKeyMenu },
+    { defaultCustomSelect, TableMenuContextmenu, TableMenuSelect, TableSelection, TableUp },
+  ]) => {
     FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)
     if (editorSelectRef.value) {
       editorSelect = new FluentEditor(editorSelectRef.value, {
