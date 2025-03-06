@@ -11,7 +11,7 @@
 
 ## 获取 Delta 内容
 
-通过调用 `editor.getContent()` 方法获取编辑器的 Delta 内容。
+通过调用 `editor.getContents()` 方法获取编辑器的 Delta 内容。
 
 :::demo src=demos/get-content-delta.vue
 :::
