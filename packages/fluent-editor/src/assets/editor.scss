@@ -224,23 +224,6 @@
     // 任务列表
     @include tasklist;
 
-    // 图片
-    .ql-image-container {
-      margin-bottom: 10px;
-
-      img {
-        margin-bottom: 0;
-      }
-
-      &::after {
-        content: '';
-        display: block;
-        height: 0;
-        clear: both;
-        visibility: hidden;
-      }
-    }
-
     img {
       max-width: 100%;
 

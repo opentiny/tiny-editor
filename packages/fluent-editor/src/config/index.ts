@@ -4,26 +4,19 @@ export * from './editor.config'
 export * from './editor.utils'
 
 // 触发上传
-export function inputFile(type, accept) {
-  const defaultMIMETypes = this.quill.uploader.options[type].join(', ')
-  const mimeTypes = accept || defaultMIMETypes
+export function inputFile(type: 'image' | 'video' | 'file', accept: string[]) {
+  if (accept.length <= 0) return
   let fileInput = this.container.querySelector(`input.ql-${type}[type=file]`)
-  this.quill.uploader.options.enableMultiUpload = this.quill.options.uploadOption?.multiple
   if (isNullOrUndefined(fileInput)) {
     fileInput = document.createElement('input')
+    fileInput.style.display = 'none'
     fileInput.classList.add(`ql-${type}`)
     fileInput.setAttribute('type', 'file')
-    fileInput.setAttribute('accept', mimeTypes)
-    if (
-      this.quill.uploader.options.enableMultiUpload === true
-      || (this.quill.uploader.options.enableMultiUpload?.file && type === 'file')
-      || (this.quill.uploader.options.enableMultiUpload?.image && type === 'image')
-    ) {
-      fileInput.setAttribute('multiple', '')
-    }
+    fileInput.setAttribute('accept', accept.map(mime => mime === '*' ? `${type}/*` : mime).join(','))
+    fileInput.setAttribute('multiple', '')
     fileInput.addEventListener('change', () => {
       const range = this.quill.getSelection(true)
-      this.quill.uploader.upload(range, fileInput.files, type === 'file')
+      this.quill.uploader.upload(range, fileInput.files)
       fileInput.value = ''
     })
     this.container.appendChild(fileInput)

@@ -1,5 +1,6 @@
 import type { ExpandedQuillOptions } from 'quill'
 import type { IEditorConfig } from '../config/types'
+import type { FileUploader } from '../modules/custom-uploader'
 import Quill from 'quill'
 import { defaultLanguage } from '../config'
 import I18N from '../modules/i18n'
@@ -7,6 +8,7 @@ import I18N from '../modules/i18n'
 class FluentEditor extends Quill {
   isFullscreen: boolean = false
   options: IEditorConfig & ExpandedQuillOptions
+  uploader: FileUploader
 
   static register(...args: any[]): void {
     super.register(...args as Parameters<typeof Quill.register>)

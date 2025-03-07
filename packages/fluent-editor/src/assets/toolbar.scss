@@ -129,11 +129,6 @@ $splitPadding: 20px; // 分隔线左/右间距
     .ql-picker.ql-header {
       @include toolbarPicker('', 98px);
     }
-
-    // 文件
-    input.ql-file[type='file'] {
-      display: none;
-    }
   }
 
   .ql-formats {

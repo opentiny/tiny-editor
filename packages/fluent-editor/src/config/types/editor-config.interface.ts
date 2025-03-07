@@ -13,17 +13,6 @@ export interface IEditorConfig extends QuillOptions {
   // Auto protocol for link
   autoProtocol?: boolean | string
   editorPaste?: any
-  uploadOption?: {
-    imageUpload?: ({ file, callback, editor }) => void
-    imageAccept?: Array<string>[] | string
-    fileAccept?: Array<string>[] | string
-    fileUpload: ({ file, callback, editor }) => void
-    isVideoPlay?: boolean
-    maxSize?: number
-    success?: (file: File) => void
-    fail?: (file: File) => void
-    multiple?: boolean
-  }
   screenshot?: Partial<ScreenShotOptions>
   i18n?: {
     lang?: string

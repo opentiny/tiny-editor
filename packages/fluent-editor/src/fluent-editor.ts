@@ -8,7 +8,7 @@ import Video from './formats/video' // 视频
 import Counter from './modules/counter' // 字符统计
 import CustomClipboard from './modules/custom-clipboard' // 粘贴板
 import Image from './modules/custom-image/BlotFormatter' // 图片
-import Uploader from './modules/custom-uploader' // 上传
+import { FileUploader } from './modules/custom-uploader' // 上传
 import DividerBlot from './modules/divider' // 分割线
 import Emoji from './modules/emoji' // 表情
 import FileModule from './modules/file' // 文件
@@ -60,7 +60,7 @@ FluentEditor.register(
     'modules/mention': Mention,
     'modules/syntax': Syntax,
     'modules/toolbar': Toolbar,
-    'modules/uploader': Uploader,
+    'modules/uploader': FileUploader,
     'modules/shortcut-key': ShortCutKey,
 
     'themes/snow': SnowTheme,

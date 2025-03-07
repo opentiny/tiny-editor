@@ -1,26 +1,23 @@
+import type FluentEditor from '../../core/fluent-editor'
 import Quill from 'quill'
 import File from './formats/file'
 import FileBar from './modules/file-bar'
 
-const Module = Quill.imports['core/module']
-
-class FileModule extends Module {
-  quill: any
+class FileModule {
   fileBar: FileBar
 
   static register() {
     Quill.register('formats/file', File, true)
   }
 
-  constructor(quill, options) {
-    super(quill, options)
+  constructor(public quill: FluentEditor) {
     this.quill = quill
     quill.root.addEventListener('click', event => this.clickEvent(event), false)
   }
 
-  clickEvent(event) {
+  clickEvent(event: MouseEvent) {
     event.preventDefault()
-    const target = event.target
+    const target = event.target as HTMLElement
     const fileDom = target.closest('a.ql-file-item')
     if (fileDom) {
       if (this.fileBar) {
