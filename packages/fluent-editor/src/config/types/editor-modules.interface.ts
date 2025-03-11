@@ -1,3 +1,4 @@
+import type { FileUploaderOptions } from '../../modules/custom-uploader'
 import type { ToolbarOption } from './type'
 
 export interface IEditorModules {
@@ -38,4 +39,5 @@ export interface IEditorModules {
       }
     }
     | boolean
+  uploader?: boolean | Partial<FileUploaderOptions>
 }

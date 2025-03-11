@@ -42,12 +42,22 @@ OriginSnowTheme.DEFAULTS = {
           this.quill.history.redo()
         },
         'file': function () {
-          const accept = this.quill.options?.uploadOption?.fileAccept
+          const accept = this.quill.uploader.options.mimetypes
           inputFile.call(this, 'file', accept)
         },
         'image': function () {
-          const accept = this.quill.options?.uploadOption?.imageAccept
+          const accept = (this.quill as FluentEditor).uploader.options.mimetypes.filter((type) => {
+            if (type === '*') return 'image/*'
+            return type.startsWith('image/')
+          })
           inputFile.call(this, 'image', accept)
+        },
+        'video': function () {
+          const accept = (this.quill as FluentEditor).uploader.options.mimetypes.filter((type) => {
+            if (type === '*') return 'video/*'
+            return type.startsWith('video/')
+          })
+          inputFile.call(this, 'video', accept)
         },
         'emoji': function () {},
         'fullscreen': fullscreenHandler,
@@ -80,6 +90,7 @@ OriginSnowTheme.DEFAULTS = {
       },
     },
     'shortcut-key': true,
+    'file': true,
   },
 }
 

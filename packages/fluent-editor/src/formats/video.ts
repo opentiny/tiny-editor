@@ -56,7 +56,7 @@ class Video extends BlockEmbed {
 Video.blotName = 'video'
 Video.tagName = 'VIDEO'
 Video.SANITIZED_URL = 'about:blank'
-Video.PROTOCOL_WHITELIST = ['http', 'https']
-Video.className = 'ql-video-item'
+Video.PROTOCOL_WHITELIST = ['http', 'https', 'blob']
+Video.className = 'ql-video'
 
 export default Video

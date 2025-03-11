@@ -1,12 +1,11 @@
+import type TypeEmbed from 'quill/blots/embed'
 import Quill from 'quill'
 import { isNullOrUndefined, sanitize } from '../../config/editor.utils'
 
-const Embed = Quill.imports['blots/embed']
-const Inline = Quill.imports['blots/inline']
-
+const Embed = Quill.import('blots/embed') as typeof TypeEmbed
 const ATTRIBUTES = ['alt', 'height', 'width', 'image-id']
 
-// @dynamic
+export type ImageValue = string | { src: string }
 class CustomImage extends Embed {
   static ID_SEED = 0
   static blotName: string
@@ -15,8 +14,8 @@ class CustomImage extends Embed {
   parent: any
   scroll: any
   next: any
-  static create(value) {
-    const node = super.create(value)
+  static create(value: ImageValue) {
+    const node = super.create(value) as HTMLElement
     const url = typeof value === 'string' ? value : value.src
     if (url) {
       const imgURL = this.sanitize(url)
@@ -26,7 +25,7 @@ class CustomImage extends Embed {
       node.setAttribute('src', imgURL)
     }
     node.setAttribute('data-image-id', `img${CustomImage.ID_SEED++}`)
-    node.setAttribute('devui-editorx-image', true)
+    node.setAttribute('devui-editorx-image', 'true')
     node.style.verticalAlign = 'baseline'
     return node
   }
@@ -48,13 +47,13 @@ class CustomImage extends Embed {
     if (/Firefox/i.test(navigator.userAgent)) {
       setTimeout(() => {
         // Disable image resizing in Firefox
-        document.execCommand('enableObjectResizing', false, false)
+        document.execCommand('enableObjectResizing', false, 'false')
       }, 1)
     }
   }
 
   static sanitize(url) {
-    return sanitize(url, ['http', 'https', 'data']) ? url : '//:0'
+    return sanitize(url, ['http', 'https', 'blob', 'data']) ? url : '//:0'
   }
 
   static value(domNode) {
@@ -99,20 +98,4 @@ class CustomImage extends Embed {
 CustomImage.blotName = 'image'
 CustomImage.tagName = 'IMG'
 
-// @dynamic
-class CustomImageContainer extends Inline {
-  static tagName: string
-  static className: string
-  static blotName: string
-  static allowedChildren: typeof CustomImage[]
-  constructor(scroll, domNode) {
-    super(scroll, domNode)
-    domNode.setAttribute('contenteditable', false)
-  }
-}
-CustomImageContainer.blotName = 'image-container'
-CustomImageContainer.className = 'ql-image-container'
-CustomImageContainer.tagName = 'DIV'
-
-CustomImageContainer.allowedChildren = [CustomImage]
-export { CustomImage as default, CustomImageContainer as ImageContainerBlot }
+export { CustomImage as default }

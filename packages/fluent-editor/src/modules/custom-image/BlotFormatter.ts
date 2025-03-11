@@ -3,7 +3,7 @@ import type { Options } from './Options'
 import type BlotSpec from './specs/BlotSpec'
 import { merge as deepmerge } from 'lodash-es'
 import Quill from 'quill'
-import ImageBlot, { ImageContainerBlot } from './image'
+import ImageBlot from './image'
 import ImageBar from './image-bar'
 import DefaultOptions from './Options'
 import { CustomImageSpec } from './specs/CustomImageSpec'
@@ -24,7 +24,6 @@ export default class BlotFormatter {
 
   static register() {
     Quill.register('formats/image', ImageBlot, true)
-    Quill.register('formats/image-container', ImageContainerBlot, true)
     Quill.register('modules/image-spec', CustomImageSpec, true)
   }
 
