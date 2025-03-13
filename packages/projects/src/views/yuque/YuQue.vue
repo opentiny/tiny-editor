@@ -1,25 +1,68 @@
 <script setup lang="ts">
-import FluentEditor from '@opentiny/fluent-editor'
+import FluentEditor, { generateTableUp, generateTableUpShortKeyMenu } from '@opentiny/fluent-editor'
 import HeaderList from 'quill-header-list'
+import { defaultCustomSelect, TableMenuContextmenu, TableMenuSelect, TableSelection, TableUp, TableResizeLine, TableResizeScale, createSelectBox } from 'quill-table-up'
 import { onMounted, ref } from 'vue'
 
 FluentEditor.register({ 'modules/header-list': HeaderList }, true)
+FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)
+
+const { tableUpConfig, tableUpKeyboardControl } = generateTableUpShortKeyMenu(createSelectBox)
+tableUpConfig.title = '_i18n"table"'
 
 let editor
 const headerListRef = ref()
+
+const title = ref('测试文档')
+
+const TOOLBAR_CONFIG = [
+  ['undo', 'redo', 'format-painter', 'clean'],
+  [
+    { header: [false, 1, 2, 3, 4, 5, 6] },
+    { size: ['12px', '13px', '14px', '15px', '16px', '19px', '22px', '24px', '29px', '32px', '40px', '48px'] },
+    'bold', 'italic', 'strike', 'underline', { script: 'super' }, { script: 'sub' }, 'code'
+  ],
+  [{ color: [] }, { background: [] }],
+  [
+    { align: ['', 'center', 'right', 'justify'] },
+    { list: 'ordered' }, { list: 'bullet' },
+    { indent: '+1' }, { indent: '-1' },
+    { 'line-height': ['1', '1.15', '1.5', '2', '2.5', '3'] }
+  ],
+  [{ list: 'check' }, 'link', 'blockquote', 'divider'],
+  [{ 'table-up': [] }, 'header-list'],
+]
 
 onMounted(() => {
   editor = new FluentEditor('#editor', {
     theme: 'snow',
     modules: {
       'toolbar': {
-        container: '#toolbar',
+        container: TOOLBAR_CONFIG,
         handlers: {
           'header-list': HeaderList.toolbarHandle,
         },
       },
       'header-list': {
         container: headerListRef.value,
+      },
+      'table-up': {
+        customSelect: defaultCustomSelect,
+        selection: TableSelection,
+        selectionOptions: {
+          tableMenu: TableMenuContextmenu,
+        },
+        resize: TableResizeLine,
+        resizeScale: TableResizeScale,
+      },
+      'shortcut-key': {
+        menuItems: [tableUpConfig],
+        isMenuItemsAdd: true,
+        menuKeyboardControls(event, data) {
+          let result = false
+          result = tableUpKeyboardControl(event, data) || result
+          return result
+        },
       },
     },
   })
@@ -30,201 +73,14 @@ onMounted(() => {
   <div
     class="fixed top-0 z-1 h-[52px] w-full flex items-center pl-[16px] bg-white"
   >
-    <RouterLink to="/">
+    <RouterLink to="/" class="hidden">
       &lt;返回
     </RouterLink>
-  </div>
-  <div
-    id="toolbar"
-    class="!fixed z-1 h-[42px] w-full top-[52px] !border-l-0 !border-r-0 !border-[rgba(0,0,0,0.04)] text-center"
-  >
-    <span class="ql-formats">
-      <button class="ql-undo" />
-      <button class="ql-redo" />
-      <button class="ql-format-painter" />
-      <button class="ql-clean" />
-    </span>
-    <span class="ql-formats">
-      <select class="ql-header">
-        <option value="" />
-        <option value="1" />
-        <option value="2" />
-        <option value="3" />
-        <option value="4" />
-        <option value="5" />
-        <option value="6" />
-      </select>
-      <select class="ql-size">
-        <option value="12px" />
-        <option value="13px" />
-        <option value="14px" />
-        <option value="15px" />
-        <option value="16px" />
-        <option value="19px" />
-        <option value="22px" />
-        <option value="24px" />
-        <option value="29px" />
-        <option value="32px" />
-        <option value="40px" />
-        <option value="48px" />
-      </select>
-      <button class="ql-bold" />
-      <button class="ql-italic" />
-      <button class="ql-strike" />
-      <button class="ql-underline" />
-      <button class="ql-script" value="super" />
-      <button class="ql-script" value="sub" />
-      <button class="ql-code" />
-    </span>
-    <span class="ql-formats">
-      <select class="ql-color">
-        <option value="rgb(0, 0, 0)" />
-        <option value="rgb(38, 38, 38)" />
-        <option value="rgb(88, 90, 90)" />
-        <option value="rgb(138, 143, 141)" />
-        <option value="rgb(216, 218, 217)" />
-        <option value="rgb(231, 233, 232)" />
-        <option value="rgb(239, 240, 240)" />
-
-        <option value="rgb(223, 42, 63)" />
-        <option value="rgb(237, 116, 12)" />
-        <option value="rgb(236, 170, 4)" />
-        <option value="rgb(251, 222, 40)" />
-        <option value="rgb(116, 182, 2)" />
-        <option value="rgb(29, 192, 201)" />
-        <option value="rgb(17, 124, 238)" />
-
-        <option value="rgb(251, 228, 231)" />
-        <option value="rgb(253, 230, 211)" />
-        <option value="rgb(249, 239, 205)" />
-        <option value="rgb(251, 245, 203)" />
-        <option value="rgb(232, 247, 207)" />
-        <option value="rgb(206, 245, 247)" />
-        <option value="rgb(217, 234, 252)" />
-
-        <option value="rgb(241, 162, 171)" />
-        <option value="rgb(248, 184, 129)" />
-        <option value="rgb(245, 212, 128)" />
-        <option value="rgb(252, 231, 90)" />
-        <option value="rgb(193, 231, 126)" />
-        <option value="rgb(129, 223, 228)" />
-        <option value="rgb(129, 187, 248)" />
-
-        <option value="rgb(228, 73, 91)" />
-        <option value="rgb(243, 143, 57)" />
-        <option value="rgb(243, 187, 47)" />
-        <option value="rgb(237, 206, 2)" />
-        <option value="rgb(140, 207, 23)" />
-        <option value="rgb(1, 178, 188)" />
-        <option value="rgb(47, 142, 244)" />
-
-        <option value="rgb(173, 26, 43)" />
-        <option value="rgb(199, 92, 0)" />
-        <option value="rgb(201, 145, 3)" />
-        <option value="rgb(165, 143, 4)" />
-        <option value="rgb(92, 141, 7)" />
-        <option value="rgb(7, 120, 126)" />
-        <option value="rgb(12, 104, 202)" />
-
-        <option value="rgb(112, 0, 13)" />
-        <option value="rgb(102, 48, 0)" />
-        <option value="rgb(102, 73, 0)" />
-        <option value="rgb(102, 88, 0)" />
-        <option value="rgb(42, 66, 0)" />
-        <option value="rgb(0, 67, 71)" />
-        <option value="rgb(0, 52, 107)" />
-      </select>
-      <select class="ql-background">
-        <option value="rgb(0, 0, 0)" />
-        <option value="rgb(38, 38, 38)" />
-        <option value="rgb(88, 90, 90)" />
-        <option value="rgb(138, 143, 141)" />
-        <option value="rgb(216, 218, 217)" />
-        <option value="rgb(231, 233, 232)" />
-        <option value="rgb(239, 240, 240)" />
-
-        <option value="rgb(223, 42, 63)" />
-        <option value="rgb(237, 116, 12)" />
-        <option value="rgb(236, 170, 4)" />
-        <option value="rgb(251, 222, 40)" />
-        <option value="rgb(116, 182, 2)" />
-        <option value="rgb(29, 192, 201)" />
-        <option value="rgb(17, 124, 238)" />
-
-        <option value="rgb(251, 228, 231)" />
-        <option value="rgb(253, 230, 211)" />
-        <option value="rgb(249, 239, 205)" />
-        <option value="rgb(251, 245, 203)" />
-        <option value="rgb(232, 247, 207)" />
-        <option value="rgb(206, 245, 247)" />
-        <option value="rgb(217, 234, 252)" />
-
-        <option value="rgb(241, 162, 171)" />
-        <option value="rgb(248, 184, 129)" />
-        <option value="rgb(245, 212, 128)" />
-        <option value="rgb(252, 231, 90)" />
-        <option value="rgb(193, 231, 126)" />
-        <option value="rgb(129, 223, 228)" />
-        <option value="rgb(129, 187, 248)" />
-
-        <option value="rgb(228, 73, 91)" />
-        <option value="rgb(243, 143, 57)" />
-        <option value="rgb(243, 187, 47)" />
-        <option value="rgb(237, 206, 2)" />
-        <option value="rgb(140, 207, 23)" />
-        <option value="rgb(1, 178, 188)" />
-        <option value="rgb(47, 142, 244)" />
-
-        <option value="rgb(173, 26, 43)" />
-        <option value="rgb(199, 92, 0)" />
-        <option value="rgb(201, 145, 3)" />
-        <option value="rgb(165, 143, 4)" />
-        <option value="rgb(92, 141, 7)" />
-        <option value="rgb(7, 120, 126)" />
-        <option value="rgb(12, 104, 202)" />
-
-        <option value="rgb(112, 0, 13)" />
-        <option value="rgb(102, 48, 0)" />
-        <option value="rgb(102, 73, 0)" />
-        <option value="rgb(102, 88, 0)" />
-        <option value="rgb(42, 66, 0)" />
-        <option value="rgb(0, 67, 71)" />
-        <option value="rgb(0, 52, 107)" />
-      </select>
-    </span>
-    <span class="ql-formats">
-      <select class="ql-align">
-        <option value="" />
-        <option value="center" />
-        <option value="right" />
-        <option value="justify" />
-      </select>
-      <button class="ql-list" value="ordered" />
-      <button class="ql-list" value="bullet" />
-      <button class="ql-indent" value="+1" />
-      <button class="ql-indent" value="-1" />
-      <select class="ql-lineheight">
-        <option value="1" />
-        <option value="1.15" />
-        <option value="1.5" />
-        <option value="2" />
-        <option value="2.5" />
-        <option value="3" />
-      </select>
-    </span>
-    <span class="ql-formats">
-      <button class="ql-list" value="check" />
-      <button class="ql-link" />
-      <button class="ql-blockquote" />
-      <button class="ql-divider" />
-    </span>
-    <span class="ql-formats">
-      <button class="ql-header-list" />
-    </span>
+    <span>{{ title }}</span>
   </div>
   <div class="!mt-[94px]">
     <div class="flex justify-center pt-[33px] pb-[26px]">
-      <textarea placeholder="请输入标题" class="w-[750px] text-[#262626] h-[54px] outline-none resize-none text-[36px] font-bold placeholder-[#bfbfbf]">测试文档</textarea>
+      <textarea placeholder="请输入标题" class="w-[750px] text-[#262626] h-[54px] outline-none resize-none text-[36px] font-bold placeholder-[#bfbfbf]" v-model="title"></textarea>
     </div>
     <div id="editor" class="!border-0 max-w-[750px] !ml-auto !mr-auto">
       <p>
@@ -495,5 +351,19 @@ onMounted(() => {
     background-color: #0000000f !important;
     border-color: #e7e9e8;
   }
+}
+
+.ql-toolbar {
+  position: fixed !important;
+  z-index: 1;
+  height: 42px;
+  width: 100%;
+  top: 52px;
+  padding-left: 16px !important;
+  background-color: #fff !important;
+  border-left: 0;
+  border-right: 0;
+  border-color: #0000000a !important;
+  text-align: center;
 }
 </style>

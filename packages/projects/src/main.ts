@@ -7,7 +7,7 @@ import YuQueView from './views/yuque/YuQue.vue'
 import './style.css'
 
 const routes = [
-  { path: '/', component: HomeView },
+  { path: '/', component: YuQueView },
   { path: '/yuque', component: YuQueView },
   { path: '/:pathMatch(.*)', component: NotFoundComponent },
 ]
