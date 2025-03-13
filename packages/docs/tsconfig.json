@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "jsx": "preserve",
+    "lib": ["esnext", "dom"],
+    "baseUrl": ".",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "paths": {
+      "@opentiny/fluent-editor": ["../fluent-editor/src"]
+    },
+    "resolveJsonModule": true,
+    "types": ["vite/client"],
+    "strict": true,
+    "sourceMap": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "./fluent-editor/**/*",
+    "../fluent-editor/**/*"
+  ]
+}

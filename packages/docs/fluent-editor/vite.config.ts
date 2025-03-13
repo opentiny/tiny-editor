@@ -8,6 +8,10 @@ export default defineConfig({
   resolve: {
     alias: [
       {
+        find: '@opentiny/fluent-editor/pacakge.json',
+        replacement: path.resolve(fluentEditorRoot, 'pacakge.json'),
+      },
+      {
         find: '@opentiny/fluent-editor/style.scss',
         replacement: path.resolve(fluentEditorRoot, 'src/assets/style.scss'),
       },
