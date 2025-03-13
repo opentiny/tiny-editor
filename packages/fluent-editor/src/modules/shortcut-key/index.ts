@@ -7,12 +7,11 @@ import Quill from 'quill'
 import QuillShortcutKey, { defaultShortKey, searchAndSort } from 'quill-shortcut-key'
 import { CHANGE_LANGUAGE_EVENT } from '../../config'
 
-interface ShortCutKeyCustomOptions { isMenuItemsAdd: boolean }
-type ShortCutKeyInputOptions = QuillShortcutKeyInputOptions & ShortCutKeyCustomOptions
-type ShortCutKeyOptions = QuillShortcutKeyOptions & ShortCutKeyCustomOptions
+export interface ShortCutKeyCustomOptions { isMenuItemsAdd: boolean }
+export type ShortCutKeyInputOptions = QuillShortcutKeyInputOptions & ShortCutKeyCustomOptions
+export type ShortCutKeyOptions = QuillShortcutKeyOptions & ShortCutKeyCustomOptions
 
 export class ShortCutKey extends QuillShortcutKey {
-  options: ShortCutKeyOptions
   constructor(public quill: FluentEditor, options: Partial<ShortCutKeyInputOptions>) {
     super(quill, options)
 
@@ -59,7 +58,7 @@ export class ShortCutKey extends QuillShortcutKey {
   defaultMenuList() {
     const icons = Quill.import('ui/icons') as Record<string, any>
     const toolbarHandler = (format: string) => {
-      return function (range: Range | null) {
+      return function (this: Quill, range: Range | null) {
         if (!range) return
         const toolbarModule = this.getModule('toolbar') as TypeToolbar
         if (!toolbarModule) return
@@ -211,7 +210,7 @@ export const shortKey = {
   link: {
     key: 'k',
     shortKey: true,
-    handler(_, context: Context) {
+    handler(this: { quill: Quill }, _: any, context: Context) {
       const toolbar = this.quill.getModule('toolbar') as TypeToolbar
       if (!toolbar) return
       toolbar.handlers.link.call(toolbar, !context.format.link)
@@ -221,8 +220,8 @@ export const shortKey = {
     key: 'c',
     altKey: true,
     shortKey: true,
-    handler() {
-      const selected = this.quill.getModule('toolbar').container.querySelector('.ql-color.ql-color-picker .ql-picker-options .ql-selected')
+    handler(this: { quill: Quill }) {
+      const selected = (this.quill.getModule('toolbar') as TypeToolbar).container!.querySelector('.ql-color.ql-color-picker .ql-picker-options .ql-selected') as HTMLElement
       this.quill.format('color', selected?.dataset?.value || false, Quill.sources.USER)
     },
   },
@@ -230,8 +229,8 @@ export const shortKey = {
     key: 'b',
     altKey: true,
     shortKey: true,
-    handler() {
-      const selected = this.quill.getModule('toolbar').container.querySelector('.ql-background.ql-color-picker .ql-picker-options .ql-selected')
+    handler(this: { quill: Quill }) {
+      const selected = (this.quill.getModule('toolbar') as TypeToolbar).container!.querySelector('.ql-background.ql-color-picker .ql-picker-options .ql-selected') as HTMLElement
       this.quill.format('background', selected?.dataset?.value || false, Quill.sources.USER)
     },
   },

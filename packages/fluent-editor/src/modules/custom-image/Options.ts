@@ -1,4 +1,4 @@
-import ImageSpec from './specs/ImageSpec'
+import { ImageSpec } from './specs'
 
 export interface OverlayOptions {
   // classname applied to the overlay element

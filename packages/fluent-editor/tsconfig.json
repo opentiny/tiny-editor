@@ -5,9 +5,9 @@
     "experimentalDecorators": true,
     "baseUrl": "./",
     "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
-    "types": ["vite/client", "@types/node", "@types/jest"],
+    "types": ["@types/node"],
     "strict": true,
     // 不允许this有隐式的any类型
     "strictNullChecks": false,

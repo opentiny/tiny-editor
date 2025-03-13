@@ -3,8 +3,8 @@ import type { Root } from 'parchment'
 import Quill from 'quill'
 
 const Parchment = Quill.import('parchment')
-type MathliveBlotMode = 'dialog' | 'only-read'
-export default class MathliveBlot extends Parchment.EmbedBlot {
+export type MathliveBlotMode = 'dialog' | 'only-read'
+export class MathliveBlot extends Parchment.EmbedBlot {
   static blotName = 'mathlive'
   static tagName = 'math-field'
   static className = 'ql-math-field'

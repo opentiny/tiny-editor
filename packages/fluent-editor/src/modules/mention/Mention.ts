@@ -1,13 +1,13 @@
 import Quill from 'quill'
 import { isNullOrUndefined } from '../../config/editor.utils'
 import { DEFAULT_MENTION_CHAR, ON_MENTION_LINK_REMOVE } from './constants'
-import MentionLink from './MentionLink'
+import { MentionLink } from './mention-link'
 
 const Delta = Quill.import('delta')
 const Parchment = Quill.import('parchment')
 const { Scope } = Parchment
 
-interface MentionOption {
+export interface MentionOption {
   containerClass?: string
   // dataAttributes?: string[]
   defaultLink?: string
@@ -21,14 +21,13 @@ interface MentionOption {
   remove?: (data: any) => void
   renderMentionItem?: (data: any) => string | HTMLElement
   renderMentionText?: (data: any) => string | HTMLElement
-  search?: (term: string) => Promise<any[]>
+  search?: (term: string) => Promise<any[]> | any[]
   searchKey: string
   select?: (data: any) => void
   target?: string
 }
 
-// @dynamic
-class Mention {
+export class Mention {
   private readonly options: MentionOption
   private readonly mentionListEL: HTMLUListElement
   private activeMentionIndex = 0
@@ -403,5 +402,3 @@ class Mention {
     this.quill.setSelection(this.latestMentionCharPos + 1, Quill.sources.API)
   }
 }
-
-export { Mention as default }

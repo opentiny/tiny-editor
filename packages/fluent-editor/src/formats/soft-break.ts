@@ -1,14 +1,12 @@
+import type TypeEmbed from 'quill/blots/embed'
 import Quill from 'quill'
 
-const Embed = Quill.imports['blots/embed']
+const Embed = Quill.import('blots/embed') as typeof TypeEmbed
 
-class SoftBreak extends Embed {
-  static blotName: string
-  static tagName: string
-  static className: string
-  domNode: any
-  prev: any
-  next: any
+export class SoftBreak extends Embed {
+  static blotName = 'soft-break'
+  static tagName = 'BR'
+  static className = 'ql-soft-break'
   remove: () => void
 
   static create() {
@@ -27,8 +25,3 @@ class SoftBreak extends Embed {
     return 1
   }
 }
-SoftBreak.blotName = 'soft-break'
-SoftBreak.tagName = 'BR'
-SoftBreak.className = 'ql-soft-break'
-
-export default SoftBreak

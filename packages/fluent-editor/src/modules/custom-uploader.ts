@@ -19,9 +19,9 @@ export interface FileUploaderOptions {
   fail: (this: { quill: FluentEditor }, file: File, range: Range) => void
 }
 export class FileUploader extends Uploader {
-  static DEFAULTS = {} as typeof Uploader.DEFAULTS
+  static DEFAULTS = {} as any
   // Partial<UploaderOptions> for ts type
-  options: Partial<UploaderOptions> & FileUploaderOptions
+  declare options: Partial<UploaderOptions> & FileUploaderOptions
   constructor(public quill: FluentEditor, options: Partial<FileUploaderOptions>) {
     super(quill, options as any)
     this.options = this.resolveOptions(options)

@@ -1,20 +1,21 @@
-import Quill from 'quill'
-import { Range } from 'quill/core/selection'
-import CustomImage from './image'
+import type { Parchment as TypeParchment } from 'quill'
+import type FluentEditor from '../../core/fluent-editor'
+import Quill, { Range } from 'quill'
+import { CustomImage } from './image'
 
 const Delta = Quill.import('delta')
 
-export default class ImageBar {
-  quill: Quill
+export type ImageOperateType = 'download' | 'copy' | 'delete'
+export class ImageBar {
   image: HTMLImageElement
   domNode: HTMLElement
-  imageRange: any
+  imageRange: Range
   template: string
 
-  constructor(quill, target) {
+  constructor(public quill: FluentEditor, target: HTMLImageElement) {
     this.quill = quill
     this.image = target
-    const imageBlot = Quill.find(target)
+    const imageBlot = Quill.find(target) as TypeParchment.Blot
     const index = this.quill.getIndex(imageBlot)
     const [imageItem, offset] = this.quill.scroll.descendant(CustomImage, index)
     const length = imageItem && imageItem.length()
@@ -70,7 +71,7 @@ export default class ImageBar {
     }
   }
 
-  async operateImage(event, operate) {
+  async operateImage(event: Event, operate: ImageOperateType) {
     event.preventDefault()
     const imageName = this.image.dataset.title || ''
     const imageDownloadUrl = this.image.src || ''
@@ -131,18 +132,19 @@ export default class ImageBar {
     }
   }
 
-  css(domNode, rules) {
+  css(domNode: HTMLElement, rules: Record<string, string | string[]>) {
     if (typeof rules === 'object') {
       for (const prop in rules) {
         if (prop) {
-          if (Array.isArray(rules[prop])) {
+          const value = rules[prop]
+          if (Array.isArray(value)) {
             // 兼容IE11浏览器
-            rules[prop].forEach((val) => {
+            value.forEach((val) => {
               domNode.style[prop] = val
             })
           }
           else {
-            domNode.style[prop] = rules[prop]
+            domNode.style[prop] = value
           }
         }
       }

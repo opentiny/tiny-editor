@@ -10,7 +10,7 @@ export interface FileValue {
   src: string
   title: string
 }
-class File extends Embed {
+export class File extends Embed {
   static blotName = 'file'
   static tagName = 'A'
   static className = 'ql-file-item'
@@ -59,5 +59,3 @@ class File extends Embed {
     return (sanitize(url, this.PROTOCOL_WHITELIST) && url) || ''
   }
 }
-
-export default File

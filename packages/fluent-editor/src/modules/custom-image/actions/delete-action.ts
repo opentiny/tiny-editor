@@ -1,7 +1,8 @@
+import type { Parchment as TypeParchment } from 'quill'
 import Quill from 'quill'
-import Action from './Action'
+import { Action } from './action'
 
-export default class DeleteAction extends Action {
+export class DeleteAction extends Action {
   onCreate() {
     document.addEventListener('keyup', this.onKeyUp, true)
     this.formatter.quill.root.addEventListener('input', this.onKeyUp, true)
@@ -19,8 +20,10 @@ export default class DeleteAction extends Action {
 
     // delete or backspace
     if (event.keyCode === 46 || event.keyCode === 8) {
-      const blot = Quill.find(this.formatter.currentSpec.getTargetElement())
+      const blot = Quill.find(this.formatter.currentSpec.getTargetElement()) as TypeParchment.Blot
       if (blot) {
+        // TODO: fix later
+        // @ts-ignore
         blot.deleteAt(0)
       }
       this.formatter.hide()

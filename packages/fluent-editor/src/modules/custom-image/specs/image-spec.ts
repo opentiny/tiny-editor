@@ -1,6 +1,6 @@
-import BlotSpec from './BlotSpec'
+import { BlotSpec } from './blot-spec'
 
-export default class ImageSpec extends BlotSpec {
+export class ImageSpec extends BlotSpec {
   img
 
   constructor(formatter) {

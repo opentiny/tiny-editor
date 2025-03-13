@@ -191,6 +191,3 @@ export function isInside(position, dom) {
       && top < areaTop + areaHeight
   return inside
 }
-
-// Internet Explorer 6-11
-export const isPureIE = !!document.documentMode

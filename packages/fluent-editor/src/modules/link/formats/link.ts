@@ -4,13 +4,13 @@ import { hadProtocol, sanitize } from '../../../config/editor.utils'
 
 const Inline = Quill.import('blots/inline') as typeof TypeInline
 
-// @dynamic
-export default class Link extends Inline {
-  static blotName: string
-  static tagName: string
-  static SANITIZED_URL: string
-  static PROTOCOL_WHITELIST: string[]
-  static className: string
+export class LinkBlot extends Inline {
+  static blotName = 'Link'
+  static tagName = 'A'
+  static SANITIZED_URL = 'about:blank'
+  static PROTOCOL_WHITELIST = ['http', 'https', 'mailto', 'tel']
+  static className = 'ql-normal-link'
+
   static autoProtocol: string = ''
   static create(value) {
     const node = super.create(value)
@@ -37,12 +37,7 @@ export default class Link extends Inline {
       super.format(name, value)
     }
     else {
-      this.domNode.setAttribute('href', Link.sanitize(value))
+      this.domNode.setAttribute('href', LinkBlot.sanitize(value))
     }
   }
 }
-Link.blotName = 'link'
-Link.tagName = 'A'
-Link.SANITIZED_URL = 'about:blank'
-Link.PROTOCOL_WHITELIST = ['http', 'https', 'mailto', 'tel']
-Link.className = 'ql-normal-link'

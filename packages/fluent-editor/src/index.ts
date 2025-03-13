@@ -1,8 +1,9 @@
 import FluentEditor from './fluent-editor'
 
-export * from './config'
-export { I18N } from './modules/i18n'
-export * from './modules/table-up'
-export * from './modules/toolbar/toolbar-tip'
-export default FluentEditor
+export * from './attributors'
+export * from './config/types'
+export * from './formats'
+export * from './modules'
 export { generateTableUpShortKeyMenu } from 'quill-shortcut-key'
+export default FluentEditor
+export { AttributeMap, Delta, Op, OpIterator, Parchment, Range } from 'quill/core'

@@ -1,10 +1,9 @@
+import type FluentEditor from '../../../core/fluent-editor'
 import Quill from 'quill'
 import emojiList from '../emoji-list'
 
-const Module = Quill.imports['core/module']
-
 // @dynamic
-class ShortNameEmoji extends Module {
+export class ShortNameEmoji {
   static DEFAULTS: {
     emojiList: any[]
     fuse: {
@@ -19,7 +18,6 @@ class ShortNameEmoji extends Module {
   }
 
   emojiList: any
-  quill: any
   fuse: any
   onOpen: any
   onClose: any
@@ -32,10 +30,7 @@ class ShortNameEmoji extends Module {
   isWhiteSpace: (ch: any) => boolean
   query: any
   buttons: any
-  options: any
-  constructor(quill, options) {
-    super(quill, options)
-
+  constructor(public quill: FluentEditor, public options: any) {
     this.emojiList = options.emojiList
 
     this.quill = quill
@@ -189,7 +184,7 @@ class ShortNameEmoji extends Module {
     while (this.container.firstChild) {
       this.container.removeChild(this.container.firstChild)
     }
-    const buttons = Array.from({ length: emojis.length })
+    const buttons: HTMLElement[] = Array.from({ length: emojis.length })
     this.buttons = buttons
 
     const handler = (i, emoji) => (event) => {
@@ -314,5 +309,3 @@ function makeElement(tag, attrs, ...children) {
   })
   return elem
 }
-
-export default ShortNameEmoji

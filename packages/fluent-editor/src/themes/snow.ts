@@ -3,8 +3,8 @@ import type TypeToolbar from 'quill/modules/toolbar'
 import type TypeIconPicker from 'quill/ui/icon-picker'
 import { CHANGE_LANGUAGE_EVENT, inputFile, isNullOrUndefined } from '../config'
 import FluentEditor from '../core/fluent-editor'
-import { CustomImageSpec } from '../modules/custom-image/specs/CustomImageSpec'
-import Tooltip from '../modules/link/modules/tooltip'
+import { CustomImageSpec } from '../modules/custom-image/specs/custom-image-spec'
+import { LinkTooltip } from '../modules/link'
 import { shortKey } from '../modules/shortcut-key'
 import { ColorPicker, Picker } from '../modules/toolbar/better-picker'
 import { FormatPainter } from '../tools/format-painter'
@@ -248,7 +248,7 @@ class SnowTheme extends OriginSnowTheme {
     toolbar.container.classList.add('ql-snow')
     this.buildButtons(toolbar.container.querySelectorAll('button'), icons)
     this.buildPickers(toolbar.container.querySelectorAll('select'), icons)
-    this.tooltip = new Tooltip(this.quill, this.options.bounds)
+    this.tooltip = new LinkTooltip(this.quill, this.options.bounds)
   }
 }
 

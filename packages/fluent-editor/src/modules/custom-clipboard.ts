@@ -18,13 +18,10 @@ import {
 const Clipboard = Quill.import('modules/clipboard') as typeof TypeClipboard
 const Delta = Quill.import('delta')
 
-class CustomClipboard extends Clipboard {
-  quill: FluentEditor
-  convert
-  onCopy
-  matchers
+export class CustomClipboard extends Clipboard {
+  declare quill: FluentEditor
 
-  prepareMatching(container, nodeMatches) {
+  prepareMatching(container: HTMLElement, nodeMatches) {
     const elementMatchers = []
     const textMatchers = []
     this.matchers.forEach((pair) => {
@@ -39,9 +36,11 @@ class CustomClipboard extends Clipboard {
         default: {
           // word 的 v:shape 系列标签只能通过 getElementsByTagName 获取
           const vRegex = /v:(.+)/
-          const nodeList = vRegex.test(selector)
-            ? Array.from(container.getElementsByTagName(selector))
-            : Array.from(container.querySelectorAll(selector))
+          const nodeList = Array.from(
+            vRegex.test(selector)
+              ? container.getElementsByTagName(selector)
+              : container.querySelectorAll(selector),
+          )
           nodeList.forEach((node) => {
             if (nodeMatches.has(node)) {
               const matches = nodeMatches.get(node)
@@ -538,5 +537,3 @@ function renderStyles(html) {
 
   return convertedString
 }
-
-export default CustomClipboard

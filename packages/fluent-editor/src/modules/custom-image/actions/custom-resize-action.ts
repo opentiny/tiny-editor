@@ -1,4 +1,4 @@
-import Action from './Action'
+import { Action } from './action'
 
 const MIN_WIDTH = 40
 
@@ -7,7 +7,7 @@ function getElementStyle(element) {
     ? element.currentStyle
     : window.getComputedStyle(element, null)
 }
-export default class CustomResizeAction extends Action {
+export class CustomResizeAction extends Action {
   topLeftHandle: HTMLElement
   topRightHandle: HTMLElement
   bottomRightHandle: HTMLElement

@@ -1,7 +1,6 @@
-import ResizeAction from '../actions/CustomResizeAction'
-import DeleteAction from '../actions/DeleteAction'
+import { CustomResizeAction, DeleteAction } from '../actions'
 
-export default class BlotSpec {
+export class BlotSpec {
   formatter
 
   constructor(formatter) {
@@ -11,7 +10,7 @@ export default class BlotSpec {
   init(): void {}
 
   getActions() {
-    return [ResizeAction, DeleteAction]
+    return [CustomResizeAction, DeleteAction]
   }
 
   getTargetElement() {

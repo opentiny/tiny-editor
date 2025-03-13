@@ -43,7 +43,7 @@ function rollupOutput(target: string, dir: string): any {
 
 export default defineConfig({
   plugins: [
-    dts({ outDir: './dist/types' }),
+    dts({ outDir: './dist/types', root: '.' }),
     {
       name: 'move-css-to-root',
       closeBundle: async () => {

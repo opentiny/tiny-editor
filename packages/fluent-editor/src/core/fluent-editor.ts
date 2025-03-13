@@ -7,8 +7,8 @@ import I18N from '../modules/i18n'
 
 class FluentEditor extends Quill {
   isFullscreen: boolean = false
-  options: IEditorConfig & ExpandedQuillOptions
-  uploader: FileUploader
+  declare options: IEditorConfig & ExpandedQuillOptions
+  declare uploader: FileUploader
 
   static register(...args: any[]): void {
     super.register(...args as Parameters<typeof Quill.register>)
@@ -27,10 +27,5 @@ class FluentEditor extends Quill {
     return I18N.parserText(name, this.lang)
   }
 }
-
-export type {
-  Module,
-  Parchment as TypeParchment,
-} from 'quill'
 
 export default FluentEditor
