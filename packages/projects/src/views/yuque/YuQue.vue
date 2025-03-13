@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import FluentEditor, { generateTableUp, generateTableUpShortKeyMenu } from '@opentiny/fluent-editor'
 import HeaderList from 'quill-header-list'
-import { defaultCustomSelect, TableMenuContextmenu, TableMenuSelect, TableSelection, TableUp, TableResizeLine, TableResizeScale, createSelectBox } from 'quill-table-up'
+import { createSelectBox, defaultCustomSelect, TableMenuContextmenu, TableResizeLine, TableResizeScale, TableSelection, TableUp } from 'quill-table-up'
 import { onMounted, ref } from 'vue'
 
 FluentEditor.register({ 'modules/header-list': HeaderList }, true)
@@ -20,14 +20,22 @@ const TOOLBAR_CONFIG = [
   [
     { header: [false, 1, 2, 3, 4, 5, 6] },
     { size: ['12px', '13px', '14px', '15px', '16px', '19px', '22px', '24px', '29px', '32px', '40px', '48px'] },
-    'bold', 'italic', 'strike', 'underline', { script: 'super' }, { script: 'sub' }, 'code'
+    'bold',
+    'italic',
+    'strike',
+    'underline',
+    { script: 'super' },
+    { script: 'sub' },
+    'code',
   ],
   [{ color: [] }, { background: [] }],
   [
     { align: ['', 'center', 'right', 'justify'] },
-    { list: 'ordered' }, { list: 'bullet' },
-    { indent: '+1' }, { indent: '-1' },
-    { 'line-height': ['1', '1.15', '1.5', '2', '2.5', '3'] }
+    { list: 'ordered' },
+    { list: 'bullet' },
+    { indent: '+1' },
+    { indent: '-1' },
+    { 'line-height': ['1', '1.15', '1.5', '2', '2.5', '3'] },
   ],
   [{ list: 'check' }, 'link', 'blockquote', 'divider'],
   [{ 'table-up': [] }, 'header-list'],
@@ -80,7 +88,7 @@ onMounted(() => {
   </div>
   <div class="!mt-[94px]">
     <div class="flex justify-center pt-[33px] pb-[26px]">
-      <textarea placeholder="请输入标题" class="w-[750px] text-[#262626] h-[54px] outline-none resize-none text-[36px] font-bold placeholder-[#bfbfbf]" v-model="title"></textarea>
+      <textarea v-model="title" placeholder="请输入标题" class="w-[750px] text-[#262626] h-[54px] outline-none resize-none text-[36px] font-bold placeholder-[#bfbfbf]" />
     </div>
     <div id="editor" class="!border-0 max-w-[750px] !ml-auto !mr-auto">
       <p>
