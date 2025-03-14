@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type FluentEditor from '@opentiny/fluent-editor'
 import Html2Canvas from 'html2canvas'
 import { onMounted, ref } from 'vue'
 
-let editor
+let editor: FluentEditor
 const editorRef = ref<HTMLElement>()
 
 const TOOLBAR_CONFIG = [

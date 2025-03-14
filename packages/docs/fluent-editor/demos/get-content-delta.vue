@@ -1,22 +1,22 @@
 <script setup lang="ts">
+import type FluentEditor from '@opentiny/fluent-editor'
 // 代码块高亮
 import hljs from 'highlight.js'
-
 // 截屏
 import Html2Canvas from 'html2canvas'
+
 // 插入公式
 import katex from 'katex'
-
 import { onMounted, ref } from 'vue'
-import 'highlight.js/styles/atom-one-dark.css'
 
+import 'highlight.js/styles/atom-one-dark.css'
 import 'katex/dist/katex.min.css'
 
 window.hljs = hljs
 window.katex = katex
 window.Html2Canvas = Html2Canvas
 
-let editor
+let editor: FluentEditor
 
 // @提醒
 const searchKey = 'name'

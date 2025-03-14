@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type FluentEditor from '@opentiny/fluent-editor'
 import hljs from 'highlight.js'
 // config extra languages
 import go from 'highlight.js/lib/languages/go'
@@ -8,7 +9,7 @@ import 'highlight.js/styles/atom-one-dark.css'
 
 hljs.registerLanguage('go', go)
 
-let editor
+let editor: FluentEditor
 
 const TOOLBAR_CONFIG = [
   [{ header: [] }],

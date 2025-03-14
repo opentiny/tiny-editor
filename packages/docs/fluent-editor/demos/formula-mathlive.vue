@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import type { MathliveModule } from '@opentiny/fluent-editor'
+import type FluentEditor from '@opentiny/fluent-editor'
 import { onMounted } from 'vue'
 
 import 'mathlive'
 import 'mathlive/static.css'
 import 'mathlive/fonts.css'
 
-let mathliveEditor
+let mathliveEditor: FluentEditor
 
 const TOOLBAR_CONFIG = [
   [{ header: [] }],
@@ -27,7 +29,7 @@ onMounted(() => {
           container: TOOLBAR_CONFIG,
           handlers: {
             formula() {
-              const mathlive = this.quill.getModule('mathlive')
+              const mathlive = this.quill.getModule('mathlive') as MathliveModule
               mathlive.createDialog('e=mc^2')
             },
           },

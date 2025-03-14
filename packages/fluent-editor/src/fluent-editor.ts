@@ -21,7 +21,6 @@ import { ColorPicker, Picker } from './modules/toolbar/better-picker'
 import SnowTheme from './themes/snow'
 import Icons from './ui/icons'
 
-// TODO: mention scroll type fix
 I18N.register(
   {
     'en-US': EN_US,
@@ -44,6 +43,7 @@ FluentEditor.register(
     'formats/text-indent': TextIndentStyle,
     'formats/video': Video,
     'formats/divider': DividerBlot,
+    'formats/link': LinkBlot,
 
     'modules/clipboard': CustomClipboard,
     'modules/counter': Counter,
@@ -52,7 +52,6 @@ FluentEditor.register(
     'modules/file': FileModule,
     'modules/i18n': I18N,
     'modules/image': BlotFormatter,
-    'modules/link': LinkBlot,
     'modules/mathlive': MathliveModule,
     'modules/mention': Mention,
     'modules/syntax': Syntax,

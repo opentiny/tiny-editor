@@ -10,8 +10,8 @@ FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)
 const { tableUpConfig, tableUpKeyboardControl } = generateTableUpShortKeyMenu(createSelectBox)
 tableUpConfig.title = '_i18n"table"'
 
-let editor
-const headerListRef = ref()
+let editor: FluentEditor
+const headerListRef = ref<HTMLElement>()
 
 const title = ref('测试文档')
 

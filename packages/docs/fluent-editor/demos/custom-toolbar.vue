@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type FluentEditor from '@opentiny/fluent-editor'
 // 代码块高亮
 import hljs from 'highlight.js'
 // 截屏
@@ -13,7 +14,7 @@ window.hljs = hljs
 window.katex = katex
 window.Html2Canvas = Html2Canvas
 
-let editor
+let editor: FluentEditor
 const editorRef = ref<HTMLElement>()
 
 const TOOLBAR_CONFIG = [

@@ -12,7 +12,7 @@ export class LinkBlot extends Inline {
   static className = 'ql-normal-link'
 
   static autoProtocol: string = ''
-  static create(value) {
+  static create(value: string) {
     const node = super.create(value)
     let href = value
     if (!hadProtocol(href) && this.autoProtocol) {
@@ -24,15 +24,15 @@ export class LinkBlot extends Inline {
     return node
   }
 
-  static formats(domNode) {
+  static formats(domNode: HTMLElement) {
     return domNode.getAttribute('href')
   }
 
-  static sanitize(url) {
+  static sanitize(url: string) {
     return sanitize(url, this.PROTOCOL_WHITELIST) ? url : this.SANITIZED_URL
   }
 
-  format(name, value) {
+  format(name: string, value: any) {
     if (name !== this.statics.blotName || [false, null].includes(value)) {
       super.format(name, value)
     }

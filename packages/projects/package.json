@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@opentiny/fluent-editor": "4.0.0-alpha.1",
+    "@opentiny/fluent-editor": "workspace:^",
     "@tailwindcss/vite": "^4.0.0",
     "quill-header-list": "0.0.2",
     "quill-table-up": "^2.1.7",

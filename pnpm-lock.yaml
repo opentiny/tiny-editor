@@ -63,6 +63,15 @@ importers:
       '@playwright/test':
         specifier: ^1.46.1
         version: 1.49.1
+      '@types/highlight.js':
+        specifier: ^10.1.0
+        version: 10.1.0
+      '@types/html2canvas':
+        specifier: ^1.0.0
+        version: 1.0.0
+      '@types/katex':
+        specifier: ^0.16.7
+        version: 0.16.7
       '@vitepress-code-preview/container':
         specifier: ^1.0.8
         version: 1.0.8(vue@3.5.13(typescript@5.7.2))
@@ -143,8 +152,8 @@ importers:
   packages/projects:
     dependencies:
       '@opentiny/fluent-editor':
-        specifier: 4.0.0-alpha.1
-        version: 4.0.0-alpha.1
+        specifier: workspace:^
+        version: link:../fluent-editor
       '@tailwindcss/vite':
         specifier: ^4.0.0
         version: 4.0.0(vite@6.0.11(@types/node@22.10.9)(jiti@2.4.2)(less@4.2.2)(lightningcss@1.29.1)(sass@1.83.4)(yaml@2.7.0))
@@ -991,9 +1000,6 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@opentiny/fluent-editor@4.0.0-alpha.1':
-    resolution: {integrity: sha512-JM/3SWuJY4BhBjonIOo1RhH9U73JVCOhaOmN182YJQYsf0y46m03nuzS/hVHGuao2t9F1UaEOrwssqaA3E/MzA==}
-
   '@parcel/watcher-android-arm64@2.5.0':
     resolution: {integrity: sha512-qlX4eS28bUcQCdribHkg/herLe+0A9RyYC+mm2PXpncit8z5b3nSqGVzMNR3CmtAOgRutiZ02eIJJgP/b1iEFQ==}
     engines: {node: '>= 10.0.0'}
@@ -1362,6 +1368,14 @@ packages:
   '@types/hast@3.0.4':
     resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
 
+  '@types/highlight.js@10.1.0':
+    resolution: {integrity: sha512-77hF2dGBsOgnvZll1vymYiNUtqJ8cJfXPD6GG/2M0aLRc29PkvB7Au6sIDjIEFcSICBhCh2+Pyq6WSRS7LUm6A==}
+    deprecated: This is a stub types definition. highlight.js provides its own type definitions, so you do not need this installed.
+
+  '@types/html2canvas@1.0.0':
+    resolution: {integrity: sha512-BJpVf+FIN9UERmzhbtUgpXj6XBZpG67FMgBLLoj9HZKd9XifcCpSV+UnFcwTZfEyun4U/KmCrrVOG7829L589w==}
+    deprecated: This is a stub types definition. html2canvas provides its own type definitions, so you do not need this installed.
+
   '@types/istanbul-lib-coverage@2.0.6':
     resolution: {integrity: sha512-2QF/t/auWm0lsy8XtKVPG19v3sSOQlJe/YHZgfjb/KBBHOGSV+J2q/S671rcq9uTBrLAXmZpqJiaQbMT+zNU1w==}
 
@@ -1376,6 +1390,9 @@ packages:
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
+
+  '@types/katex@0.16.7':
+    resolution: {integrity: sha512-HMwFiRujE5PjrgwHQ25+bsLJgowjGjm5Z8FVSf0N6PwgJrwxH0QxzHYDcKsTfV3wva0vzrpqMTJS2jXPr5BMEQ==}
 
   '@types/linkify-it@5.0.0':
     resolution: {integrity: sha512-sVDA58zAw4eWAffKOaQH5/5j3XeayukzDk+ewSsnv3p4yJEZHCCzMDiZM8e0OUrRvmpGZ85jf4yDHkHsgBNr9Q==}
@@ -3935,11 +3952,6 @@ packages:
   quill-markdown-shortcuts@0.0.10:
     resolution: {integrity: sha512-2FFFqqo65JgDgAGSer7cFQTCeiSjJF4N8lRGXGv/xjppCxSwj42OnNdGPZ/zeeCxdUY/j1LW4AiSvPQaTIkY2A==}
 
-  quill-shortcut-key@0.0.3:
-    resolution: {integrity: sha512-OWjj2jfhUFmYwmuXgmh1YjkJOqS83TTWyCpKrtaUDwwMLuuLVBw7NVNk+j9bipROj0MpFCRlmEmQ3NTEndJHMA==}
-    peerDependencies:
-      quill: ^2.0.0
-
   quill-shortcut-key@0.0.5:
     resolution: {integrity: sha512-7B1KLgkaN4e1a9+ZtT3Fui3I0bqrdeMW3jQaMYJ3W8dHEi4jg2pIwSKW3cFerqH0iSPnNE3pAhX0y9AeDg4vnA==}
     peerDependencies:
@@ -5759,13 +5771,6 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.18.0
 
-  '@opentiny/fluent-editor@4.0.0-alpha.1':
-    dependencies:
-      lodash-es: 4.17.21
-      quill: 2.0.3
-      quill-easy-color: 0.0.9(quill@2.0.3)
-      quill-shortcut-key: 0.0.3(quill@2.0.3)
-
   '@parcel/watcher-android-arm64@2.5.0':
     optional: true
 
@@ -6099,6 +6104,14 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
 
+  '@types/highlight.js@10.1.0':
+    dependencies:
+      highlight.js: 10.7.3
+
+  '@types/html2canvas@1.0.0':
+    dependencies:
+      html2canvas: 1.4.1
+
   '@types/istanbul-lib-coverage@2.0.6': {}
 
   '@types/istanbul-lib-report@3.0.3':
@@ -6115,6 +6128,8 @@ snapshots:
       pretty-format: 26.6.2
 
   '@types/json-schema@7.0.15': {}
+
+  '@types/katex@0.16.7': {}
 
   '@types/linkify-it@5.0.0': {}
 
@@ -9293,10 +9308,6 @@ snapshots:
   quill-markdown-shortcuts@0.0.10:
     dependencies:
       quill: 1.3.7
-
-  quill-shortcut-key@0.0.3(quill@2.0.3):
-    dependencies:
-      quill: 2.0.3
 
   quill-shortcut-key@0.0.5(quill@2.0.3):
     dependencies:

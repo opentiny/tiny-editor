@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import type FluentEditor from '@opentiny/fluent-editor'
 import { onMounted } from 'vue'
 
-let editor
+let editor: FluentEditor
 
 const TOOLBAR_CONFIG = [
   [{ header: [] }],

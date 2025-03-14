@@ -1,16 +1,19 @@
 <script setup lang="ts">
+import type FluentEditor from '@opentiny/fluent-editor'
+import type { I18N } from '@opentiny/fluent-editor'
+
 import QuillToolbarTip from 'quill-toolbar-tip'
 import { onMounted, ref } from 'vue'
-
 import 'quill-toolbar-tip/dist/index.css'
 
-let editor
-const editorRef = ref()
+let editor: FluentEditor
+const editorRef = ref<HTMLElement>()
 const lang = ref('zh-CN')
 
 onMounted(() => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
   import('@opentiny/fluent-editor').then(({ default: FluentEditor, I18N, generateToolbarTip }) => {
+    if (!editorRef.value) return
     FluentEditor.register({ 'modules/toolbar-tip': generateToolbarTip(QuillToolbarTip) }, true)
     I18N.register(
       {
@@ -52,8 +55,8 @@ onMounted(() => {
   })
 })
 function switchLanguage() {
-  lang.value = lang.value === 'zh-CN' ? 'en-US' : 'zh-CN'
-  editor.getModule('i18n').changeLanguage({ lang: lang.value })
+  lang.value = lang.value === 'zh-CN' ? 'en-US' : 'zh-CN';
+  (editor.getModule('i18n') as I18N).changeLanguage({ lang: lang.value })
 }
 </script>
 

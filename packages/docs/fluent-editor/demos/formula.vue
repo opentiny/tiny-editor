@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import type FluentEditor from '@opentiny/fluent-editor'
 import katex from 'katex'
 import { onMounted } from 'vue'
 import 'katex/dist/katex.min.css'
 
 window.katex = katex
 
-let editor
+let editor: FluentEditor
 
 const TOOLBAR_CONFIG = [
   [{ header: [] }],

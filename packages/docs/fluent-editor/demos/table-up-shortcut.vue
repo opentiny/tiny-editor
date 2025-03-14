@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type FluentEditor from '@opentiny/fluent-editor'
 import katex from 'katex'
 import { onMounted, ref } from 'vue'
 import 'quill-table-up/index.css'
@@ -7,7 +8,7 @@ import 'katex/dist/katex.min.css'
 
 window.katex = katex
 
-let editor
+let editor: FluentEditor
 const editorRef = ref<HTMLElement>()
 
 const TOOLBAR_CONFIG = [

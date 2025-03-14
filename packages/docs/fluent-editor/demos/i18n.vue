@@ -1,13 +1,16 @@
 <script setup lang="ts">
+import type FluentEditor from '@opentiny/fluent-editor'
+import type { I18N } from '@opentiny/fluent-editor'
 import { onMounted, ref } from 'vue'
 
-let editor
-const editorRef = ref()
+let editor: FluentEditor
+const editorRef = ref<HTMLElement>()
 const lang = ref('en-US')
 
 onMounted(() => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
-  import('@opentiny/fluent-editor').then(({ default: FluentEditor, generateToolbarTip }) => {
+  import('@opentiny/fluent-editor').then(({ default: FluentEditor }) => {
+    if (!editorRef.value) return
     editor = new FluentEditor(editorRef.value, {
       theme: 'snow',
       modules: {
@@ -25,8 +28,8 @@ onMounted(() => {
   })
 })
 function switchLanguage() {
-  lang.value = lang.value === 'zh-CN' ? 'en-US' : 'zh-CN'
-  editor.getModule('i18n').changeLanguage({ lang: lang.value })
+  lang.value = lang.value === 'zh-CN' ? 'en-US' : 'zh-CN';
+  (editor.getModule('i18n') as I18N).changeLanguage({ lang: lang.value })
 }
 </script>
 

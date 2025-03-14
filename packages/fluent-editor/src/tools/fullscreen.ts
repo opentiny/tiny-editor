@@ -1,7 +1,12 @@
-import type { FluentEditorToolbar } from '../config/types'
+import type Toolbar from 'quill/modules/toolbar'
+import type FluentEditor from '../core/fluent-editor'
 import { namespace } from '../config'
 import { ICONS_CONFIG } from '../ui/icons'
 import { lockScroll } from '../utils/scroll-lock'
+
+export interface FluentEditorToolbar extends Toolbar {
+  quill: FluentEditor
+}
 
 let exitEscHandlerBindToolbar: (e: KeyboardEvent) => void
 let resizeHandlerBindToolbar: () => void

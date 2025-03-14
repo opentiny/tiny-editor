@@ -1,6 +1,6 @@
 import type FluentEditor from '../../core/fluent-editor'
 import type { Action } from './actions'
-import type { Options } from './options'
+import type { BlotFormatterOptions } from './options'
 import type { BlotSpec } from './specs'
 import { merge as deepmerge } from 'lodash-es'
 import Quill from 'quill'
@@ -12,7 +12,7 @@ import { CustomImageSpec } from './specs'
 const dontMerge = (_destination: Array<any>, source: Array<any>) => source
 
 export class BlotFormatter {
-  options: Options
+  options: BlotFormatterOptions
   currentSpec: BlotSpec
   specs: BlotSpec[]
   overlay: HTMLElement
@@ -28,7 +28,7 @@ export class BlotFormatter {
     }, true)
   }
 
-  constructor(public quill: FluentEditor, options: any = {}) {
+  constructor(public quill: FluentEditor, options: Partial<BlotFormatterOptions> = {}) {
     this.options = deepmerge(DefaultOptions, options, { arrayMerge: dontMerge })
     this.currentSpec = null
     this.actions = []

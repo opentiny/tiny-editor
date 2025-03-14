@@ -14,6 +14,7 @@ import {
   replaceDeltaImage,
   splitWithBreak,
 } from '../config/editor.utils'
+import { isString } from '../utils/is'
 
 const Clipboard = Quill.import('modules/clipboard') as typeof TypeClipboard
 const Delta = Quill.import('delta')
@@ -26,32 +27,29 @@ export class CustomClipboard extends Clipboard {
     const textMatchers = []
     this.matchers.forEach((pair) => {
       const [selector, matcher] = pair
-      switch (selector) {
-        case Node.TEXT_NODE:
-          textMatchers.push(matcher)
-          break
-        case Node.ELEMENT_NODE:
-          elementMatchers.push(matcher)
-          break
-        default: {
-          // word 的 v:shape 系列标签只能通过 getElementsByTagName 获取
-          const vRegex = /v:(.+)/
-          const nodeList = Array.from(
-            vRegex.test(selector)
-              ? container.getElementsByTagName(selector)
-              : container.querySelectorAll(selector),
-          )
-          nodeList.forEach((node) => {
-            if (nodeMatches.has(node)) {
-              const matches = nodeMatches.get(node)
-              matches.push(matcher)
-            }
-            else {
-              nodeMatches.set(node, [matcher])
-            }
-          })
-          break
-        }
+      if (selector === Node.TEXT_NODE) {
+        textMatchers.push(matcher)
+      }
+      else if (selector === Node.ELEMENT_NODE) {
+        elementMatchers.push(matcher)
+      }
+      else if (isString(selector)) {
+        // word 的 v:shape 系列标签只能通过 getElementsByTagName 获取
+        const vRegex = /v:(.+)/
+        const nodeList = Array.from(
+          vRegex.test(selector)
+            ? container.getElementsByTagName(selector)
+            : container.querySelectorAll(selector),
+        )
+        nodeList.forEach((node) => {
+          if (nodeMatches.has(node)) {
+            const matches = nodeMatches.get(node)
+            matches.push(matcher)
+          }
+          else {
+            nodeMatches.set(node, [matcher])
+          }
+        })
       }
     })
     return [elementMatchers, textMatchers]

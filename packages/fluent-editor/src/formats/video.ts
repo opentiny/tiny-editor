@@ -1,4 +1,3 @@
-import type { Parchment as TypeParchment } from 'quill'
 import type { BlockEmbed as TypeBlockEmbed } from 'quill/blots/block'
 import Quill from 'quill'
 import { sanitize } from '../config/editor.utils'
