@@ -16,7 +16,7 @@ interface InternalModule {
   update: () => void
   destroy: () => void
 }
-interface InternalTableSelectionModule extends InternalModule {
+export interface InternalTableSelectionModule extends InternalModule {
   dragging: boolean
   boundary: {
     x: number
@@ -69,7 +69,7 @@ export function generateTableUp(QuillTableUp: Constructor) {
       })
     }
 
-    resolveTexts(options: Partial<Record<string, string>> = {}) {
+    resolveTexts(options: Record<string, string> = {}) {
       return Object.assign({
         fullCheckboxText: this.quill.getLangText('fullCheckboxText'),
         customBtnText: this.quill.getLangText('customBtnText'),
@@ -98,7 +98,7 @@ export function generateTableUp(QuillTableUp: Constructor) {
       }, Object.entries(options).reduce((pre, [key, value]) => {
         pre[key] = this.quill.getLangText(value)
         return pre
-      }, {}))
+      }, {} as Record<string, string>))
     }
   }
 }

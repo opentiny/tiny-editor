@@ -1,3 +1,5 @@
+import type { Parchment as TypeParchment } from 'quill'
+import type FluentEditor from '../../../core/fluent-editor'
 import Quill, { Range } from 'quill'
 import Emitter from 'quill/core/emitter'
 import { BaseTooltip } from 'quill/themes/base'
@@ -5,10 +7,9 @@ import { CHANGE_LANGUAGE_EVENT } from '../../../config'
 import { hadProtocol, isNullOrUndefined } from '../../../config/editor.utils'
 import { EN_US } from '../../../config/i18n/en-us'
 import { debounce } from '../../../utils/debounce'
-import LinkBlot from '../formats/link'
+import { LinkBlot } from '../formats/link'
 
-// @dynamic
-export default class Tooltip extends BaseTooltip {
+export class LinkTooltip extends BaseTooltip {
   static TEMPLATE: string = [
     `<input type="text" data-formula="e=mc^2" data-link="${EN_US.linkplaceholder}" data-video="Embed URL" style="width: 225px;">`,
     '<span class="ql-split"></span>',
@@ -20,18 +21,11 @@ export default class Tooltip extends BaseTooltip {
   isHover: boolean
   debouncedHideToolTip: any
   debouncedShowToolTip: any
-  hide: any
-  linkRange: any
-  quill: any
-  root: any
-  restoreFocus: any
-  textbox: any
-  boundsContainer: any
   options: { autoProtocol: string } = {
     autoProtocol: 'https',
   }
 
-  constructor(quill, bounds) {
+  constructor(public quill: FluentEditor, bounds) {
     super(quill, bounds)
     this.setTemplate()
     this.isInputFocus = false
@@ -106,7 +100,7 @@ export default class Tooltip extends BaseTooltip {
     if (preview.startsWith('#')) {
       return
     }
-    const linkBlot = Quill.find(linkNode)
+    const linkBlot = Quill.find(linkNode) as TypeParchment.Blot
     const index = this.quill.getIndex(linkBlot)
     const [link, offset] = this.quill.scroll.descendant(
       LinkBlot,
@@ -133,10 +127,11 @@ export default class Tooltip extends BaseTooltip {
     this.quill.root.addEventListener(
       'mouseover',
       (event) => {
+        const target = event.target as HTMLElement
         if (
-          (event.target.tagName.toUpperCase() !== 'A'
-            || !event.target.classList.contains(LinkBlot.className))
-          && !event.target.closest(`a.${LinkBlot.className}`)
+          (target.tagName.toUpperCase() !== 'A'
+            || !target.classList.contains(LinkBlot.className))
+          && !target.closest(`a.${LinkBlot.className}`)
         ) {
           return
         }
@@ -148,7 +143,8 @@ export default class Tooltip extends BaseTooltip {
     this.quill.root.addEventListener(
       'mouseout',
       (event) => {
-        if (event.target.tagName.toUpperCase() !== 'A' && !event.target.closest(`a.${LinkBlot.className}`)) {
+        const target = event.target as HTMLElement
+        if (target.tagName.toUpperCase() !== 'A' && !target.closest(`a.${LinkBlot.className}`)) {
           return
         }
         this.handleMouseLeave()

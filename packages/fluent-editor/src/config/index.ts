@@ -2,6 +2,7 @@ import { isNullOrUndefined } from './editor.utils'
 
 export * from './editor.config'
 export * from './editor.utils'
+export * from './types'
 
 // 触发上传
 export function inputFile(type: 'image' | 'video' | 'file', accept: string[]) {

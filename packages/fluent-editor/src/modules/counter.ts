@@ -1,7 +1,15 @@
-import type { ICounterOption } from '../config/types'
+import type { AnyFunction } from '../config'
 import type FluentEditor from '../fluent-editor'
 import Quill from 'quill'
 import { CHANGE_LANGUAGE_EVENT } from '../config'
+
+export interface ICounterOption {
+  format?: 'text' | 'html'
+  unit?: 'word' | 'char'
+  count?: number
+  template?: string | AnyFunction
+  errorTemplate?: string | AnyFunction
+}
 
 export default class Counter {
   container: HTMLDivElement

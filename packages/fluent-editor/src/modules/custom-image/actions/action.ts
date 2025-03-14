@@ -1,4 +1,4 @@
-export default class Action {
+export class Action {
   formatter
 
   constructor(formatter) {

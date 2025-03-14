@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import type FluentEditor from '@opentiny/fluent-editor'
 import { onMounted, ref } from 'vue'
 import 'quill-table-up/index.css'
 import 'quill-table-up/table-creator.css'
 
-let editorContextmenu
-let editorSelect
+let editorContextmenu: FluentEditor
+let editorSelect: FluentEditor
 const editorContextmenuRef = ref<HTMLElement>()
 const editorSelectRef = ref<HTMLElement>()
 
@@ -22,7 +23,7 @@ onMounted(() => {
     import('@opentiny/fluent-editor'),
     import('quill-table-up'),
   ]).then(([
-    { default: FluentEditor, generateTableUp, generateTableUpShortKeyMenu },
+    { default: FluentEditor, generateTableUp },
     { defaultCustomSelect, TableMenuContextmenu, TableMenuSelect, TableSelection, TableUp },
   ]) => {
     FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)

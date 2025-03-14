@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import type FluentEditor from '@opentiny/fluent-editor'
 import { onMounted, ref } from 'vue'
 import 'quill-table-up/index.css'
 import 'quill-table-up/table-creator.css'
 
-let editorbox
-let editorLine
-let editorScale
+let editorbox: FluentEditor
+let editorLine: FluentEditor
+let editorScale: FluentEditor
 const editorBoxRef = ref<HTMLElement>()
 const editorLineRef = ref<HTMLElement>()
 const editorScaleRef = ref<HTMLElement>()
@@ -24,7 +25,7 @@ onMounted(() => {
     import('@opentiny/fluent-editor'),
     import('quill-table-up'),
   ]).then(([
-    { default: FluentEditor, generateTableUp, generateTableUpShortKeyMenu },
+    { default: FluentEditor, generateTableUp },
     { defaultCustomSelect, TableResizeBox, TableResizeLine, TableResizeScale, TableUp },
   ]) => {
     FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)

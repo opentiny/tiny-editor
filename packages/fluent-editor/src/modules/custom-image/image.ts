@@ -1,3 +1,4 @@
+import type { Parchment as TypeParchment } from 'quill'
 import type TypeEmbed from 'quill/blots/embed'
 import Quill from 'quill'
 import { isNullOrUndefined, sanitize } from '../../config/editor.utils'
@@ -6,14 +7,11 @@ const Embed = Quill.import('blots/embed') as typeof TypeEmbed
 const ATTRIBUTES = ['alt', 'height', 'width', 'image-id']
 
 export type ImageValue = string | { src: string }
-class CustomImage extends Embed {
+export class CustomImage extends Embed {
+  static blotName = 'image'
+  static tagName = 'IMG'
   static ID_SEED = 0
-  static blotName: string
-  static tagName: string
-  domNode: any
-  parent: any
-  scroll: any
-  next: any
+  declare domNode: HTMLElement
   static create(value: ImageValue) {
     const node = super.create(value) as HTMLElement
     const url = typeof value === 'string' ? value : value.src
@@ -30,7 +28,7 @@ class CustomImage extends Embed {
     return node
   }
 
-  static formats(domNode) {
+  static formats(domNode: HTMLElement) {
     return ATTRIBUTES.reduce((formats, attribute) => {
       if (domNode.hasAttribute(attribute)) {
         formats[attribute] = domNode.getAttribute(attribute)
@@ -39,7 +37,7 @@ class CustomImage extends Embed {
     }, {})
   }
 
-  static match(url) {
+  static match(url: string) {
     return /\.(jpe?g|gif|png)$/.test(url) || /^data:image\/.+;base64/.test(url)
   }
 
@@ -52,11 +50,11 @@ class CustomImage extends Embed {
     }
   }
 
-  static sanitize(url) {
+  static sanitize(url: string) {
     return sanitize(url, ['http', 'https', 'blob', 'data']) ? url : '//:0'
   }
 
-  static value(domNode) {
+  static value(domNode: HTMLElement) {
     const formats: any = {}
     const imageSrc = domNode.getAttribute('src')
     formats.src = this.sanitize(imageSrc)
@@ -65,7 +63,7 @@ class CustomImage extends Embed {
     return formats
   }
 
-  format(name, value) {
+  format(name: string, value: any) {
     if (ATTRIBUTES.includes(name)) {
       if (value) {
         this.domNode.setAttribute(name, value)
@@ -80,11 +78,13 @@ class CustomImage extends Embed {
   }
 
   unWrap() {
-    this.parent.replaceWith(this)
+    this.parent.replaceWith(this as TypeEmbed)
   }
 
-  wrap(name, value) {
-    const wrapper = typeof name === 'string' ? this.scroll.create(name, value) : name
+  wrap(name: string, value?: any): TypeParchment.Parent
+  wrap(wrapper: TypeParchment.Parent): TypeParchment.Parent
+  wrap(name: string | TypeParchment.Parent, value?: any) {
+    const wrapper = (typeof name === 'string' ? this.scroll.create(name, value) : name) as TypeParchment.Parent
     if (!isNullOrUndefined(this.parent)) {
       this.parent.insertBefore(wrapper, this.next || undefined)
     }
@@ -95,7 +95,3 @@ class CustomImage extends Embed {
     return wrapper
   }
 }
-CustomImage.blotName = 'image'
-CustomImage.tagName = 'IMG'
-
-export { CustomImage as default }

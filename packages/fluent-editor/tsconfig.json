@@ -1,15 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "jsx": "preserve",
+    "target": "ESNext",
     "lib": ["esnext", "dom"],
-
     "experimentalDecorators": true,
     "baseUrl": "./",
-    "module": "esnext",
+    "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "types": ["vite/client", "@types/node", "@types/jest", "quill/quill.d.ts", "quill/core.d.ts"],
+    "types": ["@types/node"],
     "strict": true,
     // 不允许this有隐式的any类型
     "strictNullChecks": false,
@@ -23,5 +21,5 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true // 不允许把null、undefined赋值给其他类型的变量
   },
-  "include": ["src/*", "src/**/*"]
+  "include": ["src"]
 }

@@ -1,19 +1,18 @@
-import type Action from './actions/Action'
-import type { Options } from './Options'
-import type BlotSpec from './specs/BlotSpec'
+import type FluentEditor from '../../core/fluent-editor'
+import type { Action } from './actions'
+import type { BlotFormatterOptions } from './options'
+import type { BlotSpec } from './specs'
 import { merge as deepmerge } from 'lodash-es'
 import Quill from 'quill'
-import ImageBlot from './image'
-import ImageBar from './image-bar'
-import DefaultOptions from './Options'
-import { CustomImageSpec } from './specs/CustomImageSpec'
+import { CustomImage } from './image'
+import { ImageBar } from './image-bar'
+import DefaultOptions from './options'
+import { CustomImageSpec } from './specs'
 
 const dontMerge = (_destination: Array<any>, source: Array<any>) => source
 
-// @dynamic
-export default class BlotFormatter {
-  quill: any
-  options: Options
+export class BlotFormatter {
+  options: BlotFormatterOptions
   currentSpec: BlotSpec
   specs: BlotSpec[]
   overlay: HTMLElement
@@ -23,12 +22,13 @@ export default class BlotFormatter {
   private debounceTimer: number | null = null
 
   static register() {
-    Quill.register('formats/image', ImageBlot, true)
-    Quill.register('modules/image-spec', CustomImageSpec, true)
+    Quill.register({
+      'formats/image': CustomImage,
+      'modules/image-spec': CustomImageSpec,
+    }, true)
   }
 
-  constructor(quill: any, options: any = {}) {
-    this.quill = quill
+  constructor(public quill: FluentEditor, options: Partial<BlotFormatterOptions> = {}) {
     this.options = deepmerge(DefaultOptions, options, { arrayMerge: dontMerge })
     this.currentSpec = null
     this.actions = []
@@ -123,7 +123,7 @@ export default class BlotFormatter {
       return
     }
 
-    const parent: HTMLElement = this.quill.root.parentNode
+    const parent = this.quill.root.parentElement
     const specRect = overlayTarget.getBoundingClientRect()
     const parentRect = parent.getBoundingClientRect()
 

@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import type FluentEditor from '@opentiny/fluent-editor'
 import { onMounted, ref } from 'vue'
 
-let editor
+let editor: FluentEditor
 
-const editorRef = ref()
+const editorRef = ref<HTMLElement>()
 const editable = ref(true)
 
 // @提醒
@@ -28,6 +29,7 @@ const mentionList = [
 onMounted(() => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
   import('@opentiny/fluent-editor').then((module) => {
+    if (!editorRef.value) return
     const FluentEditor = module.default
 
     editor = new FluentEditor(editorRef.value, {

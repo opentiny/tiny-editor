@@ -1,17 +1,17 @@
+import type TypeEmbed from 'quill/blots/embed'
 import Quill from 'quill'
 import emojiMap from '../emoji-map'
 
-const Embed = Quill.imports['blots/embed']
+const Embed = Quill.import('blots/embed') as typeof TypeEmbed
 
-// @dynamic
-class EmojiBlot extends Embed {
-  static emojiClass: string
-  static emojiPrefix: any
-  static tagName: string
-  static blotName: string
-  static className: string
+export class EmojiBlot extends Embed {
+  static blotName = 'emoji'
+  static className = 'ql-emojiblot'
+  static tagName = 'span'
+  static emojiClass = 'ap'
+  static emojiPrefix = 'ap-'
   static create(value) {
-    const node = super.create()
+    const node = super.create() as HTMLElement
     if (typeof value === 'object') {
       EmojiBlot.buildSpan(value, node)
     }
@@ -22,7 +22,7 @@ class EmojiBlot extends Embed {
       }
     }
     // 修复在emoji后输入中文插入其中导致quill不能识别
-    node.setAttribute('contenteditable', false)
+    node.setAttribute('contenteditable', 'false')
     return node
   }
 
@@ -44,11 +44,3 @@ class EmojiBlot extends Embed {
     return string.split('-').map(str => Number.parseInt(str, 16))
   }
 }
-
-EmojiBlot.blotName = 'emoji'
-EmojiBlot.className = 'ql-emojiblot'
-EmojiBlot.tagName = 'span'
-EmojiBlot.emojiClass = 'ap'
-EmojiBlot.emojiPrefix = 'ap-'
-
-export default EmojiBlot

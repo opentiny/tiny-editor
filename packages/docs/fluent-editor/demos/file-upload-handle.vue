@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { Range } from '@opentiny/fluent-editor'
+import type FluentEditor from '@opentiny/fluent-editor'
 import { onMounted, ref } from 'vue'
 
-let editor
-const editorRef = ref()
+let editor: FluentEditor
+const editorRef = ref<HTMLElement>()
 
 const TOOLBAR_CONFIG = [
   [{ header: [] }],

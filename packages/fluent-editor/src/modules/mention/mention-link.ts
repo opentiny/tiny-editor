@@ -1,15 +1,14 @@
 import type TypeEmbed from 'quill/blots/embed'
+import type TypeScroll from 'quill/blots/scroll'
 import Quill from 'quill'
 import { DEFAULT_MENTION_CHAR, MENTION_CHAR, ON_MENTION_LINK_REMOVE } from './constants'
 
 const Embed = Quill.import('blots/embed') as typeof TypeEmbed
 
-// @dynamic
-class MentionLink extends Embed {
+export class MentionLink extends Embed {
   static blotName: string
   static tagName: string
   static className: string
-  scroll: any
   mentionData: any
 
   static create(data) {
@@ -43,7 +42,7 @@ class MentionLink extends Embed {
     return value
   }
 
-  constructor(scroll, domNode, data) {
+  constructor(public scroll: TypeScroll, domNode, data) {
     super(scroll, domNode)
     this.mentionData = data
   }
@@ -63,4 +62,3 @@ class MentionLink extends Embed {
 MentionLink.blotName = 'mention'
 MentionLink.tagName = 'span'
 MentionLink.className = 'ql-mention-link'
-export { MentionLink as default }
