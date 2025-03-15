@@ -48,8 +48,8 @@ importers:
         specifier: ^0.0.10
         version: 0.0.10
       quill-table-up:
-        specifier: ^2.1.5
-        version: 2.1.5(quill@2.0.3)
+        specifier: ^2.1.7
+        version: 2.1.7(quill@2.0.3)
       quill-toolbar-tip:
         specifier: ^0.0.13
         version: 0.0.13(quill@2.0.3)
@@ -94,8 +94,8 @@ importers:
         specifier: ^0.0.9
         version: 0.0.9(quill@2.0.3)
       quill-shortcut-key:
-        specifier: ^0.0.3
-        version: 0.0.3(quill@2.0.3)
+        specifier: ^0.0.5
+        version: 0.0.5(quill@2.0.3)
     devDependencies:
       '@types/jest':
         specifier: ^26.0.23
@@ -155,8 +155,8 @@ importers:
         specifier: 0.0.2
         version: 0.0.2(quill@2.0.3)
       quill-table-up:
-        specifier: ^2.1.5
-        version: 2.1.5(quill@2.0.3)
+        specifier: ^2.1.7
+        version: 2.1.7(quill@2.0.3)
       sass:
         specifier: ^1.47.0
         version: 1.83.4
@@ -3979,8 +3979,13 @@ packages:
     peerDependencies:
       quill: ^2.0.0
 
-  quill-table-up@2.1.5:
-    resolution: {integrity: sha512-4k9oTX4bFU+y5NO9Fun/GfwGnn5cfdR1GxgJaiUtU1QBZoilCSk6oBZ3g9GbdpjitOKkdOnlovFteANecz5dcg==}
+  quill-shortcut-key@0.0.5:
+    resolution: {integrity: sha512-7B1KLgkaN4e1a9+ZtT3Fui3I0bqrdeMW3jQaMYJ3W8dHEi4jg2pIwSKW3cFerqH0iSPnNE3pAhX0y9AeDg4vnA==}
+    peerDependencies:
+      quill: ^2.0.0
+
+  quill-table-up@2.1.7:
+    resolution: {integrity: sha512-HJYVHkw/t4R25aChS0k8nWPlaYtMPuGBr59X/WlFoHpUdNMOE/WpD8itmSmMMdBijzhV1BlF8BFNhjD/Ip9dxQ==}
     peerDependencies:
       quill: ^2.0.3
 
@@ -5704,7 +5709,7 @@ snapshots:
       '@types/istanbul-lib-coverage': 2.0.6
       collect-v8-coverage: 1.0.2
 
-  '@jest/test-sequencer@26.6.3':
+  '@jest/test-sequencer@26.6.3(ts-node@9.1.1(typescript@4.9.5))':
     dependencies:
       '@jest/test-result': 26.6.2
       graceful-fs: 4.2.11
@@ -5712,7 +5717,11 @@ snapshots:
       jest-runner: 26.6.3(ts-node@9.1.1(typescript@4.9.5))
       jest-runtime: 26.6.3(ts-node@9.1.1(typescript@4.9.5))
     transitivePeerDependencies:
+      - bufferutil
+      - canvas
       - supports-color
+      - ts-node
+      - utf-8-validate
 
   '@jest/transform@26.6.2':
     dependencies:
@@ -8043,7 +8052,7 @@ snapshots:
   jest-config@26.6.3(ts-node@9.1.1(typescript@4.9.5)):
     dependencies:
       '@babel/core': 7.26.0
-      '@jest/test-sequencer': 26.6.3
+      '@jest/test-sequencer': 26.6.3(ts-node@9.1.1(typescript@4.9.5))
       '@jest/types': 26.6.2
       babel-jest: 26.6.3(@babel/core@7.26.0)
       chalk: 4.1.2
@@ -9378,7 +9387,11 @@ snapshots:
     dependencies:
       quill: 2.0.3
 
-  quill-table-up@2.1.5(quill@2.0.3):
+  quill-shortcut-key@0.0.5(quill@2.0.3):
+    dependencies:
+      quill: 2.0.3
+
+  quill-table-up@2.1.7(quill@2.0.3):
     dependencies:
       '@floating-ui/dom': 1.6.13
       quill: 2.0.3

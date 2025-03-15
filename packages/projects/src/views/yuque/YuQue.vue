@@ -53,6 +53,7 @@ onMounted(() => {
       },
       'header-list': {
         container: headerListRef.value,
+        scrollContainer: window,
       },
       'table-up': {
         customSelect: defaultCustomSelect,
@@ -364,7 +365,6 @@ onMounted(() => {
 .ql-toolbar {
   position: fixed !important;
   z-index: 1;
-  height: 42px;
   width: 100%;
   top: 52px;
   padding-left: 16px !important;
