@@ -5,7 +5,7 @@ import { hadProtocol, sanitize } from '../../../config/editor.utils'
 const Inline = Quill.import('blots/inline') as typeof TypeInline
 
 export class LinkBlot extends Inline {
-  static blotName = 'Link'
+  static blotName = 'link'
   static tagName = 'A'
   static SANITIZED_URL = 'about:blank'
   static PROTOCOL_WHITELIST = ['http', 'https', 'mailto', 'tel']

@@ -21,8 +21,6 @@ export class LinkTooltip extends BaseTooltip {
   isHover: boolean
   debouncedHideToolTip: any
   debouncedShowToolTip: any
-  hide: any
-  restoreFocus: any
   options: { autoProtocol: string } = {
     autoProtocol: 'https',
   }
