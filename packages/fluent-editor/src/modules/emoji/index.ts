@@ -1,5 +1,3 @@
-import EmojiBlot from './formats/emoji-blot'
-import ShortNameEmoji from './modules/emoji'
-import ToolbarEmoji from './modules/toolbar-emoji'
-
-export default { EmojiBlot, ShortNameEmoji, ToolbarEmoji }
+export * from './formats/emoji-blot'
+export * from './modules/emoji'
+export * from './modules/toolbar-emoji'

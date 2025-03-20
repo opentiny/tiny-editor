@@ -28,6 +28,7 @@ function preRelease() {
   shelljs.sed('-i', `"version": "${currentVersion}"`, `"version": "${newVersion}"`, targetFile)
   shelljs.sed('-i', `"main": "src/index.ts"`, `"main": "lib/index.cjs.js"`, targetFile)
   shelljs.sed('-i', `"module": "src/index.ts"`, `"module": "es/index.es.js"`, targetFile)
+  shelljs.sed('-i', `"types": "dist/types/index.d.ts"`, `"types": "types/index.d.ts"`, targetFile)
   shelljs.cp('-rf', '../../README.md', 'dist')
 }
 

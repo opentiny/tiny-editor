@@ -1,10 +1,8 @@
 import { isInside } from '../../../config/editor.utils'
-import CustomResizeAction from '../actions/CustomResizeAction'
-import DeleteAction from '../actions/DeleteAction'
-import ImageSpec from './ImageSpec'
+import { CustomResizeAction, DeleteAction } from '../actions'
+import { ImageSpec } from './image-spec'
 
 export class CustomImageSpec extends ImageSpec {
-  formatter
   editorElem: HTMLElement | undefined
   observer: any
   oldRootScrollTop: any

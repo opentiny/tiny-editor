@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import type FluentEditor from '@opentiny/fluent-editor'
 import { onMounted } from 'vue'
 
-let editor
+let editor: FluentEditor
 
 onMounted(() => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook

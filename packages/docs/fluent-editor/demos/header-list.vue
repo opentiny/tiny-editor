@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import type FluentEditor from '@opentiny/fluent-editor'
 import { onMounted, ref } from 'vue'
 import 'quill-header-list/dist/index.css'
 
-let editor
-const editorRef = ref()
-const headerListRef = ref()
+let editor: FluentEditor
+const editorRef = ref<HTMLElement>()
+const headerListRef = ref<HTMLElement>()
 
 onMounted(() => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
@@ -13,6 +14,7 @@ onMounted(() => {
     import('quill-header-list'),
   ])
     .then(([{ default: FluentEditor }, { default: HeaderList }]) => {
+      if (!editorRef.value) return
       FluentEditor.register({ 'modules/header-list': HeaderList }, true)
 
       editor = new FluentEditor(editorRef.value, {

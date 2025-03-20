@@ -1,4 +1,4 @@
-import ImageSpec from './specs/ImageSpec'
+import { ImageSpec } from './specs'
 
 export interface OverlayOptions {
   // classname applied to the overlay element
@@ -48,7 +48,7 @@ export interface AlignOptions {
   }
 }
 
-export interface Options {
+export interface BlotFormatterOptions {
   // the BlotSpecs supported
   specs: any
   overlay: OverlayOptions
@@ -56,7 +56,7 @@ export interface Options {
   resize: ResizeOptions
 }
 
-const DefaultOptions: Options = {
+const DefaultOptions: BlotFormatterOptions = {
   specs: [
     ImageSpec,
   ],

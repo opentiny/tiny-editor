@@ -6,7 +6,7 @@ import { isString } from '../../utils/is'
 
 const Delta = Quill.import('delta')
 const Tooltip = Quill.import('ui/tooltip') as typeof TypeTooltip
-export default class MathliveTooltip extends Tooltip {
+export class MathliveTooltip extends Tooltip {
   static TEMPLATE = ``
 
   mathliveDom: MathfieldElement

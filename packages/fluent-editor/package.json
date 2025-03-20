@@ -25,12 +25,10 @@
   ],
   "main": "src/index.ts",
   "module": "src/index.ts",
-  "types": "types/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "scripts": {
-    "start": "vite build && vite",
-    "dev": "vite",
-    "build": "pnpm build:theme && vite build && node scripts/pre-release.cjs",
-    "build:theme": "vite build --config vite.config.theme.ts",
+    "dev": "vite build --watch",
+    "build": "vite build && node scripts/pre-release.cjs",
     "test": "jest"
   },
   "dependencies": {
@@ -42,7 +40,6 @@
   "devDependencies": {
     "@types/jest": "^26.0.23",
     "commander": "^6.2.0",
-    "glob": "^11.0.0",
     "highlight.js": "^10.2.0",
     "html2canvas": "^1.4.1",
     "jest": "^26.6.3",

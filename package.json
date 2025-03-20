@@ -25,7 +25,8 @@
     "tiny-editor"
   ],
   "scripts": {
-    "dev": "pnpm -F docs dev",
+    "dev": "pnpm -F @opentiny/fluent-editor dev",
+    "dev:docs": "pnpm -F docs dev",
     "dev:projects": "pnpm -F projects dev",
     "build": "pnpm -F docs build",
     "build:v3": "pnpm -F docs build:v3",

@@ -1,6 +1,4 @@
-import {
-  peopleEmoji,
-} from './emoji-list/index'
+import { peopleEmoji } from './emoji-list/index'
 
 const emojiList = [
   ...peopleEmoji,

@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
+    "lib": ["esnext", "dom"],
+    "baseUrl": ".",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "paths": {
+      "@opentiny/fluent-editor": ["../fluent-editor/src"]
+    },
+    "resolveJsonModule": true,
+    "types": ["vite/client", "./types/global.d.ts"],
+    "strict": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "./fluent-editor/**/*",
+    "../fluent-editor/**/*",
+    "./types/**/*"
+  ]
+}

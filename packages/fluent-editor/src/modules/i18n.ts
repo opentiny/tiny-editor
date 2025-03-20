@@ -4,7 +4,7 @@ import { isUndefined } from '../utils/is'
 
 const langs: Record<string, Record<string, string>> = {}
 
-interface I18NOptions {
+export interface I18NOptions {
   lang: string
 }
 export class I18N {
@@ -62,7 +62,5 @@ export class I18N {
     this.quill.emitter.emit(CHANGE_LANGUAGE_EVENT, this.options.lang, langs[langOps.lang])
   }
 }
-
-export { I18NOptions }
 
 export default I18N

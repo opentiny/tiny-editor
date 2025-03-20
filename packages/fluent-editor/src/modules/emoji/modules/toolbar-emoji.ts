@@ -1,17 +1,14 @@
+import type TypeToolbar from 'quill/modules/toolbar'
+import type FluentEditor from '../../../core/fluent-editor'
 import Quill from 'quill'
 import emojiList from '../emoji-list'
 import { EMOJI_SPRITE as emojiSprite } from '../emoji-sprite'
 
-const Module = Quill.imports['core/module']
-
-class ToolbarEmoji extends Module {
-  quill: any
-  toolbar: any
-  constructor(quill, options) {
-    super(quill, options)
-
+export class ToolbarEmoji {
+  toolbar: TypeToolbar
+  constructor(public quill: FluentEditor) {
     this.quill = quill
-    this.toolbar = quill.getModule('toolbar')
+    this.toolbar = quill.getModule('toolbar') as TypeToolbar
     if (typeof this.toolbar !== 'undefined') {
       this.toolbar.addHandler('emoji', this.checkPalatteExist)
     }
@@ -178,5 +175,3 @@ function fnUpdateEmojiContainer(emojiFilter, panel, quill) {
   const type = emojiFilter.dataset.filter
   fnEmojiElementsToPanel(type, panel, quill)
 }
-
-export default ToolbarEmoji

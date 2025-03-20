@@ -4,15 +4,15 @@ import { hadProtocol, sanitize } from '../../../config/editor.utils'
 
 const Inline = Quill.import('blots/inline') as typeof TypeInline
 
-// @dynamic
-export default class Link extends Inline {
-  static blotName: string
-  static tagName: string
-  static SANITIZED_URL: string
-  static PROTOCOL_WHITELIST: string[]
-  static className: string
+export class LinkBlot extends Inline {
+  static blotName = 'link'
+  static tagName = 'A'
+  static SANITIZED_URL = 'about:blank'
+  static PROTOCOL_WHITELIST = ['http', 'https', 'mailto', 'tel']
+  static className = 'ql-normal-link'
+
   static autoProtocol: string = ''
-  static create(value) {
+  static create(value: string) {
     const node = super.create(value)
     let href = value
     if (!hadProtocol(href) && this.autoProtocol) {
@@ -24,25 +24,20 @@ export default class Link extends Inline {
     return node
   }
 
-  static formats(domNode) {
+  static formats(domNode: HTMLElement) {
     return domNode.getAttribute('href')
   }
 
-  static sanitize(url) {
+  static sanitize(url: string) {
     return sanitize(url, this.PROTOCOL_WHITELIST) ? url : this.SANITIZED_URL
   }
 
-  format(name, value) {
+  format(name: string, value: any) {
     if (name !== this.statics.blotName || [false, null].includes(value)) {
       super.format(name, value)
     }
     else {
-      this.domNode.setAttribute('href', Link.sanitize(value))
+      this.domNode.setAttribute('href', LinkBlot.sanitize(value))
     }
   }
 }
-Link.blotName = 'link'
-Link.tagName = 'A'
-Link.SANITIZED_URL = 'about:blank'
-Link.PROTOCOL_WHITELIST = ['http', 'https', 'mailto', 'tel']
-Link.className = 'ql-normal-link'

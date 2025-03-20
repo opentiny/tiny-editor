@@ -1,11 +1,11 @@
 import Quill from 'quill'
 import { Range } from 'quill/core/selection'
 import { unshiftString } from '../../../utils/method'
-import File from '../formats/file'
+import { File } from '../formats/file'
 
-const Delta = Quill.imports.delta
+const Delta = Quill.import('delta')
 
-export default class FileBar {
+export class FileBar {
   quill: any
   file: any
   domNode: HTMLElement
