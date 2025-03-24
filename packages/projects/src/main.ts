@@ -4,6 +4,7 @@ import App from './App.vue'
 import NotFoundComponent from './components/NotFound.vue'
 import HomeView from './views/home/Home.vue'
 import YuQueView from './views/yuque/YuQue.vue'
+import 'tailwindcss/index.css'
 import './style.scss'
 
 const routes = [
