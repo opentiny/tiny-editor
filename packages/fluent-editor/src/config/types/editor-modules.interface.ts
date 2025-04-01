@@ -33,7 +33,7 @@ export interface IEditorModules {
       hljs?: any
     }
     | boolean
-  'toolbar'?: boolean | ToolbarOptions | ToolbarOptions['container']
+  'toolbar'?: boolean | ToolbarOptions | ToolbarOptions['container'] | string[]
   'uploader'?: boolean | Partial<FileUploaderOptions>
   'shortcut-key'?: boolean | Partial<ShortCutKeyInputOptions>
   'mention'?: boolean | MentionOption

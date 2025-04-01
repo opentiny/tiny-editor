@@ -37,6 +37,10 @@ onMounted(() => {
         mathlive: true,
       },
     })
+
+    const html = '<p>正弦交流电的公式可以表示为<math-field class="ql-math-field view" contenteditable="false" mode="dialog">E = E_{max} \sin(\omega t + \phi)</math-field>，其中<math-field class="ql-math-field view" contenteditable="false" mode="dialog">E_{max}</math-field>表示最大值，<math-field class="ql-math-field view" contenteditable="false" mode="dialog">\omega</math-field>表示角频率，<math-field class="ql-math-field view" contenteditable="false" mode="dialog">t</math-field>表示时间，<math-field class="ql-math-field view" contenteditable="false" mode="dialog">\phi</math-field>表示初相位。公式中的<math-field class="ql-math-field view" contenteditable="false" mode="dialog">E_{max}</math-field>、<math-field class="ql-math-field view" contenteditable="false" mode="dialog">\omega</math-field>、<math-field class="ql-math-field view" contenteditable="false" mode="dialog">t</math-field>、<math-field class="ql-math-field view" contenteditable="false" mode="dialog">\phi</math-field>分别代表的含义是（）。</p>'
+
+    mathliveEditor.root.innerHTML = html
   })
 })
 </script>
