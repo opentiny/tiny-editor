@@ -1,20 +1,18 @@
+import type { BlotFormatter } from '../blot-formatter'
 import { isInside } from '../../../config/editor.utils'
-import { CustomResizeAction, DeleteAction } from '../actions'
 import { ImageSpec } from './image-spec'
 
 export class CustomImageSpec extends ImageSpec {
   editorElem: HTMLElement | undefined
   observer: any
-  oldRootScrollTop: any
+  oldRootScrollTop: number
 
-  constructor(formatter) {
+  constructor(formatter: BlotFormatter) {
     super(formatter)
     this.formatter = formatter
     this.oldRootScrollTop = this.formatter.quill.root.scrollTop
     this.editorElem = this.formatter.quill.container
-    if (this.formatter.quill.root === this.formatter.quill.scrollingContainer) {
-      this.formatter.quill.root.addEventListener('scroll', this.handleQuillRootScroll.bind(this))
-    }
+    this.formatter.quill.root.addEventListener('scroll', this.handleQuillRootScroll.bind(this))
   }
 
   handleQuillRootScroll() {
@@ -28,10 +26,6 @@ export class CustomImageSpec extends ImageSpec {
     this.editorElem.addEventListener('mouseout', this.imageMouseout)
 
     super.init()
-  }
-
-  getActions() {
-    return [DeleteAction, CustomResizeAction]
   }
 
   imageMouseOver(event) {
@@ -118,7 +112,7 @@ export class CustomImageSpec extends ImageSpec {
       return
     }
 
-    this.img = el
+    this.img = el as HTMLImageElement
     this.oldRootScrollTop = this.formatter.quill.root.scrollTop
     this.resetOverlayMarginTop()
     this.formatter.show(this)

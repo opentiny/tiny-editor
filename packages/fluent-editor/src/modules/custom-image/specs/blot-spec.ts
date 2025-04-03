@@ -1,19 +1,20 @@
-import { CustomResizeAction, DeleteAction } from '../actions'
+import type { BlotFormatter } from '../blot-formatter'
+import { CustomResizeAction, DeleteAction, ImageToolbarAction } from '../actions'
 
 export class BlotSpec {
-  formatter
+  formatter: BlotFormatter
 
-  constructor(formatter) {
+  constructor(formatter: BlotFormatter) {
     this.formatter = formatter
   }
 
   init(): void {}
 
   getActions() {
-    return [CustomResizeAction, DeleteAction]
+    return [ImageToolbarAction, CustomResizeAction, DeleteAction]
   }
 
-  getTargetElement() {
+  getTargetElement(): HTMLElement | null {
     return null
   }
 

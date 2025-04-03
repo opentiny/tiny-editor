@@ -2,11 +2,18 @@ import type { Parchment as TypeParchment } from 'quill'
 import type TypeEmbed from 'quill/blots/embed'
 import Quill from 'quill'
 import { isNullOrUndefined, sanitize } from '../../config/editor.utils'
+import { isObject } from '../../utils/is'
+import { ALIGN_ATTR, alignmentHandler } from './actions'
 
 const Embed = Quill.import('blots/embed') as typeof TypeEmbed
 const ATTRIBUTES = ['alt', 'height', 'width', 'image-id']
 
-export type ImageValue = string | { src: string }
+export type ImageValue = string | {
+  src: string
+  align?: string
+  height?: number
+  width?: number
+}
 export class CustomImage extends Embed {
   static blotName = 'image'
   static tagName = 'IMG'
@@ -23,8 +30,19 @@ export class CustomImage extends Embed {
       node.setAttribute('src', imgURL)
     }
     node.setAttribute('data-image-id', `img${CustomImage.ID_SEED++}`)
-    node.setAttribute('devui-editorx-image', 'true')
     node.style.verticalAlign = 'baseline'
+    if (isObject(value)) {
+      if (value.align && alignmentHandler[value.align]) {
+        node.setAttribute(ALIGN_ATTR, value.align)
+        alignmentHandler[value.align](node)
+      }
+      if (value.width) {
+        node.setAttribute('width', String(value.width))
+      }
+      if (value.height) {
+        node.setAttribute('height', String(value.height))
+      }
+    }
     return node
   }
 
@@ -58,8 +76,16 @@ export class CustomImage extends Embed {
     const formats: any = {}
     const imageSrc = domNode.getAttribute('src')
     formats.src = this.sanitize(imageSrc)
-    formats.hasExisted = domNode.getAttribute('devui-editorx-image')
     formats.imageId = domNode.dataset.imageId
+    if (domNode.dataset.align) {
+      formats.align = domNode.dataset.align
+    }
+    if (domNode.hasAttribute('width')) {
+      formats.width = domNode.getAttribute('width')
+    }
+    if (domNode.hasAttribute('height')) {
+      formats.height = domNode.getAttribute('height')
+    }
     return formats
   }
 

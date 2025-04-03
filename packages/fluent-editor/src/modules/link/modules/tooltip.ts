@@ -85,7 +85,7 @@ export class LinkTooltip extends BaseTooltip {
     this.debouncedHideToolTip()
   }
 
-  handleMouseEnter(event) {
+  handleMouseEnter(event: MouseEvent) {
     const isTooltipShow = !this.root.classList.contains('ql-hidden')
     if (isTooltipShow) {
       return
@@ -95,9 +95,9 @@ export class LinkTooltip extends BaseTooltip {
       this.save()
     }
     this.isHover = true
-    const linkNode = event.target
+    const linkNode = event.target as HTMLElement
     const preview = LinkBlot.formats(linkNode)
-    if (preview.startsWith('#')) {
+    if (!preview || preview.startsWith('#')) {
       return
     }
     const linkBlot = Quill.find(linkNode) as TypeParchment.Blot
