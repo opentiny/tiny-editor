@@ -165,7 +165,7 @@ export class CustomClipboard extends Clipboard {
           delta.length() - linePos.length - linePos.fix,
           Quill.sources.SILENT,
         )
-        this.quill.scrollIntoView()
+        this.quill.scrollSelectionIntoView()
         if (loadingTipsContainer) {
           loadingTipsContainer.remove()
         }
