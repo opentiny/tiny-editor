@@ -19,7 +19,7 @@ export const alignmentHandler = {
   right: (el: HTMLElement, toolbarButtons: ImageToolbarButtons) => {
     setAlignStyle(el, 'inline', 'right', '0 0 1em 1em')
   },
-  dowload: (el: HTMLImageElement, toolbarButtons: ImageToolbarButtons) => {
+  download: (el: HTMLImageElement, toolbarButtons: ImageToolbarButtons) => {
     const imageName = el.dataset.title || 'image'
     const url = el.src || ''
     if (!url) return
@@ -98,7 +98,7 @@ const defaultButtons: Record<string, ToolButtonOption> = {
     name: DOWNLOAD,
     icon: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path class="ql-fill" d="M26 24v4H6v-4H4v4a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2v-4zm0-10l-1.41-1.41L17 20.17V2h-2v18.17l-7.59-7.58L6 14l10 10z"/></svg>`,
     apply: (el: HTMLImageElement, toolbarButtons: ImageToolbarButtons) => {
-      alignmentHandler.dowload(el, toolbarButtons)
+      alignmentHandler.download(el, toolbarButtons)
     },
   },
   [COPY]: {

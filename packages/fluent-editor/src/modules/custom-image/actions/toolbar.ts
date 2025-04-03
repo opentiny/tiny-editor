@@ -95,7 +95,7 @@ export class ImageToolbar {
     }
 
     const target = formatter.currentSpec.getTargetElement()
-    if (!target && target.tagName.toLowerCase() !== 'img') {
+    if (!target || target.tagName.toLowerCase() !== 'img') {
       return
     }
 
