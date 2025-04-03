@@ -81,13 +81,6 @@ OriginSnowTheme.DEFAULTS = {
           border: '1px dashed rgb(68, 68, 68)',
         },
       },
-      align: {
-        icons: {
-          left: '<i class="icon-text-align-left"></i>',
-          center: '<i class="icon-text-align-center"></i>',
-          right: '<i class="icon-text-align-right"></i>',
-        },
-      },
     },
     'shortcut-key': true,
     'file': true,
