@@ -1,12 +1,7 @@
 import { BlotSpec } from './blot-spec'
 
 export class ImageSpec extends BlotSpec {
-  img
-
-  constructor(formatter) {
-    super(formatter)
-    this.img = null
-  }
+  img: HTMLImageElement | null = null
 
   init() {
     this.formatter.quill.root.addEventListener('click', this.onClick)
@@ -27,7 +22,7 @@ export class ImageSpec extends BlotSpec {
     }
     event.stopPropagation()
 
-    this.img = el
+    this.img = el as HTMLImageElement
     this.formatter.show(this)
   }
 }

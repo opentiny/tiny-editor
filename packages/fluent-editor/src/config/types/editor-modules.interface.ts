@@ -1,6 +1,6 @@
 import type { ToolbarProps } from 'quill/modules/toolbar'
 import type { I18NOptions, ICounterOption, MentionOption, ShortCutKeyInputOptions } from '../../modules'
-import type { BlotFormatterOptions } from '../../modules/custom-image/options'
+import type { BlotFormatterOptionsInput } from '../../modules/custom-image/options'
 import type { FileUploaderOptions } from '../../modules/custom-uploader'
 
 export type ToolbarOptions = {
@@ -43,5 +43,5 @@ export interface IEditorModules {
   'emoji-shortname'?: any
   'file'?: boolean
   'mathlive'?: boolean
-  'image'?: boolean | Partial<BlotFormatterOptions>
+  'image'?: boolean | Partial<BlotFormatterOptionsInput>
 }
