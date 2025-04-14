@@ -51,7 +51,7 @@ onMounted(() => {
 <template>
   <div ref="editorRef">
     <p />
-    <p><img data-align="center" src="https://d85bacca-925d-464c-94b0-4797720f56a6.mdnplay.dev/shared-assets/images/examples/grapefruit-slice.jpg"></p>
+    <p><img data-align="center" width="400px" src="https://res.hc-cdn.com/tiny-vue-web-doc/3.20.7.20250117141151/static/images/mountain.png"></p>
     <p />
   </div>
 </template>
