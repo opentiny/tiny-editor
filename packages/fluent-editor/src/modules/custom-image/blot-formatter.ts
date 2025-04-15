@@ -26,7 +26,7 @@ export class BlotFormatter {
   }
 
   constructor(public quill: FluentEditor, options: Partial<BlotFormatterOptions> = {}) {
-    this.options = deepmerge(DefaultOptions, options, { arrayMerge: dontMerge })
+    this.options = deepmerge({}, DefaultOptions, options, { arrayMerge: dontMerge })
     this.currentSpec = null
     this.actions = []
     this.overlay = document.createElement('div')
