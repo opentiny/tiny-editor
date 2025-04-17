@@ -98,8 +98,8 @@ export class AI {
       this.dialogContainerEl.appendChild(this.wrapContainerEl)
     }
     
-    this.aiPreTextEl.innerText = `${this.model}帮你写：`
-    this.sendButtonEl.innerText = this.SEND
+    this.aiPreTextEl.textContent = `${this.model}帮你写：`
+    this.sendButtonEl.textContent = this.SEND
     this.sendButtonEl.style.display = 'block' // 显示发送按钮
     this.resultPopupEl.style.display = 'none'
     this.quill.container.appendChild(this.dialogContainerEl)
@@ -119,7 +119,7 @@ export class AI {
       }
     })
     this.sendButtonEl.addEventListener('click', async (e) => {
-      if (e.target.innerText === this.BREAK) {
+      if (e.target.textContent === this.BREAK) {
         this.isBreak = true
       }
       else {
@@ -148,9 +148,9 @@ export class AI {
 
     // 有信息
     this.isBreak = false // 重置打断标记，防止重复打断ai
-    this.sendButtonEl.innerText = this.BREAK
+    this.sendButtonEl.textContent = this.BREAK
     this.sendButtonEl.style.display = 'block'
-    this.aiPreTextEl.innerText = '按ESC退出 | 正在编写...' // 显示提示语
+    this.aiPreTextEl.textContent = '按ESC退出 | 正在编写...' // 显示提示语
     // 这里实现实际的AI查询逻辑
     try {
       const response = await fetch(`${this.host}/api/generate`, {
@@ -201,9 +201,9 @@ export class AI {
       // 创建操作菜单
       this.createActionMenu()
       if (content) {
-        this.aiPreTextEl.innerText = '' // 清空提示语
+        this.aiPreTextEl.textContent = '' // 清空提示语
         // 隐藏发送按钮
-        this.sendButtonEl.innerText = this.SEND
+        this.sendButtonEl.textContent = this.SEND
         this.sendButtonEl.style.display = 'none'
       }
       return content
@@ -276,7 +276,9 @@ export class AI {
 
   private closeAIPanel() {
     this.isBreak = true // 停止查询
-    this.quill.container.removeChild(this.dialogContainerEl)
+    if(this.dialogContainerEl) {
+      this.quill.container.removeChild(this.dialogContainerEl)
+    }
     this.dialogContainerEl = null
     this.actionMenuEl = null
   }
