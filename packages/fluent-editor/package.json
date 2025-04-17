@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "lodash-es": "^4.17.15",
-    "ollama": "0.5.14",
     "quill": "^2.0.0",
     "quill-easy-color": "^0.0.9",
     "quill-shortcut-key": "^0.0.5"

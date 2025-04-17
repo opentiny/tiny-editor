@@ -2,6 +2,7 @@
 import type FluentEditor from '@opentiny/fluent-editor'
 import { onMounted } from 'vue'
 
+let editor: FluentEditor
 const TOOLBAR_CONFIG = [
   ['ai', { header: [] }],
   ['bold', 'italic', 'underline', 'link'],
