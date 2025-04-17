@@ -1,3 +1,5 @@
+import type { ImageToolbar, ImageToolbarButtons } from './actions'
+import type { BlotSpec } from './specs'
 import { ImageSpec } from './specs'
 
 export interface OverlayOptions {
@@ -14,48 +16,51 @@ export interface ResizeOptions {
   handleStyle: Record<string, string>
 }
 
-export interface AlignOptions {
-  // the name of the attribute for an element that has its alignment changed
-  attribute: string
-  // the aligner does the actual alignment switch
-  aligner: {
-    // whether or not the aligner should handle the actual alignment properties
-    applyStyle: boolean
-  }
-  // icons used for alignment
-  icons: {
-    left: string
-    center: string
-    right: string
-  }
-  // the toolbar so users can change alignments
-  toolbar: {
-    // whether or not users can deselect an alignment. it's up to you to set the initial alignment
-    allowDeselect: boolean
-    // class name applied to the root toolbar element
-    mainClassName: string
-    // style applied to root toolbar element, or null to prevent styles
-    mainStyle
-    // class name applied to each button in the toolbar
-    buttonClassName: string
-    /* whether or not to add the selected style to the buttons.
+export interface ToolButtonOption {
+  name: string
+  icon: string
+  isActive?: (el: HTMLElement) => boolean
+  apply: (this: ImageToolbar, el: HTMLImageElement, toolbarButtons: ImageToolbarButtons) => void
+}
+
+export interface ToolbarButtonOptions {
+  buttons: Record<string, ToolButtonOption | boolean>
+}
+
+export interface ToolbarOptions extends ToolbarButtonOptions {
+  // class name applied to the root toolbar element
+  mainClassName: string
+  // style applied to root toolbar element, or null to prevent styles
+  mainStyle: Record<string, unknown>
+  // class name applied to each button in the toolbar
+  buttonClassName: string
+  /* whether or not to add the selected style to the buttons.
     they'll always get the is-selected class */
-    addButtonSelectStyle: boolean
-    // style applied to buttons, or null to prevent styles
-    buttonStyle
-    // style applied to the svgs in the buttons
-    svgStyle
-  }
+  addButtonSelectStyle: boolean
+  // style applied to buttons, or null to prevent styles
+  buttonStyle: Record<string, unknown>
+  // style applied to the svgs in the buttons
+  svgStyle: Record<string, unknown>
 }
 
+export interface BlotFormatterOptionsInput {
+  specs: typeof BlotSpec[]
+  overlay: Partial<OverlayOptions>
+  resize: Partial<ResizeOptions>
+  toolbar: Partial<ToolbarOptions>
+}
 export interface BlotFormatterOptions {
-  // the BlotSpecs supported
-  specs: any
+  specs: typeof BlotSpec[]
   overlay: OverlayOptions
-  align: AlignOptions
   resize: ResizeOptions
+  toolbar: ToolbarOptions
 }
 
+export const LEFT_ALIGN = 'align-left'
+export const CENTER_ALIGN = 'align-center'
+export const RIGHT_ALIGN = 'align-right'
+export const COPY = 'copy'
+export const DOWNLOAD = 'download'
 const DefaultOptions: BlotFormatterOptions = {
   specs: [
     ImageSpec,
@@ -68,69 +73,48 @@ const DefaultOptions: BlotFormatterOptions = {
       border: '1px dashed #444',
     },
   },
-  align: {
-    attribute: 'data-align',
-    aligner: {
-      applyStyle: true,
+  toolbar: {
+    mainClassName: 'blot-formatter__toolbar',
+    mainStyle: {
+      position: 'absolute',
+      top: '-12px',
+      right: '0',
+      left: '0',
+      height: '0',
+      minWidth: '120px',
+      font: '12px/1.0 Arial, Helvetica, sans-serif',
+      textAlign: 'center',
+      color: '#333',
+      boxSizing: 'border-box',
+      cursor: 'default',
+      zIndex: '1',
     },
-    icons: {
-      left: `
-        <svg viewbox="0 0 18 18">
-          <line class="ql-stroke" x1="3" x2="15" y1="9" y2="9"></line>
-          <line class="ql-stroke" x1="3" x2="13" y1="14" y2="14"></line>
-          <line class="ql-stroke" x1="3" x2="9" y1="4" y2="4"></line>
-        </svg>
-      `,
-      center: `
-        <svg viewbox="0 0 18 18">
-           <line class="ql-stroke" x1="15" x2="3" y1="9" y2="9"></line>
-          <line class="ql-stroke" x1="14" x2="4" y1="14" y2="14"></line>
-          <line class="ql-stroke" x1="12" x2="6" y1="4" y2="4"></line>
-        </svg>
-      `,
-      right: `
-        <svg viewbox="0 0 18 18">
-          <line class="ql-stroke" x1="15" x2="3" y1="9" y2="9"></line>
-          <line class="ql-stroke" x1="15" x2="5" y1="14" y2="14"></line>
-          <line class="ql-stroke" x1="15" x2="9" y1="4" y2="4"></line>
-        </svg>
-      `,
+    buttonClassName: 'blot-formatter__toolbar-button',
+    addButtonSelectStyle: true,
+    buttonStyle: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '24px',
+      height: '24px',
+      background: 'white',
+      border: '1px solid #999',
+      verticalAlign: 'middle',
+      cursor: 'pointer',
     },
-    toolbar: {
-      allowDeselect: true,
-      mainClassName: 'blot-formatter__toolbar',
-      mainStyle: {
-        position: 'absolute',
-        top: '-12px',
-        right: '0',
-        left: '0',
-        height: '0',
-        minWidth: '100px',
-        font: '12px/1.0 Arial, Helvetica, sans-serif',
-        textAlign: 'center',
-        color: '#333',
-        boxSizing: 'border-box',
-        cursor: 'default',
-        zIndex: '1',
-      },
-      buttonClassName: 'blot-formatter__toolbar-button',
-      addButtonSelectStyle: true,
-      buttonStyle: {
-        display: 'inline-block',
-        width: '24px',
-        height: '24px',
-        background: 'white',
-        border: '1px solid #999',
-        verticalAlign: 'middle',
-      },
-      svgStyle: {
-        display: 'inline-block',
-        width: '24px',
-        height: '24px',
-        background: 'white',
-        border: '1px solid #999',
-        verticalAlign: 'middle',
-      },
+    svgStyle: {
+      display: 'inline-block',
+      width: '16px',
+      height: '16px',
+      background: 'white',
+      verticalAlign: 'middle',
+    },
+    buttons: {
+      [LEFT_ALIGN]: true,
+      [CENTER_ALIGN]: true,
+      [RIGHT_ALIGN]: true,
+      [COPY]: true,
+      [DOWNLOAD]: true,
     },
   },
   resize: {

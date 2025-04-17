@@ -31,6 +31,6 @@ test('image-upload', async ({ page }) => {
   expect(newBox.height + moveDistance).toEqual(oldBox.height)
 
   // remove overlay
-  await page.mouse.click(newBox.x + newBox.width + 2, newBox.y + newBox.height + 2)
+  await page.mouse.click(newBox.x + newBox.width + 20, newBox.y + newBox.height + 20)
   await expect(page.locator('.blot-formatter__overlay')).not.toBeVisible()
 })

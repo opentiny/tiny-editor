@@ -5,7 +5,6 @@ import type { BlotSpec } from './specs'
 import { merge as deepmerge } from 'lodash-es'
 import Quill from 'quill'
 import { CustomImage } from './image'
-import { ImageBar } from './image-bar'
 import DefaultOptions from './options'
 import { CustomImageSpec } from './specs'
 
@@ -17,9 +16,7 @@ export class BlotFormatter {
   specs: BlotSpec[]
   overlay: HTMLElement
   actions: Action[]
-  observer: any
-  imageBar: ImageBar
-  private debounceTimer: number | null = null
+  observer: MutationObserver
 
   static register() {
     Quill.register({
@@ -29,7 +26,7 @@ export class BlotFormatter {
   }
 
   constructor(public quill: FluentEditor, options: Partial<BlotFormatterOptions> = {}) {
-    this.options = deepmerge(DefaultOptions, options, { arrayMerge: dontMerge })
+    this.options = deepmerge({}, DefaultOptions, options, { arrayMerge: dontMerge })
     this.currentSpec = null
     this.actions = []
     this.overlay = document.createElement('div')
@@ -41,7 +38,6 @@ export class BlotFormatter {
     // disable native image resizing on firefox
     document.execCommand('enableObjectResizing', false, 'false') // eslint-disable-next-line-line no-undef
     this.quill.root.addEventListener('click', this.onClick)
-    this.quill.root.addEventListener('mouseover', event => this.onMouseOver(event))
     this.specs = this.options.specs.map((SpecClass: any) => new SpecClass(this))
     this.specs.forEach(spec => spec.init())
   }
@@ -57,11 +53,11 @@ export class BlotFormatter {
     // fix: 图片对齐之后，虚线外框应该跟随移动
     const imageDom = spec.getTargetElement()
     const win: any = window
-    const MutationObserver = win.MutationObserver || win.WebKitMutationObserver || win.MozMutationObserver
+    const MutationObserver: typeof window.MutationObserver = win.MutationObserver || win.WebKitMutationObserver || win.MozMutationObserver
     const element = imageDom.parentNode
     this.observer = new MutationObserver((mutationList) => {
       for (const mutation of mutationList) {
-        const target = mutation.target
+        const target = mutation.target as HTMLElement
         const image = target.querySelector('img')
         if (image) {
           this.repositionOverlay()
@@ -74,7 +70,6 @@ export class BlotFormatter {
       attributeOldValue: true,
       subtree: true,
     })
-    document.body.addEventListener('click', this.hideImageOverlay, true)
   }
 
   hide() {
@@ -155,43 +150,5 @@ export class BlotFormatter {
 
   onClick = () => {
     this.hide()
-    this.hideImageBar()
-  }
-
-  onMouseOver = (event) => {
-    if (this.debounceTimer) {
-      clearTimeout(this.debounceTimer)
-    }
-    this.debounceTimer = window.setTimeout(() => {
-      if (event.target.tagName === 'IMG') {
-        const target = event.target
-        if (target) {
-          if (this.imageBar) {
-            this.imageBar.destroy()
-          }
-          this.imageBar = new ImageBar(this.quill, target)
-        }
-      }
-      else {
-        this.hideImageBar()
-      }
-    }, 150)
-  }
-
-  hideImageBar = () => {
-    if (this.imageBar) {
-      this.imageBar.destroy()
-      this.imageBar = null
-    }
-  }
-
-  hideImageOverlay = (event) => {
-    const target = event.target
-    const isBlotFormatter = target?.classList?.contains('blot-formatter__overlay')
-    // 点击图片操作框之外应该将其销毁
-    if (!isBlotFormatter) {
-      this.hide()
-    }
-    document.body.removeEventListener('click', this.hideImageOverlay)
   }
 }

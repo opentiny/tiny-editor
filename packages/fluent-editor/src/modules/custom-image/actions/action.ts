@@ -1,7 +1,9 @@
-export class Action {
-  formatter
+import type { BlotFormatter } from '../blot-formatter'
 
-  constructor(formatter) {
+export class Action {
+  formatter: BlotFormatter
+
+  constructor(formatter: BlotFormatter) {
     this.formatter = formatter
   }
 
