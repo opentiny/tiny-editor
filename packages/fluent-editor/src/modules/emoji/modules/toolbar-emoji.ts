@@ -14,10 +14,10 @@ export class ToolbarEmoji {
     }
 
     // 在emoji模块加载时判断并插入emoji精灵图样式，防止重复插入
-    let emojiStyle = document.querySelector('style#devui-emoji-sprite')
+    let emojiStyle = document.querySelector('style#emoji-sprite')
     if (!emojiStyle) {
       emojiStyle = document.createElement('style')
-      emojiStyle.setAttribute('id', 'devui-emoji-sprite')
+      emojiStyle.setAttribute('id', 'emoji-sprite')
       emojiStyle.innerHTML = `.ap{background-image:url(${emojiSprite})}`
       document.head.appendChild(emojiStyle)
     }

@@ -4,13 +4,9 @@
       position: absolute;
       transform: translateY(10px);
       background-color: #fff;
-      background-color: var(--devui-connected-overlay-bg, #fff);
       border: 1px solid #adb0b8;
-      border: 1px solid var(--devui-line, #adb0b8);
-      box-shadow: 0 2px 8px 0 rgb(37 43 58 / 20%);
-      box-shadow: var(--devui-shadow-connected-overlay, 0 2px 8px 0) var(--devui-light-shadow, rgba(37, 43, 58, 0.2));
+      box-shadow: 0 2px 8px 0 rgba(37, 43, 58, 0.2);
       color: #252b3a;
-      color: var(--devui-text, #252b3a);
       padding: 5px 3px;
       white-space: nowrap;
 
@@ -47,7 +43,6 @@
         padding: 0 6px;
         width: 200px;
         background-color: #fff;
-        background-color: var(--devui-base-bg, #fff);
       }
 
       .ql-split {
@@ -56,7 +51,6 @@
         line-height: 16px;
         margin: 6px 4px;
         border-left: 1px solid #adb0b8;
-        border-left: 1px solid var(--devui-line, #adb0b8);
         display: inline-block;
         vertical-align: bottom;
       }
@@ -65,7 +59,6 @@
           display: block;
           font-size: 16px;
           color: #252b3a;
-          color: var(--devui-text, #252b3a);
           line-height: 28px;
           font-family: 'iconfont' !important;
           font-size: 16px;
@@ -82,7 +75,6 @@
           display: block;
           font-size: 16px;
           color: #252b3a;
-          color: var(--devui-text, #252b3a);
           line-height: 28px;
           font-family: 'iconfont' !important;
           font-size: 16px;
@@ -104,7 +96,6 @@
       display: inline-block;
       text-align: center;
       color: #babbc0;
-      color: var(--devui-placeholder, #babbc0);
       border-radius: 2px 2px;
       text-decoration: none;
       -webkit-transition: background-color 0.3s ease-in-out;
@@ -116,7 +107,6 @@
         display: block;
         font-size: 16px;
         color: #babbc0;
-        color: var(--devui-aide-text, #babbc0);
         line-height: 28px;
       }
 
