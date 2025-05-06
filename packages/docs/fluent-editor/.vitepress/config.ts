@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 import packageJson from '@opentiny/fluent-editor/package.json' with { type: 'json'}
 import { demoPreviewPlugin } from '@vitepress-code-preview/plugin'
 import { defineConfig, loadEnv } from 'vitepress'
+import llmstxt from 'vitepress-plugin-llms'
 import { sidebar } from './sidebar'
 
 const env = loadEnv(process.env.VITE_BASE_URL!, fileURLToPath(new URL('../', import.meta.url)))
@@ -107,5 +108,8 @@ export default defineConfig({
         }
       })
     },
+  },
+  vite: {
+    plugins: [llmstxt()],
   },
 })
