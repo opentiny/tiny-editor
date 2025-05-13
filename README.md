@@ -6,6 +6,8 @@
 
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/opentiny/tiny-editor)
+
 TinyEditor is a rich text editor based on Quill 2.0, which extends Quill with rich modules and formats such as table, image, link, clipboard, emoji, file, mention, and quick menu. It is framework-independent, compatible with Quill API, and compatible with Quill module ecosystem.
 
 English | [简体中文](README.zh-CN.md)
