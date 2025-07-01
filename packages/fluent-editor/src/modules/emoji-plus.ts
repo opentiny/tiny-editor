@@ -4,7 +4,7 @@ import { computePosition } from '@floating-ui/dom'
 import { Picker } from 'emoji-mart'
 import { debounce } from 'lodash-es'
 
-export interface EmojiModulePLusOptions {
+export interface EmojiModulePlusOptions {
   theme?: string
   locale?: string
   set?: string
@@ -19,7 +19,7 @@ export interface EmojiModulePLusOptions {
   dynamicWidth?: boolean
 }
 
-const DefaultOptions: EmojiModulePLusOptions = {
+const DefaultOptions: EmojiModulePlusOptions = {
   theme: 'light',
   set: 'native',
   skinTonePosition: 'none',
@@ -42,12 +42,12 @@ const I18nKeyMap: Record<string, string> = {
 
 class EmojiPlusModule {
   private quill: FluentEditor
-  private options: EmojiModulePLusOptions
+  private options: EmojiModulePlusOptions
   private picker: HTMLElement | null
   private isPickerVisible: boolean
   private clearContainerResize: () => void
 
-  constructor(quill: FluentEditor, options: EmojiModulePLusOptions = {}) {
+  constructor(quill: FluentEditor, options: EmojiModulePlusOptions = {}) {
     this.quill = quill
     this.options = { ...DefaultOptions, locale: I18nKeyMap[this.quill.lang] ?? 'en', ...options }
     this.picker = null
