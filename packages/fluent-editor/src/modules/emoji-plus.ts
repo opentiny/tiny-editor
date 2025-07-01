@@ -1,4 +1,4 @@
-import type Quill from 'quill'
+import type FluentEditor from '../fluent-editor'
 import data from '@emoji-mart/data'
 import { computePosition } from '@floating-ui/dom'
 import { Picker } from 'emoji-mart'
@@ -21,7 +21,6 @@ export interface EmojiModulePLusOptions {
 
 const DefaultOptions: EmojiModulePLusOptions = {
   theme: 'light',
-  locale: 'zh',
   set: 'native',
   skinTonePosition: 'none',
   previewPosition: 'bottom',
@@ -36,16 +35,21 @@ const DefaultOptions: EmojiModulePLusOptions = {
 
 const PickerDomId = 'emoji-plus-picker'
 
+const I18nKeyMap: Record<string, string> = {
+  'zh-CN': 'zh',
+  'en-US': 'en',
+}
+
 class EmojiPlusModule {
-  private quill: Quill
+  private quill: FluentEditor
   private options: EmojiModulePLusOptions
   private picker: HTMLElement | null
   private isPickerVisible: boolean
   private clearContainerResize: () => void
 
-  constructor(quill: Quill, options: EmojiModulePLusOptions = {}) {
+  constructor(quill: FluentEditor, options: EmojiModulePLusOptions = {}) {
     this.quill = quill
-    this.options = { ...DefaultOptions, ...options }
+    this.options = { ...DefaultOptions, locale: I18nKeyMap[this.quill.lang] ?? 'en', ...options }
     this.picker = null
     this.isPickerVisible = false
 
