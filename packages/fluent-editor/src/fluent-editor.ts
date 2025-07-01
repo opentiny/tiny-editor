@@ -9,6 +9,7 @@ import { BlotFormatter } from './modules/custom-image' // 图片
 import { FileUploader } from './modules/custom-uploader' // 上传
 import { DividerBlot } from './modules/divider' // 分割线
 import { EmojiBlot, ShortNameEmoji, ToolbarEmoji } from './modules/emoji' // 表情
+import { EmojiPlusModule } from './modules/emoji-plus'
 import { FileModule } from './modules/file' // 文件
 import I18N from './modules/i18n'
 import { LinkBlot } from './modules/link' // 超链接
@@ -49,6 +50,7 @@ FluentEditor.register(
     'modules/counter': Counter,
     'modules/emoji-shortname': ShortNameEmoji,
     'modules/emoji-toolbar': ToolbarEmoji,
+    'modules/emoji-plus': EmojiPlusModule,
     'modules/file': FileModule,
     'modules/i18n': I18N,
     'modules/image': BlotFormatter,
