@@ -1,6 +1,8 @@
 import type Quill from 'quill'
 import data from '@emoji-mart/data'
+import { computePosition } from '@floating-ui/dom'
 import { Picker } from 'emoji-mart'
+import { debounce } from 'lodash-es'
 
 export interface EmojiModulePLusOptions {
   theme?: string
@@ -32,11 +34,14 @@ const DefaultOptions: EmojiModulePLusOptions = {
   dynamicWidth: false,
 }
 
+const PickerDomId = 'emoji-plus-picker'
+
 class EmojiPlusModule {
   private quill: Quill
   private options: EmojiModulePLusOptions
   private picker: HTMLElement | null
   private isPickerVisible: boolean
+  private clearContainerResize: () => void
 
   constructor(quill: Quill, options: EmojiModulePLusOptions = {}) {
     this.quill = quill
@@ -60,6 +65,34 @@ class EmojiPlusModule {
     return document.getElementsByClassName('ql-emoji-plus')[0]
   }
 
+  private updatePickerPosition() {
+    const but = this.getButton()
+    const PickerDom = document.getElementById(PickerDomId)
+
+    computePosition(but, PickerDom).then(({ x, y }) => {
+      this.picker.style.top = `${y}px`
+      this.picker.style.left = `${x}px`
+    })
+  }
+
+  private containerResize() {
+    const container = this.quill.root.parentElement
+    if (!container) return
+
+    const debouncedResize = debounce(() => this.updatePickerPosition(), 100)
+
+    const resizeObserver = new ResizeObserver(() => {
+      debouncedResize()
+    })
+
+    resizeObserver.observe(container)
+
+    return () => {
+      resizeObserver.disconnect()
+      debouncedResize.cancel()
+    }
+  }
+
   public openDialog() {
     if (!this.picker) {
       this.picker = new Picker({
@@ -71,15 +104,11 @@ class EmojiPlusModule {
 
       document.body.appendChild(this.picker)
 
-      const rect = this.getButton()?.getBoundingClientRect()
-      if (rect) {
-        this.picker.style.top = `${rect.top + 25}px`
-        this.picker.style.left = `${rect.left}px`
-      }
-
-      this.picker.style.boxShadow = '0 4px 4px 0 rgba(0, 0, 0, 0.25)'
+      this.picker.id = PickerDomId
       this.picker.style.position = 'absolute'
       this.picker.style.zIndex = '1'
+      this.updatePickerPosition()
+      this.clearContainerResize = this.containerResize()
 
       this.isPickerVisible = true
     }
@@ -116,6 +145,7 @@ class EmojiPlusModule {
   }
 
   public destroy() {
+    this.clearContainerResize()
     this.closeDialog()
   }
 }
