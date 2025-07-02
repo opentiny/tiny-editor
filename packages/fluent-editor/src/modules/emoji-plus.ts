@@ -1,3 +1,4 @@
+import type TypeToolbar from 'quill/modules/toolbar'
 import type FluentEditor from '../fluent-editor'
 import data from '@emoji-mart/data'
 import { computePosition } from '@floating-ui/dom'
@@ -53,16 +54,13 @@ class EmojiPlusModule {
     this.picker = null
     this.isPickerVisible = false
 
-    const but = this.getButton()
+    const toolbar = quill.getModule('toolbar') as TypeToolbar
 
-    but.addEventListener('click', () => {
-      if (this.isPickerVisible) {
-        this.closeDialog()
-      }
-      else {
-        this.openDialog()
-      }
-    })
+    if (typeof toolbar !== 'undefined') {
+      toolbar.addHandler('emoji-plus', () => {
+        this.isPickerVisible ? this.closeDialog() : this.openDialog()
+      })
+    }
   }
 
   private getButton() {

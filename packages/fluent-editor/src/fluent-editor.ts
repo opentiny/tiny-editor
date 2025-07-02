@@ -2,7 +2,7 @@ import { FontStyle, LineHeightStyle, SizeStyle, TextIndentStyle } from './attrib
 import { EN_US } from './config/i18n/en-us'
 import { ZH_CN } from './config/i18n/zh-cn'
 import FluentEditor from './core/fluent-editor'
-import { SoftBreak, StrikeBlot, Video } from './formats'
+import { EmojiPlusBlot, SoftBreak, StrikeBlot, Video } from './formats'
 import Counter from './modules/counter' // 字符统计
 import { CustomClipboard } from './modules/custom-clipboard' // 粘贴板
 import { BlotFormatter } from './modules/custom-image' // 图片
@@ -39,6 +39,7 @@ FluentEditor.register(
     'formats/line-height': LineHeightStyle,
     'formats/size': SizeStyle,
     'formats/emoji': EmojiBlot,
+    'formats/emoji-plus': EmojiPlusBlot,
     'formats/softBreak': SoftBreak,
     'formats/strike': StrikeBlot,
     'formats/text-indent': TextIndentStyle,
