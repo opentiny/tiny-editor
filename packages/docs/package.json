@@ -14,7 +14,10 @@
     "report": "pnpm exec playwright show-report"
   },
   "dependencies": {
+    "@emoji-mart/data": "^1.2.1",
+    "@floating-ui/dom": "^1.7.2",
     "@opentiny/fluent-editor": "workspace:^",
+    "emoji-mart": "^5.6.0",
     "highlight.js": "^10.2.0",
     "html2canvas": "^1.4.1",
     "katex": "^0.16.11",
