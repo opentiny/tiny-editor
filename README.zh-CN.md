@@ -68,7 +68,7 @@ pnpm dev
 
 ## ✨ 贡献者
 
-贡献者是在 OpenTiny 社区做出贡献的社区成员。
+贡献者是在 OpenTiny 社区中做出过贡献的社区成员。
 
 <a href="https://www.openomy.com/github/opentiny/tiny-editor" target="_blank" style="display: block; width: 100%;" align="center">
   <img src="https://www.openomy.com/svg?repo=opentiny/tiny-editor&chart=bubble&latestMonth=99" target="_blank" alt="Contribution Leaderboard" style="display: block; width: 100%;" />
