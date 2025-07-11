@@ -20,7 +20,7 @@ export interface EmojiModuleOptions {
   dynamicWidth?: boolean
 }
 
-const DefaultOptions: EmojiModuleOptions = {
+const DEFAULT_OPTIONS: Readonly<EmojiModuleOptions> = {
   theme: 'light',
   set: 'native',
   skinTonePosition: 'none',
@@ -32,145 +32,201 @@ const DefaultOptions: EmojiModuleOptions = {
   navPosition: 'top',
   noCountryFlags: false,
   dynamicWidth: false,
-}
+} as const
 
-const PickerDomId = 'emoji-picker'
+const PICKER_DOM_ID = 'emoji-picker'
 
-const I18nKeyMap: Record<string, string> = {
+const LOCALE_MAP = {
   'zh-CN': 'zh',
   'en-US': 'en',
-}
+} as const
 
 class EmojiModule {
-  private quill: FluentEditor
-  private options: EmojiModuleOptions
-  private picker: HTMLElement | null
-  private isPickerVisible: boolean
-  private clearContainerResize: () => void
+  private readonly quill: FluentEditor
+  private readonly options: EmojiModuleOptions
+  private picker: HTMLElement | null = null
+  private isPickerVisible = false
+  private cleanupResizeObserver: (() => void) | null = null
 
   constructor(quill: FluentEditor, options: EmojiModuleOptions = {}) {
     this.quill = quill
-    this.options = { ...DefaultOptions, locale: I18nKeyMap[this.quill.lang] ?? 'en', ...options }
-    this.picker = null
-    this.isPickerVisible = false
 
-    const toolbar = quill.getModule('toolbar') as TypeToolbar
+    this.options = {
+      ...DEFAULT_OPTIONS,
+      // emoji-mart 与 tiny-editor 国际化的的 locale 不一致使用 LOCALE_MAP 转换
+      locale: LOCALE_MAP[this.quill.lang] ?? 'en',
+      ...options,
+    }
 
-    if (typeof toolbar !== 'undefined') {
+    const toolbar = this.quill.getModule('toolbar') as TypeToolbar
+
+    if (toolbar) {
       toolbar.addHandler('emoji', () => {
-        this.isPickerVisible ? this.closeDialog() : this.openDialog()
+        if (this.isPickerVisible) {
+          this.closeDialog()
+        }
+        else {
+          this.openDialog()
+        }
       })
     }
   }
 
-  private getButton() {
-    return document.getElementsByClassName('ql-emoji')[0] as HTMLElement | undefined
+  private getEmojiButton() {
+    return document.querySelector('.ql-emoji') as HTMLElement | null
   }
 
-  private updatePickerPosition() {
-    const but = this.getButton()
+  private async updatePickerPosition() {
+    const button = this.getEmojiButton()
+    const pickerElement = document.getElementById(PICKER_DOM_ID)
 
-    if (!but || !this.picker) {
+    if (!button || !this.picker || !pickerElement) {
       return
     }
 
-    const PickerDom = document.getElementById(PickerDomId)
-
-    if (!PickerDom) {
-      return
-    }
-
-    computePosition(but, PickerDom).then(({ x, y }) => {
+    try {
+      const { x, y } = await computePosition(button, pickerElement)
       this.picker.style.top = `${y}px`
       this.picker.style.left = `${x}px`
-    })
+    }
+    catch (error) {
+      console.warn('Failed to compute picker position:', error)
+    }
   }
 
-  private containerResize() {
+  // 监听容器大小变化，更新表情选择弹窗位置
+  private setupContainerResizeObserver() {
     const container = this.quill.root.parentElement
-    if (!container) return
+    if (!container) {
+      return null
+    }
 
-    const debouncedResize = debounce(() => this.updatePickerPosition(), 100)
+    const debouncedUpdate = debounce(() => {
+      this.updatePickerPosition()
+    }, 100)
 
     const resizeObserver = new ResizeObserver(() => {
-      debouncedResize()
+      debouncedUpdate()
     })
 
     resizeObserver.observe(container)
 
     return () => {
       resizeObserver.disconnect()
-      debouncedResize.cancel()
+      debouncedUpdate.cancel()
     }
   }
 
+  // 创建表情选择弹窗
+  private createPicker() {
+    const pickerConfig = {
+      data,
+      onEmojiSelect: this.handleEmojiSelect.bind(this),
+      onClickOutside: this.handleClickOutside.bind(this),
+      ...this.options,
+    }
+
+    const picker = new Picker(pickerConfig) as unknown as HTMLElement
+
+    // 设置样式和属性
+    picker.id = PICKER_DOM_ID
+    picker.style.position = 'absolute'
+    picker.style.zIndex = '1000'
+
+    return picker
+  }
+
+  // 打开表情弹窗
   public openDialog() {
-    if (!this.picker) {
-      this.picker = new Picker({
-        data,
-        onEmojiSelect: (emoji: any) => this.selectEmoji(emoji),
-        onClickOutside: (event: MouseEvent) => this.onClickOutside(event),
-        ...this.options,
-      }) as unknown as HTMLElement
-
-      document.body.appendChild(this.picker)
-
-      this.picker.id = PickerDomId
-      this.picker.style.position = 'absolute'
-      this.picker.style.zIndex = '1000'
-      this.updatePickerPosition()
-      this.clearContainerResize = this.containerResize()
-
-      this.isPickerVisible = true
-    }
-  }
-
-  public closeDialog() {
-    this.isPickerVisible = false
-    this.picker?.remove()
-    this.picker = null
-  }
-
-  private selectEmoji(emoji: any) {
-    const selection = this.quill.getSelection(true)
-    if (!selection) {
+    if (this.picker) {
       return
     }
 
-    const emojiDelta = this.quill.insertText(
-      selection.index,
-      emoji.native,
-      'user',
-    )
+    try {
+      this.picker = this.createPicker()
+      document.body.appendChild(this.picker)
 
-    this.closeDialog()
-
-    // 设置表情符号后的输入位置
-    setTimeout(() => {
-      const newSelection = this.quill.getSelection(true)
-      if (newSelection && emojiDelta) {
-        this.quill.setSelection(newSelection.index + emojiDelta.length())
-      }
-    })
-  }
-
-  private onClickOutside(event: MouseEvent): void {
-    const but = this.getButton()
-
-    // 仅当工具栏内的表情符号按钮存在且未发生点击时才关闭！
-    if (!but || !(but === event.target || (event.target instanceof Element && but.contains(event.target)))) {
+      this.updatePickerPosition()
+      this.cleanupResizeObserver = this.setupContainerResizeObserver()
+      this.isPickerVisible = true
+    }
+    catch (error) {
+      console.error('Failed to open emoji picker:', error)
       this.closeDialog()
     }
   }
 
-  public destroy() {
-    if (this.clearContainerResize) {
-      this.clearContainerResize()
+  // 关闭表情弹窗
+  public closeDialog() {
+    if (!this.picker) {
+      return
     }
+
+    this.isPickerVisible = false
+    this.picker.remove()
+    this.picker = null
+
+    this.cleanupResizeObserver?.()
+    this.cleanupResizeObserver = null
+  }
+
+  // 处理表情选择事件
+  private handleEmojiSelect(emoji: { native: string }) {
+    const selection = this.quill.getSelection(true)
+    if (!selection) {
+      console.warn('No selection available for emoji insertion')
+      return
+    }
+
+    try {
+      const emojiDelta = this.quill.insertText(selection.index, emoji.native, 'user')
+
+      this.closeDialog()
+
+      // 异步设置光标位置，确保插入完成后再设置
+      this.setSelectionAfterEmoji(emojiDelta)
+    }
+    catch (error) {
+      console.error('Failed to insert emoji:', error)
+    }
+  }
+
+  // 设置表情插入后的光标位置
+  private setSelectionAfterEmoji(emojiDelta: any) {
+    setTimeout(() => {
+      try {
+        const newSelection = this.quill.getSelection(true)
+        if (newSelection && emojiDelta) {
+          this.quill.setSelection(newSelection.index + emojiDelta.length())
+        }
+      }
+      catch (error) {
+        console.warn('Failed to set selection after emoji insertion:', error)
+      }
+    }, 0)
+  }
+
+  // 处理外部点击事件
+  private handleClickOutside(event: MouseEvent) {
+    const button = this.getEmojiButton()
+
+    const target = event.target
+
+    const isClickOnButton = target === button || (target instanceof Element && button.contains(target))
+    // 如果点击的是表情符号按钮或其子元素，则不关闭选择器
+    if (button && isClickOnButton) {
+      return
+    }
+
+    this.closeDialog()
+  }
+
+  // 销毁模块，清理资源
+  public destroy() {
+    this.cleanupResizeObserver?.()
+    this.cleanupResizeObserver = null
     this.closeDialog()
   }
 }
 
-export {
-  EmojiModule,
-}
+export { EmojiModule }
