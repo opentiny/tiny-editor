@@ -2,14 +2,13 @@ import { FontStyle, LineHeightStyle, SizeStyle, TextIndentStyle } from './attrib
 import { EN_US } from './config/i18n/en-us'
 import { ZH_CN } from './config/i18n/zh-cn'
 import FluentEditor from './core/fluent-editor'
-import { EmojiPlusBlot, SoftBreak, StrikeBlot, Video } from './formats'
+import { EmojiBlot, SoftBreak, StrikeBlot, Video } from './formats'
 import Counter from './modules/counter' // 字符统计
 import { CustomClipboard } from './modules/custom-clipboard' // 粘贴板
 import { BlotFormatter } from './modules/custom-image' // 图片
 import { FileUploader } from './modules/custom-uploader' // 上传
 import { DividerBlot } from './modules/divider' // 分割线
-import { EmojiBlot, ShortNameEmoji, ToolbarEmoji } from './modules/emoji' // 表情
-import { EmojiPlusModule } from './modules/emoji-plus'
+import { EmojiModule } from './modules/emoji'
 import { FileModule } from './modules/file' // 文件
 import I18N from './modules/i18n'
 import { LinkBlot } from './modules/link' // 超链接
@@ -39,7 +38,6 @@ FluentEditor.register(
     'formats/line-height': LineHeightStyle,
     'formats/size': SizeStyle,
     'formats/emoji': EmojiBlot,
-    'formats/emoji-plus': EmojiPlusBlot,
     'formats/softBreak': SoftBreak,
     'formats/strike': StrikeBlot,
     'formats/text-indent': TextIndentStyle,
@@ -49,9 +47,7 @@ FluentEditor.register(
 
     'modules/clipboard': CustomClipboard,
     'modules/counter': Counter,
-    'modules/emoji-shortname': ShortNameEmoji,
-    'modules/emoji-toolbar': ToolbarEmoji,
-    'modules/emoji-plus': EmojiPlusModule,
+    'modules/emoji': EmojiModule,
     'modules/file': FileModule,
     'modules/i18n': I18N,
     'modules/image': BlotFormatter,

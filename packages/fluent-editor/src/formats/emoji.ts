@@ -3,8 +3,8 @@ import Quill from 'quill'
 
 const Inline = Quill.import('blots/inline') as typeof TypeInline
 
-export class EmojiPlusBlot extends Inline {
-  static blotName = 'emoji-plus'
+export class EmojiBlot extends Inline {
+  static blotName = 'emoji'
   static tagName = 'span'
-  static className = 'ql-emoji-plus-format'
+  static className = 'ql-emoji-format'
 }

@@ -18,19 +18,19 @@ import type { QuillOptions } from 'quill'
 export interface FluentEditorOptions extends QuillOptions {
   modules?: QuillModules & {
     // 字符统计模块
-    'counter': boolean | CounterOption
+    counter: boolean | CounterOption
 
     // 表情模块
-    'emoji-toolbar'?: boolean
+    emoji?: boolean
 
     // 文件上传模块
-    'file'?: boolean
+    file?: boolean
 
     // 可编辑公式模块
-    'mathlive': boolean
+    mathlive: boolean
 
     // @提醒模块
-    'mention'?: boolean | MentionOptions
+    mention?: boolean | MentionOptions
   }
 
   // 是否给超链接自动增加协议前缀

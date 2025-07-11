@@ -67,7 +67,6 @@ export function generateToolbarTip(QuillToolbarTip: Constructor) {
         'image',
         'file',
         'emoji',
-        'emoji-plus',
         'video',
         'screenshot',
         'code-block',

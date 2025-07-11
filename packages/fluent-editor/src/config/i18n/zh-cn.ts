@@ -59,7 +59,6 @@ export const ZH_CN = {
 
   // blot tip name
   'emoji': '表情',
-  'emoji-plus': '表情',
   'fullscreen': '全屏',
   'blockquote': '引用',
   'undo': '撤销',

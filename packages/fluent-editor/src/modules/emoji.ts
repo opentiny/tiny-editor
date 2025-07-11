@@ -5,7 +5,7 @@ import { computePosition } from '@floating-ui/dom'
 import { Picker } from 'emoji-mart'
 import { debounce } from 'lodash-es'
 
-export interface EmojiModulePlusOptions {
+export interface EmojiModuleOptions {
   theme?: string
   locale?: string
   set?: string
@@ -20,7 +20,7 @@ export interface EmojiModulePlusOptions {
   dynamicWidth?: boolean
 }
 
-const DefaultOptions: EmojiModulePlusOptions = {
+const DefaultOptions: EmojiModuleOptions = {
   theme: 'light',
   set: 'native',
   skinTonePosition: 'none',
@@ -34,21 +34,21 @@ const DefaultOptions: EmojiModulePlusOptions = {
   dynamicWidth: false,
 }
 
-const PickerDomId = 'emoji-plus-picker'
+const PickerDomId = 'emoji-picker'
 
 const I18nKeyMap: Record<string, string> = {
   'zh-CN': 'zh',
   'en-US': 'en',
 }
 
-class EmojiPlusModule {
+class EmojiModule {
   private quill: FluentEditor
-  private options: EmojiModulePlusOptions
+  private options: EmojiModuleOptions
   private picker: HTMLElement | null
   private isPickerVisible: boolean
   private clearContainerResize: () => void
 
-  constructor(quill: FluentEditor, options: EmojiModulePlusOptions = {}) {
+  constructor(quill: FluentEditor, options: EmojiModuleOptions = {}) {
     this.quill = quill
     this.options = { ...DefaultOptions, locale: I18nKeyMap[this.quill.lang] ?? 'en', ...options }
     this.picker = null
@@ -57,14 +57,14 @@ class EmojiPlusModule {
     const toolbar = quill.getModule('toolbar') as TypeToolbar
 
     if (typeof toolbar !== 'undefined') {
-      toolbar.addHandler('emoji-plus', () => {
+      toolbar.addHandler('emoji', () => {
         this.isPickerVisible ? this.closeDialog() : this.openDialog()
       })
     }
   }
 
   private getButton() {
-    return document.getElementsByClassName('ql-emoji-plus')[0] as HTMLElement | undefined
+    return document.getElementsByClassName('ql-emoji')[0] as HTMLElement | undefined
   }
 
   private updatePickerPosition() {
@@ -172,5 +172,5 @@ class EmojiPlusModule {
 }
 
 export {
-  EmojiPlusModule,
+  EmojiModule,
 }

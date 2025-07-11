@@ -72,7 +72,6 @@ const ICONS_CONFIG: { [key: string]: any } = {
   'fullscreen': FULLSCREEN_ICON,
   'fullscreen-exit': FULLSCREEN_EXIT_ICON,
   'emoji': EMOJI_ICON,
-  'emoji-plus': EMOJI_PLUS_ICON,
   'help': HELP_ICON,
   'screenshot': SCREENSHOT_ICON,
   'format-painter': FORMAT_PAINTER_ICON,

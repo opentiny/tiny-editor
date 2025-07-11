@@ -61,7 +61,6 @@ export const EN_US = {
 
   // blot tip name
   'emoji': 'Emoji',
-  'emoji-plus': 'Emoji Plus',
   'fullscreen': 'Full Screen',
   'blockquote': 'Quote',
   'undo': 'Undo',
