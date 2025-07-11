@@ -1,7 +1,6 @@
 @use './common/config.scss' as *;
 @import './common';
 @import './tasklist';
-@import './emoji/emoji';
 
 @mixin editor {
   .ql-container.ql-snow {
@@ -348,7 +347,5 @@
 
 // 编辑器正文
 @include editor;
-// Emoji表情
-@include emoji;
 // 编辑器外的任务列表
 @include tasklistOutside;

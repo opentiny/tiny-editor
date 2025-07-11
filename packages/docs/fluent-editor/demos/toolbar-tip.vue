@@ -50,7 +50,7 @@ onMounted(() => {
       modules: {
         'toolbar': TOOLBAR_CONFIG,
         'file': true,
-        'emoji-toolbar': true,
+        'emoji': true,
         'syntax': true,
         'toolbar-tip': {
           defaultTooltipOptions: {

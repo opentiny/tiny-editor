@@ -20,8 +20,8 @@ onMounted(() => {
     editor = new FluentEditor('#editor', {
       theme: 'snow',
       modules: {
-        'toolbar': TOOLBAR_CONFIG,
-        'emoji-toolbar': true,
+        toolbar: TOOLBAR_CONFIG,
+        emoji: true,
       },
     })
   })

@@ -2,6 +2,7 @@ import type { ToolbarProps } from 'quill/modules/toolbar'
 import type { I18NOptions, ICounterOption, MentionOption, ShortCutKeyInputOptions } from '../../modules'
 import type { BlotFormatterOptionsInput } from '../../modules/custom-image/options'
 import type { FileUploaderOptions } from '../../modules/custom-uploader'
+import type { EmojiModuleOptions } from '../../modules/emoji'
 
 export type ToolbarOptions = {
   container?: HTMLElement | (Record<string, any>[] | string[] | (string | Record<string, any>)[])[]
@@ -39,8 +40,7 @@ export interface IEditorModules {
   'mention'?: boolean | MentionOption
   'i18n'?: boolean | Partial<I18NOptions>
   'counter'?: boolean | ICounterOption
-  'emoji-toolbar'?: boolean
-  'emoji-shortname'?: any
+  'emoji'?: boolean | EmojiModuleOptions
   'file'?: boolean
   'mathlive'?: boolean
   'image'?: boolean | Partial<BlotFormatterOptionsInput>

@@ -46,10 +46,10 @@ onMounted(() => {
     editor = new FluentEditor(editorRef.value, {
       theme: 'snow',
       modules: {
-        'toolbar': TOOLBAR_CONFIG,
-        'file': true,
-        'emoji-toolbar': true,
-        'syntax': true,
+        toolbar: TOOLBAR_CONFIG,
+        file: true,
+        emoji: true,
+        syntax: true,
       },
     })
   })

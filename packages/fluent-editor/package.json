@@ -38,8 +38,12 @@
     "quill-shortcut-key": "^0.0.5"
   },
   "devDependencies": {
+    "@emoji-mart/data": "^1.2.1",
+    "@floating-ui/dom": "^1.7.2",
     "@types/jest": "^26.0.23",
+    "@types/lodash-es": "^4.17.12",
     "commander": "^6.2.0",
+    "emoji-mart": "^5.6.0",
     "highlight.js": "^10.2.0",
     "html2canvas": "^1.4.1",
     "jest": "^26.6.3",
