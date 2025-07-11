@@ -1,3 +1,4 @@
+import type { Delta } from 'quill'
 import type TypeToolbar from 'quill/modules/toolbar'
 import type FluentEditor from '../fluent-editor'
 import data from '@emoji-mart/data'
@@ -190,7 +191,7 @@ class EmojiModule {
   }
 
   // 设置表情插入后的光标位置
-  private setSelectionAfterEmoji(emojiDelta: any) {
+  private setSelectionAfterEmoji(emojiDelta: Delta) {
     setTimeout(() => {
       try {
         const newSelection = this.quill.getSelection(true)
@@ -210,9 +211,10 @@ class EmojiModule {
 
     const target = event.target
 
-    const isClickOnButton = target === button || (target instanceof Element && button.contains(target))
+    const isClickOnButton = target === button || (target instanceof Element && button?.contains(target))
+
     // 如果点击的是表情符号按钮或其子元素，则不关闭选择器
-    if (button && isClickOnButton) {
+    if (isClickOnButton) {
       return
     }
 
