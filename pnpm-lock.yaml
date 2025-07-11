@@ -105,15 +105,6 @@ importers:
 
   packages/fluent-editor:
     dependencies:
-      '@emoji-mart/data':
-        specifier: ^1.2.1
-        version: 1.2.1
-      '@floating-ui/dom':
-        specifier: ^1.7.2
-        version: 1.7.2
-      emoji-mart:
-        specifier: ^5.6.0
-        version: 5.6.0
       lodash-es:
         specifier: ^4.17.15
         version: 4.17.21
@@ -127,12 +118,21 @@ importers:
         specifier: ^0.0.5
         version: 0.0.5(quill@2.0.3)
     devDependencies:
+      '@emoji-mart/data':
+        specifier: ^1.2.1
+        version: 1.2.1
+      '@floating-ui/dom':
+        specifier: ^1.7.2
+        version: 1.7.2
       '@types/jest':
         specifier: ^26.0.23
         version: 26.0.24
       commander:
         specifier: ^6.2.0
         version: 6.2.1
+      emoji-mart:
+        specifier: ^5.6.0
+        version: 5.6.0
       highlight.js:
         specifier: ^10.2.0
         version: 10.7.3
