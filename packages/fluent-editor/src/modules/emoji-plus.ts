@@ -64,12 +64,21 @@ class EmojiPlusModule {
   }
 
   private getButton() {
-    return document.getElementsByClassName('ql-emoji-plus')[0]
+    return document.getElementsByClassName('ql-emoji-plus')[0] as HTMLElement | undefined
   }
 
   private updatePickerPosition() {
     const but = this.getButton()
+
+    if (!but || !this.picker) {
+      return
+    }
+
     const PickerDom = document.getElementById(PickerDomId)
+
+    if (!PickerDom) {
+      return
+    }
 
     computePosition(but, PickerDom).then(({ x, y }) => {
       this.picker.style.top = `${y}px`
@@ -108,7 +117,7 @@ class EmojiPlusModule {
 
       this.picker.id = PickerDomId
       this.picker.style.position = 'absolute'
-      this.picker.style.zIndex = '1'
+      this.picker.style.zIndex = '1000'
       this.updatePickerPosition()
       this.clearContainerResize = this.containerResize()
 
@@ -123,8 +132,13 @@ class EmojiPlusModule {
   }
 
   private selectEmoji(emoji: any) {
+    const selection = this.quill.getSelection(true)
+    if (!selection) {
+      return
+    }
+
     const emojiDelta = this.quill.insertText(
-      this.quill.getSelection(true).index,
+      selection.index,
       emoji.native,
       'user',
     )
@@ -133,7 +147,10 @@ class EmojiPlusModule {
 
     // 设置表情符号后的输入位置
     setTimeout(() => {
-      this.quill.setSelection(this.quill.getSelection(true).index + emojiDelta.length())
+      const newSelection = this.quill.getSelection(true)
+      if (newSelection && emojiDelta) {
+        this.quill.setSelection(newSelection.index + emojiDelta.length())
+      }
     })
   }
 
@@ -147,7 +164,9 @@ class EmojiPlusModule {
   }
 
   public destroy() {
-    this.clearContainerResize()
+    if (this.clearContainerResize) {
+      this.clearContainerResize()
+    }
     this.closeDialog()
   }
 }
