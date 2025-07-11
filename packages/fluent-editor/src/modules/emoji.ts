@@ -51,12 +51,7 @@ class EmojiModule {
   constructor(quill: FluentEditor, options: EmojiModuleOptions = {}) {
     this.quill = quill
 
-    this.options = {
-      ...DEFAULT_OPTIONS,
-      // emoji-mart 与 tiny-editor 国际化的的 locale 不一致使用 LOCALE_MAP 转换
-      locale: LOCALE_MAP[this.quill.lang] ?? 'en',
-      ...options,
-    }
+    this.options = options
 
     const toolbar = this.quill.getModule('toolbar') as TypeToolbar
 
@@ -120,10 +115,13 @@ class EmojiModule {
   // 创建表情选择弹窗
   private createPicker() {
     const pickerConfig = {
+      ...DEFAULT_OPTIONS,
+      // emoji-mart 与 tiny-editor 国际化的的 locale 不一致使用 LOCALE_MAP 转换
+      locale: LOCALE_MAP[this.quill.lang] ?? 'en',
+      ...this.options,
       data,
       onEmojiSelect: this.handleEmojiSelect.bind(this),
       onClickOutside: this.handleClickOutside.bind(this),
-      ...this.options,
     }
 
     const picker = new Picker(pickerConfig) as unknown as HTMLElement
