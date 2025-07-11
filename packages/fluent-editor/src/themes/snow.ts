@@ -59,6 +59,7 @@ OriginSnowTheme.DEFAULTS = {
           })
           inputFile.call(this, 'video', accept)
         },
+        'ai': function () {},
         'emoji': function () {},
         'fullscreen': fullscreenHandler,
         [FormatPainter.toolName]: FormatPainter,
