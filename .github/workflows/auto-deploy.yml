@@ -4,7 +4,8 @@ name: Auto Deploy
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: [test-fix-build-err]
+    pull_request:
+      branches: [test-fix-build-err]
     paths:
       - 'packages/docs/**'
       - 'packages/projects/**'
