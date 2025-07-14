@@ -2,10 +2,11 @@
 name: Auto Deploy
 
 on:
+  pull_request:
+    branches: [test-fix-build-err]
   # Runs on pushes targeting the default branch
   push:
-    pull_request:
-      branches: [test-fix-build-err]
+    branches: [test-fix-build-err]
     paths:
       - 'packages/docs/**'
       - 'packages/projects/**'
