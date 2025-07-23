@@ -16,10 +16,11 @@ onMounted(() => {
       modules: {
         toolbar: [
           ['bold', 'italic', 'strike', 'underline'],
-          ['link', 'image'],
+          ['link', 'image', 'emoji'],
           [{ color: [] }, { background: [] }],
         ],
         counter: true,
+        emoji: true,
         i18n: {
           lang: lang.value,
         },

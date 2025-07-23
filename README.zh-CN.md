@@ -68,30 +68,11 @@ pnpm dev
 
 ## ✨ 贡献者
 
-贡献者是在 OpenTiny 社区中合并了 1 个或多个 PR 的社区成员。
+贡献者是在 OpenTiny 社区中做出过贡献的社区成员。
 
-感谢以下 OpenTiny 的贡献者们 ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/zzxming"><img src="https://avatars.githubusercontent.com/u/74341337?v=4?s=100" width="100px;" alt="zzxming"/><br /><sub><b>zzxming</b></sub></a><br /><a href="https://github.com/opentiny/tiny-editor/commits?author=zzxming" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Janson1012"><img src="https://avatars.githubusercontent.com/u/60996238?v=4?s=100" width="100px;" alt="Janson1012"/><br /><sub><b>Janson1012</b></sub></a><br /><a href="https://github.com/opentiny/tiny-editor/commits?author=Janson1012" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://kagol.github.io/blogs"><img src="https://avatars.githubusercontent.com/u/9566362?v=4?s=100" width="100px;" alt="Kagol"/><br /><sub><b>Kagol</b></sub></a><br /><a href="https://github.com/opentiny/tiny-editor/commits?author=kagol" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/kiss-keray"><img src="https://avatars.githubusercontent.com/u/24504763?v=4?s=100" width="100px;" alt="keray"/><br /><sub><b>keray</b></sub></a><br /><a href="https://github.com/opentiny/tiny-editor/commits?author=kiss-keray" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/qwangry"><img src="https://avatars.githubusercontent.com/u/58112936?v=4?s=100" width="100px;" alt="qwangry"/><br /><sub><b>qwangry</b></sub></a><br /><a href="https://github.com/opentiny/tiny-editor/commits?author=qwangry" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/jany55555"><img src="https://avatars.githubusercontent.com/u/173228510?v=4?s=100" width="100px;" alt="jany55555"/><br /><sub><b>jany55555</b></sub></a><br /><a href="https://github.com/opentiny/tiny-editor/commits?author=jany55555" title="Code">💻</a></td>
-    </tr>
-  </tbody>
-</table>
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
+<a href="https://www.openomy.com/github/opentiny/tiny-editor" target="_blank" style="display: block; width: 100%;" align="center">
+  <img src="https://www.openomy.com/svg?repo=opentiny/tiny-editor&chart=bubble&latestMonth=99" target="_blank" alt="Contribution Leaderboard" style="display: block; width: 100%;" />
+</a>
 
 ## ❤️ 致谢
 
