@@ -1,8 +1,10 @@
+import QuillCursors from 'quill-cursors'
 import { FontStyle, LineHeightStyle, SizeStyle, TextIndentStyle } from './attributors'
 import { EN_US } from './config/i18n/en-us'
 import { ZH_CN } from './config/i18n/zh-cn'
 import FluentEditor from './core/fluent-editor'
 import { SoftBreak, StrikeBlot, Video } from './formats'
+import CollaborativeEditor from './modules/collaborative-editing'
 import Counter from './modules/counter' // 字符统计
 import { CustomClipboard } from './modules/custom-clipboard' // 粘贴板
 import { BlotFormatter } from './modules/custom-image' // 图片
@@ -45,6 +47,7 @@ FluentEditor.register(
     'formats/divider': DividerBlot,
     'formats/link': LinkBlot,
 
+    'modules/collaboration': CollaborativeEditor,
     'modules/clipboard': CustomClipboard,
     'modules/counter': Counter,
     'modules/emoji-shortname': ShortNameEmoji,
@@ -58,6 +61,7 @@ FluentEditor.register(
     'modules/toolbar': BetterToolbar,
     'modules/uploader': FileUploader,
     'modules/shortcut-key': ShortCutKey,
+    'modules/cursors': QuillCursors,
 
     'themes/snow': SnowTheme,
 
