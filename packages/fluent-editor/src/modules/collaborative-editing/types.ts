@@ -27,11 +27,14 @@ export type CustomProviderConfig = BaseYjsProviderConfig & {
   type: string
 }
 
+export type CursorsConfig = boolean | object
+
 export interface YjsOptions {
   ydoc?: Y.Doc
   provider: (WebRTCProviderConfig | WebsocketProviderConfig | CustomProviderConfig)
   awareness?: AwarenessOptions
   offline?: boolean | IndexedDBOptions
+  cursors?: CursorsConfig
 
   // callback
   onConnect?: () => void

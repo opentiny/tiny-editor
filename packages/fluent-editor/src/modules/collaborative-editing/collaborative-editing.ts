@@ -11,7 +11,8 @@ export class CollaborativeEditor {
   private ydoc: Y.Doc = new Y.Doc()
   private provider: any
   private awareness: Awareness
-  private _isConnected = false // 插件级别
+  private cursors: any
+  private _isConnected = false
   private _isSynced = false
 
   constructor(
@@ -19,6 +20,7 @@ export class CollaborativeEditor {
     private options: YjsOptions,
   ) {
     this.ydoc = this.options.ydoc || new Y.Doc()
+    this.cursors = this.quill.getModule('cursors')
 
     if (this.options.awareness) {
       this.awareness = setupAwareness(this.options.awareness, new Awareness(this.ydoc))
@@ -27,7 +29,6 @@ export class CollaborativeEditor {
     if (this.options.provider) {
       const providerConfig = this.options.provider
       try {
-        // Create provider with shared handlers, Y.Doc, and Awareness
         const provider = createProvider({
           doc: this.ydoc,
           options: providerConfig.options,
@@ -76,7 +77,7 @@ export class CollaborativeEditor {
     }
   }
 
-  public getAwareness(): Awareness {
+  public getAwareness() {
     return this.awareness
   }
 
@@ -94,5 +95,9 @@ export class CollaborativeEditor {
 
   get isSynced() {
     return this._isSynced
+  }
+
+  public getCursors() {
+    return this.cursors
   }
 }
