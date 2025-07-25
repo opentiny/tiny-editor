@@ -1,3 +1,4 @@
+export * from './collaborative-editing'
 export * from './counter'
 export * from './custom-clipboard'
 export * from './custom-image'
