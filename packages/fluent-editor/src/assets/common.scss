@@ -111,7 +111,7 @@
 @mixin toolbarSvgColor {
   svg,
   polygon,
-  path {
+  svg:not(.ql-ai-icon) path {
     @content;
   }
 }
