@@ -22,23 +22,22 @@ export class WebsocketProviderWrapper implements UnifiedProvider {
 
   private _isConnected = false
   private _isSynced = false
-  private doc: Y.Doc
-
-  awareness: Awareness
-  document: Y.Doc
-  type: 'websocket'
 
   private onConnect?: () => void
   private onDisconnect?: () => void
   private onError?: (error: Error) => void
   private onSyncChange?: (isSynced: boolean) => void
 
+  document: Y.Doc
+  awareness: Awareness
+  type: 'websocket'
+
   connect = () => {
     try {
       this.provider.connect()
     }
     catch (error) {
-      console.warn('[yjs] Error connecting WebRTC provider:', error)
+      console.warn('[yjs] Error connecting WebSocket provider:', error)
     }
   }
 
@@ -47,7 +46,7 @@ export class WebsocketProviderWrapper implements UnifiedProvider {
       this.provider.destroy()
     }
     catch (error) {
-      console.warn('[yjs] Error destroying WebRTC provider:', error)
+      console.warn('[yjs] Error destroying WebSocket provider:', error)
     }
   }
 
@@ -64,7 +63,7 @@ export class WebsocketProviderWrapper implements UnifiedProvider {
       }
     }
     catch (error) {
-      console.warn('[yjs] Error disconnecting WebRTC provider:', error)
+      console.warn('[yjs] Error disconnecting WebSocket provider:', error)
     }
   }
 
@@ -86,13 +85,13 @@ export class WebsocketProviderWrapper implements UnifiedProvider {
     this.onError = onError
     this.onSyncChange = onSyncChange
 
-    this.doc = doc || new Y.Doc()
-    this.awareness = awareness ?? new Awareness(this.doc)
+    this.document = doc || new Y.Doc()
+    this.awareness = awareness ?? new Awareness(this.document)
     try {
       this.provider = new WebsocketProvider(
         options.serverUrl,
         options.roomname,
-        this.doc,
+        this.document,
         {
           awareness: this.awareness,
           ...options,
@@ -105,19 +104,19 @@ export class WebsocketProviderWrapper implements UnifiedProvider {
 
         if (event.status === 'connected') {
           if (!wasConnected) {
-            onConnect?.()
+            this.onConnect?.()
           }
           if (!this._isSynced) {
             this._isSynced = true
-            onSyncChange?.(true)
+            this.onSyncChange?.(true)
           }
         }
         else if (event.status === 'disconnected') {
           if (wasConnected) {
-            onDisconnect?.()
+            this.onDisconnect?.()
             if (this._isSynced) {
               this._isSynced = false
-              onSyncChange?.(false)
+              this.onSyncChange?.(false)
             }
           }
         }
@@ -139,13 +138,5 @@ export class WebsocketProviderWrapper implements UnifiedProvider {
 
   getProvider() {
     return this.provider
-  }
-
-  getDoc() {
-    return this.doc
-  }
-
-  getAwareness() {
-    return this.awareness
   }
 }

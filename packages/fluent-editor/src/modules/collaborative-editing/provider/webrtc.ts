@@ -17,12 +17,15 @@ export class WebRTCProviderWrapper implements UnifiedProvider {
   private provider: WebrtcProvider
   private _isConnected = false
   private _isSynced = false
-  private doc: Y.Doc
 
   private onConnect?: () => void
   private onDisconnect?: () => void
   private onError?: (error: Error) => void
   private onSyncChange?: (isSynced: boolean) => void
+
+  document: Y.Doc
+  awareness: Awareness
+  type: 'websocket'
 
   connect = () => {
     try {
@@ -71,9 +74,9 @@ export class WebRTCProviderWrapper implements UnifiedProvider {
     this.onError = onError
     this.onSyncChange = onSyncChange
 
-    this.doc = doc || new Y.Doc()
+    this.document = doc || new Y.Doc()
     try {
-      this.provider = new WebrtcProvider(options.roomname, this.doc, {
+      this.provider = new WebrtcProvider(options.roomname, this.document, {
         awareness,
         ...options,
       })
@@ -96,7 +99,7 @@ export class WebRTCProviderWrapper implements UnifiedProvider {
 
             if (this._isSynced) {
               this._isSynced = false
-              onSyncChange?.(false)
+              this.onSyncChange?.(false)
             }
           }
         }
@@ -106,16 +109,6 @@ export class WebRTCProviderWrapper implements UnifiedProvider {
       console.warn('[yjs] Error creating WebRTC provider:', error)
       onError?.(error instanceof Error ? error : new Error(String(error)))
     }
-  }
-
-  type: 'webrtc'
-
-  get awareness(): Awareness {
-    return this.provider!.awareness
-  }
-
-  get document() {
-    return this.doc
   }
 
   get isConnected() {

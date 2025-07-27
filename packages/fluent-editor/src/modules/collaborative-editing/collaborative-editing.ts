@@ -23,7 +23,14 @@ export class CollaborativeEditor {
     this.cursors = this.quill.getModule('cursors')
 
     if (this.options.awareness) {
-      this.awareness = setupAwareness(this.options.awareness, new Awareness(this.ydoc))
+      const awareness = setupAwareness(this.options.awareness, new Awareness(this.ydoc))
+      if (!awareness) {
+        throw new Error('Failed to initialize awareness')
+      }
+      this.awareness = awareness
+    }
+    else {
+      this.awareness = new Awareness(this.ydoc)
     }
 
     if (this.options.provider) {
