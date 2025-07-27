@@ -82,19 +82,17 @@ onMounted(() => {
 </script>
 
 <template>
-<div class="collaborative-demo">
-  <div class="editor-container">
-    <h3>用户1 编辑器</h3>
-    <div ref="editor1Ref" class="editor">
+  <div class="collaborative-demo">
+    <div class="editor-container">
+      <h3>用户1 编辑器</h3>
+      <div ref="editor1Ref" class="editor" />
     </div>
-  </div>
 
-  <div class="editor-container">
-    <h3>用户2 编辑器</h3>
-    <div ref="editor2Ref" class="editor">
+    <div class="editor-container">
+      <h3>用户2 编辑器</h3>
+      <div ref="editor2Ref" class="editor" />
     </div>
   </div>
-</div>
 </template>
 
 <style scoped></style>

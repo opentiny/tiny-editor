@@ -6,7 +6,7 @@ import * as Y from 'yjs'
 
 export interface WebsocketProviderOptions extends ProviderEventHandlers {
   serverUrl: string
-  roomname: string
+  roomName: string
   connect?: boolean
   awareness?: any
   params?: Record<string, string>
@@ -90,7 +90,7 @@ export class WebsocketProviderWrapper implements UnifiedProvider {
     try {
       this.provider = new WebsocketProvider(
         options.serverUrl,
-        options.roomname,
+        options.roomName,
         this.document,
         {
           awareness: this.awareness,

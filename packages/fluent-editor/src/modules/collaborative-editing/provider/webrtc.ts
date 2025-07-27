@@ -5,7 +5,7 @@ import { WebrtcProvider } from 'y-webrtc'
 import * as Y from 'yjs'
 
 export interface WebRTCProviderOptions {
-  roomname: string
+  roomName: string
   filterBcConns?: boolean
   maxConns?: number
   password?: string
@@ -25,7 +25,7 @@ export class WebRTCProviderWrapper implements UnifiedProvider {
 
   document: Y.Doc
   awareness: Awareness
-  type: 'websocket'
+  type: 'webrtc'
 
   connect = () => {
     try {
@@ -76,7 +76,7 @@ export class WebRTCProviderWrapper implements UnifiedProvider {
 
     this.document = doc || new Y.Doc()
     try {
-      this.provider = new WebrtcProvider(options.roomname, this.document, {
+      this.provider = new WebrtcProvider(options.roomName, this.document, {
         awareness,
         ...options,
       })
