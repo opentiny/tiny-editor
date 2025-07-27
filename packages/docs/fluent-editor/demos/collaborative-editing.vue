@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type FluentEditor from '@opentiny/fluent-editor'
 import { onMounted, ref } from 'vue'
+import 'quill-table-up/index.css'
+import 'quill-table-up/table-creator.css'
 
 let editor1: FluentEditor
 let editor2: FluentEditor
@@ -13,18 +15,23 @@ const TOOLBAR_CONFIG = [
   [{ list: 'ordered' }, { list: 'bullet' }],
   ['blockquote', 'code-block'],
   ['link'],
+  [{ 'table-up': [] }],
   ['clean'],
 ]
 
 const ROOM_NAME = `tiny-editor-document-demo-roomName`
 
 onMounted(() => {
-  import('@opentiny/fluent-editor').then((module) => {
-    const FluentEditor = module.default
-    const { CollaborationModule } = module
-
+  Promise.all([
+    import('@opentiny/fluent-editor'),
+    import('quill-table-up'),
+  ]).then(([
+    { default: FluentEditor, generateTableUp, CollaborationModule },
+    { defaultCustomSelect, TableMenuContextmenu, TableSelection, TableUp },
+  ]) => {
     if (!editor1Ref.value || !editor2Ref.value) return
 
+    FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)
     CollaborationModule.register()
     FluentEditor.register('modules/collaboration', CollaborationModule, true)
 
@@ -32,9 +39,16 @@ onMounted(() => {
     editor1 = new FluentEditor(editor1Ref.value, {
       theme: 'snow',
       modules: {
-        toolbar: TOOLBAR_CONFIG,
-        cursors: true,
-        collaboration: {
+        'toolbar': TOOLBAR_CONFIG,
+        'cursors': true,
+        'table-up': {
+          customSelect: defaultCustomSelect,
+          selection: TableSelection,
+          selectionOptions: {
+            tableMenu: TableMenuContextmenu,
+          },
+        },
+        'collaboration': {
           cursors: true,
           provider: {
             type: 'websocket',
@@ -57,9 +71,16 @@ onMounted(() => {
     editor2 = new FluentEditor(editor2Ref.value, {
       theme: 'snow',
       modules: {
-        toolbar: TOOLBAR_CONFIG,
-        cursors: true,
-        collaboration: {
+        'toolbar': TOOLBAR_CONFIG,
+        'cursors': true,
+        'table-up': {
+          customSelect: defaultCustomSelect,
+          selection: TableSelection,
+          selectionOptions: {
+            tableMenu: TableMenuContextmenu,
+          },
+        },
+        'collaboration': {
           cursors: true,
           provider: {
             type: 'websocket',
