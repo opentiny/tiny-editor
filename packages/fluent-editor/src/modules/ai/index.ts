@@ -57,7 +57,7 @@ export class AI {
 
   // 创建弹出框
   private createElements() {
-    if(!this.dialogContainerEl) {
+    if (!this.dialogContainerEl) {
       this.dialogContainerEl = document.createElement('div')
       this.dialogContainerEl.className = 'ql-ai-dialog'
       this.wrapContainerEl = document.createElement('div')
@@ -83,7 +83,6 @@ export class AI {
       this.sendButtonEl = document.createElement('div')
       this.sendButtonEl.className = 'ql-ai-send'
 
-
       // 创建结果弹窗
       this.resultPopupEl = document.createElement('div')
       this.resultPopupEl.className = 'ql-ai-result'
@@ -97,7 +96,7 @@ export class AI {
       this.wrapContainerEl.appendChild(this.inputContainerEl)
       this.dialogContainerEl.appendChild(this.wrapContainerEl)
     }
-    
+
     this.aiPreTextEl.textContent = `${this.model}帮你写：`
     this.sendButtonEl.textContent = this.SEND
     this.sendButtonEl.style.display = 'block' // 显示发送按钮
@@ -111,7 +110,7 @@ export class AI {
 
     // 定位到编辑器焦点位置
     this.positionElements()
-    
+
     // 监听发送事件
     this.inputEl.addEventListener('keydown', async (e) => {
       if (e.key === 'Enter') {
@@ -119,7 +118,7 @@ export class AI {
       }
     })
     this.sendButtonEl.addEventListener('click', async (e) => {
-      if (e.target.textContent === this.BREAK) {
+      if (e.target instanceof HTMLElement && e.target.textContent === this.BREAK) {
         this.isBreak = true
       }
       else {
@@ -135,14 +134,13 @@ export class AI {
       }
     }
     this.quill.container.addEventListener('keydown', handleKeyDown)
-
   }
 
   // AI查询
   private async queryAI(question?: string): Promise<string> {
     this.inputValue = question || this.inputEl.value
     this.inputEl.value = '' // 清空输入框
-    if(this.inputValue.trim() === '') {
+    if (this.inputValue.trim() === '') {
       return
     }
 
@@ -276,7 +274,7 @@ export class AI {
 
   private closeAIPanel() {
     this.isBreak = true // 停止查询
-    if(this.dialogContainerEl) {
+    if (this.dialogContainerEl) {
       this.quill.container.removeChild(this.dialogContainerEl)
     }
     this.dialogContainerEl = null
