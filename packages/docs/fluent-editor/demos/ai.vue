@@ -34,8 +34,6 @@ onMounted(() => {
 
 <template>
   <div id="editor-add-toolbar-item">
-    <h3>标题：</h3>
-    <p>内容：</p>
-    <p>署名：</p>
+    <p>我曾经跨过山和大海，也穿过人山人海</p>
   </div>
 </template>

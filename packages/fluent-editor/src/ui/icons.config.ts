@@ -315,9 +315,9 @@ export const FORMAT_PAINTER_ICON = `<svg viewBox="0 0 32 32"><path fill="current
 
 export const DIVIDER_ICON = `<svg viewBox="0 0 18 18"><line x1="0" y1="9" x2="18" y2="9" stroke="currentColor" stroke-width="2"/></svg>`
 
-export const AI_ICON = `<svg viewBox="0 0 24 24.0023" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24.0022736" fill="none" customFrame="#000000">
+export const AI_ICON = `<svg viewBox="0 0 24 24.0023" class="ql-ai-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24.0022736" fill="none" customFrame="#000000">
 	<defs>
-		<linearGradient id="paint_linear_1" x1="2.50000095" x2="12.0000048" y1="0" y2="23.9999962" gradientUnits="userSpaceOnUse">
+		<linearGradient class="ql-ai-icon-linear" id="paint_linear_1" x1="2.50000095" x2="12.0000048" y1="0" y2="23.9999962" gradientUnits="userSpaceOnUse">
 			<stop stop-color="rgb(250,100,1)" offset="0.263296664" stop-opacity="1" />
 			<stop stop-color="rgb(249.9,102.687,1)" offset="0.349490285" stop-opacity="1" />
 			<stop stop-color="rgb(247,181,1)" offset="0.494946986" stop-opacity="1" />
