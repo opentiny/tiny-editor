@@ -29,6 +29,7 @@ const SELECT_PLACEHOLDER = '向我提问/选择操作'
 const STOP_ANSWER = '停止回答'
 const REPLACE_SELECT = '替换选中内容'
 const INSERT_TEXT = '插入内容'
+const INSERT_SUB_CONTENT_TEXT = '插入内容下方'
 const REGENERATE = '重新生成'
 const CLOSE = '关闭'
 const THINK_TEXT = '正在为您分析并总结答案'
@@ -71,15 +72,17 @@ export class AI {
   model: string
   message: string
   isBreak: boolean = false // 打断标记
+  textNumber: number // 文本字数限制
   private _isSelectRangeMode: boolean = false // 选择/点击模式
   private _charCount: number = 0 // 文本字数
   private _debounceTimer = null
   private _inputPlaceholder: string = ''
   private _showOperationMenu: boolean = false
   private _isThinking: boolean = false // 思考中
+  private _showResultPopupEl: boolean = false // 结果弹窗
   selectedText: string = '' // 选择的文本
   inputValue: string = '' // 存储输入框的值
-  resultMenuList: { text: string, icon: string }[] = []
+  resultMenuList: { text: string, icon: string, selectText?: string }[] = []
   operationMenuList: { id: string, text: string, icon: string }[] = []
   private _operationMenuItemList: { id: string, text: string, icon?: string }[] = []
 
@@ -127,10 +130,11 @@ export class AI {
     this.host = options.host
     this.apiKey = options.apiKey
     this.model = options.model
+    this.textNumber = options.contentMaxLength || 5000
 
     this.resultMenuList = [
       { text: REPLACE_SELECT, icon: REPLACE_SELECT_ICON },
-      { text: INSERT_TEXT, icon: INSERT_ICON },
+      { text: INSERT_TEXT, icon: INSERT_ICON, selectText: INSERT_SUB_CONTENT_TEXT  },
       { text: REGENERATE, icon: REBUILD_ICON },
       { text: CLOSE, icon: MENU_CLOSE_ICON },
     ]
@@ -147,15 +151,15 @@ export class AI {
     // 创建输入框和结果弹窗
     this.create()
 
-    // 定位到编辑器焦点位置
-    this.positionElements()
-    const range = this.quill.getSelection()
-    if (range.length) {
+    this.selectionRange = this.quill.getSelection()
+    if (this.selectionRange.length) {
       this.isSelectRangeMode = true
     }
     else {
       this.isSelectRangeMode = false
     }
+    // 定位到编辑器焦点位置
+    this.positionElements()
 
     // 添加ESC键监听
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -175,11 +179,6 @@ export class AI {
     this.positionElements()
 
     this.isSelectRangeMode = true
-
-    // const selectedText = this.quill.getText(this.selectionRange.index, this.selectionRange.length)
-    // this.inputEl.value = `处理这段文字: ${selectedText}`
-    // this.inputEl.focus()
-    // this.hideSelectionBubble()
   }
 
   private create() {
@@ -199,7 +198,6 @@ export class AI {
     if (!this.resultPopupEl) {
       this.resultPopupEl = document.createElement('div')
       this.resultPopupEl.className = 'ql-ai-result'
-      this.resultPopupEl.style.display = 'none'
       this.resultPopupHeaderEl = document.createElement('div')
       this.resultPopupHeaderEl.className = 'ql-ai-result-header'
       this.resultPopupHeaderEl.innerText = RESULT_HEADER_TEXT
@@ -236,6 +234,7 @@ export class AI {
       this.resultPopupEl.appendChild(this.resultPopupContentEl)
       this.resultPopupEl.appendChild(this.resultPopupFooterEl)
     }
+    this.showResultPopupEl = false
   }
 
   private createOperationMenuElements() {
@@ -327,7 +326,6 @@ export class AI {
       this.inputContainerEl.appendChild(this.inputEl)
       this.inputRightEl.appendChild(this.inputSendBtnEl)
       this.inputRightEl.appendChild(this.inputCloseBtnEl)
-      this.inputSendBtnEl.style.display = 'none'
       this.inputContainerEl.appendChild(this.inputRightEl) // 添加发送按钮
       this.wrapContainerEl.appendChild(this.resultPopupEl)
       this.wrapContainerEl.appendChild(this.inputContainerEl)
@@ -336,6 +334,13 @@ export class AI {
     }
     else {
       this.dialogContainerEl.style.display = 'block'
+    }
+    this.hiddenInputSendBtnEl()
+  }
+
+  private hiddenInputSendBtnEl(display = 'none') {
+    if (this.inputEl && this.inputSendBtnEl) {
+      this.inputSendBtnEl.style.display = display
     }
   }
 
@@ -484,11 +489,9 @@ export class AI {
     // 监听输入事件
     if (this.inputEl) {
       this.inputEl.addEventListener('input', () => {
-        if (this.inputEl && this.inputSendBtnEl) {
-          this.inputSendBtnEl.style.display = this.inputEl.value.trim() ? 'flex' : 'none'
-        }
+        this.hiddenInputSendBtnEl(this.inputEl.value.trim() ? 'flex' : 'none')
         if (this.menuContainerEl && this._isSelectRangeMode) {
-          this.showOperationMenu = !this.inputEl.value.trim()
+          this.showOperationMenu = !this.inputEl.value.trim() && !this._showResultPopupEl
         }
       })
     }
@@ -516,7 +519,7 @@ export class AI {
 
   positionElements() {
     if (!this.dialogContainerEl) return
-    const range = this.quill.getSelection()
+    const range = this.selectionRange
     if (range) {
       const bounds = this.quill.getBounds(range.index)
       this.dialogContainerEl.style.position = 'absolute'
@@ -584,14 +587,9 @@ export class AI {
       this.actionMenuEl = document.createElement('div')
       this.actionMenuEl.className = 'ql-ai-actions'
 
-      this.resultMenuList.forEach(({ text, icon }, index) => {
+      this.resultMenuList.forEach(({ text, icon }) => {
         const menuItem = document.createElement('div')
-        if (index === 0 && !this._isSelectRangeMode) {
-          menuItem.className = 'ql-ai-action-item  hidden'
-        }
-        else {
-          menuItem.className = 'ql-ai-action-item'
-        }
+        menuItem.className = 'ql-ai-action-item'
         menuItem.innerHTML = `${icon}<span class="ql-ai-result-menu-text">${text}</span>`
         menuItem.addEventListener('click', () => this.handleAction(text))
         this.actionMenuEl.appendChild(menuItem)
@@ -599,11 +597,14 @@ export class AI {
 
       this.wrapContainerEl.appendChild(this.actionMenuEl)
     }
+    const secondMenuItemText = this.actionMenuEl.children[1].querySelector('.ql-ai-result-menu-text') as HTMLDivElement
     if (!this._isSelectRangeMode) {
       this.actionMenuEl.firstChild.classList.add('hidden')
+      secondMenuItemText.textContent = INSERT_TEXT;
     }
     else {
       this.actionMenuEl.firstChild.classList.remove('hidden')
+      secondMenuItemText.textContent = INSERT_SUB_CONTENT_TEXT;
     }
 
     this.isThinking = false
@@ -703,6 +704,7 @@ export class AI {
       // 创建操作菜单
       this.createActionMenu()
       this.inputEl.value = '' // 清空输入框
+      this.hiddenInputSendBtnEl()
       return content
     }
     catch (error) {
@@ -715,9 +717,11 @@ export class AI {
     if (!this.resultPopupEl) return
 
     // 显示结果
-    this.resultPopupContentEl.innerHTML = response
-    this.charCount = this.resultPopupContentEl.textContent.replace(/\s+/g, '').length
-    this.resultPopupEl.style.display = 'block'
+    if(this._charCount <= this.textNumber) {
+      this.resultPopupContentEl.innerHTML = response
+      this.charCount = this.resultPopupContentEl.textContent.replace(/\s+/g, '').length
+    }
+    this.showResultPopupEl = true
   }
 
   private handleAction(action: string) {
@@ -756,21 +760,10 @@ export class AI {
     if (!this.resultPopupContentEl) return
     const range = this.quill.getSelection(true)
     if (range) {
-      if (range.length > 0) {
-        // 有选中文本，先删除选中内容
-        this.quill.deleteText(range.index, range.length)
-        // 然后插入AI生成的内容
-        this.quill.clipboard.dangerouslyPasteHTML(
-          range.index,
-          this.resultPopupContentEl.innerHTML,
-        )
-      }
-      else {
-        this.quill.clipboard.dangerouslyPasteHTML(
-          range.index,
-          this.resultPopupContentEl.innerHTML,
-        )
-      }
+      this.quill.clipboard.dangerouslyPasteHTML(
+        range.index + range.length,
+        this.resultPopupContentEl.innerHTML,
+      )
     }
     this.closeAIPanel()
   }
@@ -790,9 +783,7 @@ export class AI {
       this.actionMenuEl.style.display = 'none'
     }
 
-    if (this.resultPopupEl) {
-      this.resultPopupEl.style.display = 'none'
-    }
+    this.showResultPopupEl = false
 
     if (this.inputEl && this.inputEl.value.trim() !== '') {
       this.inputEl.value = '' // 清空输入框
@@ -809,7 +800,7 @@ export class AI {
     this._debounceTimer = setTimeout(() => {
       this._charCount = value
       if (this.resultPopupFooterTextEl) {
-        this.resultPopupFooterTextEl.innerText = `${this._charCount}`
+        this.resultPopupFooterTextEl.innerText = `${this._charCount}/${this.textNumber}`
       }
       clearTimeout(this._debounceTimer)
       this._debounceTimer = null
@@ -840,5 +831,12 @@ export class AI {
   set isThinking(value: boolean) {
     this._isThinking = value
     this.switchInputEl(!value)
+  }
+
+  set showResultPopupEl(value: boolean) {
+    this._showResultPopupEl = value
+    if (this.resultPopupEl) {
+      this.resultPopupEl.style.display = value? 'block' : 'none'
+    }
   }
 }

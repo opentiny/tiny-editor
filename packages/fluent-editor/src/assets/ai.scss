@@ -299,10 +299,44 @@ span {
   margin-bottom: 8px;
   display: flex;
   gap: 16px;
+
+  &:has(.editor) {
+    .ql-ai-main-menu > .ql-ai-menu-item:first-child {
+      background: #f5f5f5;
+
+      & > svg:nth-of-type(2)  {
+        display: inline-block;
+      }
+    }
+  }
+  &:has(.tone) {
+    .ql-ai-main-menu > .ql-ai-menu-item:nth-of-type(2) {
+      background: #f5f5f5;
+
+      & > svg:nth-of-type(2)  {
+        display: inline-block;
+      }
+    }
+  }
+  &:has(.adjust) {
+    .ql-ai-main-menu > .ql-ai-menu-item:nth-of-type(3) {
+      background: #f5f5f5;
+
+      & > svg:nth-of-type(2)  {
+        display: inline-block;
+      }
+    }
+  }
 }
 
 .ql-ai-main-menu {
   height: 132px;
+
+  .ql-ai-menu-item > svg:nth-of-type(2)  {
+    height: 8px;
+    width: 8px;
+    display: none;
+  }
 }
 
 .ql-ai-main-menu,
@@ -316,6 +350,10 @@ span {
 
 .ql-ai-sub-menu {
   display: none;
+
+  .ql-ai-menu-item:hover {
+    background: #f5f5f5;
+  }
 }
 
 .ql-ai-sub-menu{
@@ -340,11 +378,6 @@ span {
   &:not(:first-child) {
     margin-top: 4px;
   }
-  
-  &:hover {
-    background: #f5f5f5;
-    border-radius: 4px;
-  }
 
   svg:first-child {
     margin-right: 8px;
@@ -357,11 +390,6 @@ span {
     color: #191919;
     font-size: 14px;
     line-height: 20px;
-  }
-
-  svg:nth-of-type(2)  {
-    height: 8px;
-    width: 8px;
   }
 }
 
