@@ -8,6 +8,19 @@ export const THINK_ICON = `<svg viewBox="0 0 22 18.207" xmlns="http://www.w3.org
 	</g>
 </svg>`
 
+// 替换选中内容图标
+export const REPLACE_SELECT_ICON = `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" fill="none">
+	<rect id="ic_ict_replace" width="20" height="20" x="0" y="0" />
+	<g id="ic_ict_replace-替换/base/ic_ict_replace">
+		<path id="path4" d="M17.8604 9.50485C17.6884 6.00975 14.9421 3.15881 11.3942 2.64771L12.6748 4.44568M2.63232 11.0973C2.8043 14.5924 5.55066 17.4433 9.09849 17.9544L7.81794 16.1564" fill-rule="evenodd" stroke="rgb(20,118,255)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" />
+		<path id="path6" d="M12.1546 11.012L17.107 11.012C17.7381 11.012 18.2498 11.5236 18.2498 12.1548L18.2498 17.1072C18.2498 17.7384 17.7381 18.2501 17.107 18.2501L12.1546 18.2501C11.5234 18.2501 11.0117 17.7384 11.0117 17.1072L11.0117 12.1548C11.0117 11.5236 11.5234 11.012 12.1546 11.012Z" fill="rgb(255,255,255)" fill-opacity="0" fill-rule="evenodd" />
+		<path id="path6" d="M17.107 11.012C17.7381 11.012 18.2498 11.5236 18.2498 12.1548L18.2498 17.1072C18.2498 17.7384 17.7381 18.2501 17.107 18.2501L12.1546 18.2501C11.5234 18.2501 11.0117 17.7384 11.0117 17.1072L11.0117 12.1548C11.0117 11.5236 11.5234 11.012 12.1546 11.012L17.107 11.012Z" fill-rule="evenodd" stroke="rgb(20,118,255)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" />
+		<path id="path7" d="M3.39286 2.25L8.34524 2.25C8.97642 2.25 9.48809 2.76167 9.48809 3.39286L9.48809 8.34524C9.48809 8.97642 8.97642 9.48809 8.34524 9.48809L3.39286 9.48809C2.76167 9.48809 2.25 8.97642 2.25 8.34524L2.25 3.39286C2.25 2.76167 2.76167 2.25 3.39286 2.25Z" fill="rgb(255,255,255)" fill-opacity="0" fill-rule="evenodd" />
+		<path id="path7" d="M8.34524 2.25C8.97642 2.25 9.48809 2.76167 9.48809 3.39286L9.48809 8.34524C9.48809 8.97642 8.97642 9.48809 8.34524 9.48809L3.39286 9.48809C2.76167 9.48809 2.25 8.97642 2.25 8.34524L2.25 3.39286C2.25 2.76167 2.76167 2.25 3.39286 2.25L8.34524 2.25Z" fill-rule="evenodd" stroke="rgb(20,118,255)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" />
+	</g>
+</svg>
+`
+
 // 插入按钮图标
 export const INSERT_ICON = `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" fill="none">
 	<rect id="ic_ict_from_top_to_down" width="20" height="20" x="0" y="0" />

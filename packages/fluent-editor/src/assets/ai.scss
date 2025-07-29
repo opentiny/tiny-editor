@@ -1,9 +1,66 @@
+.ql-ai-icon-box {
+  position: relative;
+
+  &:hover {
+    .ql-ai-icon-bubble {
+      display: block;
+    } 
+  }
+
+  .ql-ai-icon-bubble {
+    display: none;
+    width: 216px;
+    height: 52px;
+    border-radius: 12px;
+    position: absolute;
+    top: 28px;
+    left: -26px;
+    z-index: 1000;
+  }
+
+  .ql-ai-icon-bubble-box {
+    margin-top: 8px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 44px;
+
+    .ql-ai-icon-bubble-text {
+      z-index: 1000;
+      font-size: 14px;
+      line-height: 21px;
+      color: #191919;
+    }
+
+    svg {
+      position: absolute;
+    }
+
+    .bubble-arrow-icon {
+      z-index: 1000;
+      left: 16px;
+      top: -8px;
+      width: 28px;
+      height: 9px;
+    }
+
+    .bubble-rect-icon {
+      top: 0;
+      width: 216px;
+      height: 44px;
+      z-index: 999;
+    }
+  }
+}
+
 .ql-ai-dialog {
   position: absolute;
   left: 15px;
 }
 
-.ql-toolbar .ql-ai > .ql-ai-icon:hover {
+.ql-toolbar .ql-ai .ql-ai-icon-box > .ql-ai-trigger-icon:hover {
   path {
     fill: #5e7ce0;
   }
@@ -111,10 +168,7 @@ span {
 }
 
 .ql-ai-result {
-  position: absolute;
-  bottom: calc(100% + 10px);
-  left: 0;
-  right: 0;
+  margin-bottom: 12px;
   padding: 16px 24px 8px;
   background: white;
   border-radius: 24px;
@@ -193,6 +247,10 @@ span {
     background: #f5f5f5;
   }
 
+  &.hidden {
+    display: none;
+  }
+
   svg {
     margin-right: 8px;
     width: 20px;
@@ -258,6 +316,16 @@ span {
 
 .ql-ai-sub-menu {
   display: none;
+}
+
+.ql-ai-sub-menu{
+  &.tone {
+    margin-top: 40px;
+  }
+
+  &.adjust {
+    margin-top: 86px;
+  }
 }
 
 .ql-ai-menu-item {

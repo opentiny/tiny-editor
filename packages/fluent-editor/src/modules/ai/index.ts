@@ -11,6 +11,7 @@ import {
   MENU_CLOSE_ICON,
   REBUILD_ICON,
   REFRESH_ICON,
+  REPLACE_SELECT_ICON,
   RICH_CONTENT_ICON,
   RIGHT_ARROW_ICON,
   SEND_BTN_ICON,
@@ -26,11 +27,42 @@ import {
 const INPUT_PLACEHOLDER = '请输入问题或“/”获取提示词'
 const SELECT_PLACEHOLDER = '向我提问/选择操作'
 const STOP_ANSWER = '停止回答'
+const REPLACE_SELECT = '替换选中内容'
 const INSERT_TEXT = '插入内容'
 const REGENERATE = '重新生成'
 const CLOSE = '关闭'
 const THINK_TEXT = '正在为您分析并总结答案'
 const RESULT_HEADER_TEXT = '根据您的诉求，已为您解答，具体如下：'
+const MENU_TITLE_DATA = {
+  editor: [
+    { id: '1-1', text: '丰富内容', icon: RICH_CONTENT_ICON },
+    { id: '1-2', text: '精简内容', icon: STREAMLINE_CONTENT_ICON },
+    { id: '1-3', text: '修改标点符号', icon: SYMBOL_ICON },
+    { id: '1-4', text: '翻译', icon: TRANSLATE_ICON },
+  ],
+  tone: [
+    { id: '2-1', text: '更专业的' },
+    { id: '2-2', text: '更直接的' },
+    { id: '2-3', text: '更友善的' },
+    { id: '2-4', text: '更口语化的' },
+  ],
+  adjust: [
+    { id: '3-1', text: '提炼要点' },
+    { id: '3-2', text: '归纳总结' },
+    { id: '3-3', text: '转写成[代码块]' },
+  ],
+}
+const MENU_ID_MAP = {
+  editor: 'subMenuEditorEl',
+  tone: 'subMenuToneEl',
+  adjust: 'subMenuAdjustEl',
+}
+
+interface OperationMenuItem {
+  id: string
+  text: string
+  icon?: string
+}
 
 export class AI {
   toolbar: TypeToolbar
@@ -44,10 +76,12 @@ export class AI {
   private _debounceTimer = null
   private _inputPlaceholder: string = ''
   private _showOperationMenu: boolean = false
+  private _isThinking: boolean = false // 思考中
+  selectedText: string = '' // 选择的文本
   inputValue: string = '' // 存储输入框的值
   resultMenuList: { text: string, icon: string }[] = []
-  operationMenuList: { id: string, text: string, icon: string, rightIcon?: string }[] = []
-  operationMenuItemList: { id: string, text: string, icon: string }[] = []
+  operationMenuList: { id: string, text: string, icon: string }[] = []
+  private _operationMenuItemList: { id: string, text: string, icon?: string }[] = []
 
   private alertEl: HTMLDivElement | null = null
   private alertTimer: number | null = null
@@ -59,6 +93,10 @@ export class AI {
   private inputContainerEl: HTMLDivElement | null = null
   private inputEl: HTMLInputElement | null = null
   private menuContainerEl: HTMLDivElement | null = null
+  private subMenuEl: HTMLDivElement | null = null
+  private subMenuEditorEl: HTMLDivElement | null = null
+  private subMenuToneEl: HTMLDivElement | null = null
+  private subMenuAdjustEl: HTMLDivElement | null = null
   private inputRightEl: HTMLDivElement | null = null
   private inputSendBtnEl: HTMLSpanElement | null = null
   private inputCloseBtnEl: HTMLSpanElement | null = null
@@ -91,22 +129,16 @@ export class AI {
     this.model = options.model
 
     this.resultMenuList = [
+      { text: REPLACE_SELECT, icon: REPLACE_SELECT_ICON },
       { text: INSERT_TEXT, icon: INSERT_ICON },
       { text: REGENERATE, icon: REBUILD_ICON },
       { text: CLOSE, icon: MENU_CLOSE_ICON },
     ]
 
     this.operationMenuList = [
-      { id: '1', text: '编辑调整内容', icon: EDITOR_ICON, rightIcon: RIGHT_ARROW_ICON },
-      { id: '2', text: '改写口吻', icon: CALL_ICON },
-      { id: '3', text: '整理选区内容', icon: ADJUST_ICON },
-    ]
-
-    this.operationMenuItemList = [
-      { id: '1-1', text: '丰富内容', icon: RICH_CONTENT_ICON },
-      { id: '1-2', text: '精简内容', icon: STREAMLINE_CONTENT_ICON },
-      { id: '1-3', text: '修改标点符号', icon: SYMBOL_ICON },
-      { id: '1-4', text: '翻译', icon: TRANSLATE_ICON },
+      { id: 'editor', text: '编辑调整内容', icon: EDITOR_ICON },
+      { id: 'tone', text: '改写口吻', icon: CALL_ICON },
+      { id: 'adjust', text: '整理选区内容', icon: ADJUST_ICON },
     ]
   }
 
@@ -139,6 +171,9 @@ export class AI {
   private selectTextEvent() {
     if (!this.selectionRange) return
     this.create()
+    // 定位到编辑器焦点位置
+    this.positionElements()
+
     this.isSelectRangeMode = true
 
     // const selectedText = this.quill.getText(this.selectionRange.index, this.selectionRange.length)
@@ -212,42 +247,52 @@ export class AI {
       // 创建主菜单
       const mainMenu = document.createElement('div')
       mainMenu.className = 'ql-ai-main-menu'
-      this.operationMenuList.forEach(({ text, icon, rightIcon, id }) => {
+      this.operationMenuList.forEach(({ text, icon, id }) => {
         const menuItem = document.createElement('div')
         menuItem.className = 'ql-ai-menu-item'
-        menuItem.innerHTML = `${icon}<span>${text}</span>${rightIcon || ''}`
-        menuItem.addEventListener('click', (e) => {
+        menuItem.innerHTML = `${icon}<span>${text}</span>${RIGHT_ARROW_ICON}`
+        menuItem.addEventListener('mouseenter', (e) => {
           e.stopPropagation()
-          if (text === '编辑调整内容') {
-            subMenu.style.display = 'block'
-          }
-          else {
-            subMenu.style.display = 'none'
-            this.handleOperationMenuClick(id)
-          }
+          this.subMenuEl.style.display = 'block'
+          this.subMenuEl.className = `ql-ai-sub-menu ${id}`
+          this.createOperationMenuItem(id)
         })
         mainMenu.appendChild(menuItem)
       })
-
-      // 创建子菜单
-      const subMenu = document.createElement('div')
-      subMenu.className = 'ql-ai-sub-menu'
-      subMenu.style.display = 'none'
-      this.operationMenuItemList.forEach(({ text, icon, id }) => {
-        const menuItem = document.createElement('div')
-        menuItem.className = 'ql-ai-menu-item'
-        menuItem.innerHTML = `${icon}<span>${text}</span>`
-        menuItem.addEventListener('click', (e) => {
-          e.stopPropagation()
-          this.handleOperationMenuItemClick(id)
-        })
-        subMenu.appendChild(menuItem)
-      })
+      if (!this.subMenuEl) {
+        // 创建子菜单
+        this.subMenuEl = document.createElement('div')
+        this.subMenuEl.className = 'ql-ai-sub-menu'
+        this.subMenuEl.style.display = 'none'
+      }
 
       this.menuContainerEl.appendChild(mainMenu)
-      this.menuContainerEl.appendChild(subMenu)
+      this.menuContainerEl.appendChild(this.subMenuEl)
     }
     this.showOperationMenu = false
+  }
+
+  private createOperationMenuItem(id: string) {
+    let menuItemBox = this[MENU_ID_MAP[id]]
+    if (!menuItemBox) {
+      menuItemBox = document.createElement('div')
+    }
+    // 清除子菜单容器中的所有子元素
+    while (this.subMenuEl.firstChild) {
+      this.subMenuEl.removeChild(this.subMenuEl.firstChild)
+    }
+
+    MENU_TITLE_DATA[id].forEach(({ text, icon, id }) => {
+      const menuItem = document.createElement('div')
+      menuItem.className = 'ql-ai-menu-item'
+      menuItem.innerHTML = `${icon || ''}<span>${text}</span>`
+      menuItem.addEventListener('click', (e) => {
+        e.stopPropagation()
+        this.handleOperationMenuItemClick(text, id)
+      })
+      menuItemBox.appendChild(menuItem)
+    })
+    this.subMenuEl.appendChild(menuItemBox)
   }
 
   private createInputBoxElements() {
@@ -284,9 +329,9 @@ export class AI {
       this.inputRightEl.appendChild(this.inputCloseBtnEl)
       this.inputSendBtnEl.style.display = 'none'
       this.inputContainerEl.appendChild(this.inputRightEl) // 添加发送按钮
+      this.wrapContainerEl.appendChild(this.resultPopupEl)
       this.wrapContainerEl.appendChild(this.inputContainerEl)
       this.wrapContainerEl.appendChild(this.menuContainerEl) // 添加菜单容器
-      this.wrapContainerEl.appendChild(this.resultPopupEl)
       this.dialogContainerEl.appendChild(this.wrapContainerEl)
     }
     else {
@@ -417,11 +462,15 @@ export class AI {
     if (range && range.length > 0) {
       this.selectionRange = range
       this.showSelectionBubble()
+      this.selectedText = this.quill.getText(range.index, range.length)
     }
     else {
-      this.hideSelectionBubble()
       if (range && range.index !== null) {
+        this.selectedText = ''
         this.closeAIPanel()
+      }
+      else {
+        this.hideSelectionBubble()
       }
     }
   }
@@ -447,16 +496,13 @@ export class AI {
     // 给发送按钮添加点击事件
     if (this.inputSendBtnEl) {
       this.inputSendBtnEl.addEventListener('click', async () => {
-        this.switchInputEl(false)
         await this.queryAI()
-        this.switchInputEl()
       })
     }
     // 监听发送事件
     this.inputEl.addEventListener('keydown', async (e) => {
       if (e.key === 'Enter') {
         await this.queryAI()
-        this.switchInputEl()
       }
     })
 
@@ -474,7 +520,7 @@ export class AI {
     if (range) {
       const bounds = this.quill.getBounds(range.index)
       this.dialogContainerEl.style.position = 'absolute'
-      this.dialogContainerEl.style.top = `${bounds.top + bounds.height}px`
+      this.dialogContainerEl.style.top = `${bounds.top + bounds.height + 20}px`
     }
   }
 
@@ -520,37 +566,14 @@ export class AI {
     }
   }
 
-  // 添加处理主菜单点击的方法
-  private handleOperationMenuClick(id: string) {
-    if (id !== '1') {
-      const content = JSON.stringify(this.quill.root.innerHTML)
-      let quetion = ''
-      if (id === '2') {
-        quetion = `改写这块内容的叙述口吻，并保持原有的格式和语言风格,不要思考过程，直接返回修改后的内容，这块内容为：${content}`
-      }
-      else if (id === '3') {
-        quetion = `整理这块内容的格式，使其更清晰、更易读，不要思考过程，直接返回修改后的内容，这块内容为：${content}`
-      }
-      this.showOperationMenu = false
-      this.queryAI(quetion)
-    }
-  }
-
   // 添加处理子菜单点击的方法
-  private handleOperationMenuItemClick(id: string) {
-    const content = JSON.stringify(this.quill.root.innerHTML)
+  private handleOperationMenuItemClick(text: string, id: string = '') {
     let quetion = ''
-    if (id === '1-1') {
-      quetion = `丰富这块内容的内容，使其更丰富、更详细，不要思考过程，直接返回修改后的内容，这块内容为：${content}`
+    if (id.startsWith('1-') || id.startsWith('3-')) {
+      quetion = `将目标文字${text}，目标文字为：${this.selectedText}`
     }
-    else if (id === '1-2') {
-      quetion = `精简这块内容的内容，使其更简洁、更清晰，不要思考过程，直接返回修改后的内容，这块内容为：${content}`
-    }
-    else if (id === '1-3') {
-      quetion = `修改这块内容的标点符号，使其更符合中文习惯，不要思考过程，直接返回修改后的内容，这块内容为：${content}`
-    }
-    else if (id === '1-4') {
-      quetion = `将这块内容翻译成英文，不要思考过程，直接返回修改后的内容，这块内容为：${content}`
+    else if (id.startsWith('2-')) {
+      quetion = `改写目标文字的口吻，让其变得${text}，目标文字为：${this.selectedText}`
     }
     this.showOperationMenu = false
     this.queryAI(quetion)
@@ -561,9 +584,14 @@ export class AI {
       this.actionMenuEl = document.createElement('div')
       this.actionMenuEl.className = 'ql-ai-actions'
 
-      this.resultMenuList.forEach(({ text, icon }) => {
+      this.resultMenuList.forEach(({ text, icon }, index) => {
         const menuItem = document.createElement('div')
-        menuItem.className = 'ql-ai-action-item'
+        if (index === 0 && !this._isSelectRangeMode) {
+          menuItem.className = 'ql-ai-action-item  hidden'
+        }
+        else {
+          menuItem.className = 'ql-ai-action-item'
+        }
         menuItem.innerHTML = `${icon}<span class="ql-ai-result-menu-text">${text}</span>`
         menuItem.addEventListener('click', () => this.handleAction(text))
         this.actionMenuEl.appendChild(menuItem)
@@ -571,6 +599,14 @@ export class AI {
 
       this.wrapContainerEl.appendChild(this.actionMenuEl)
     }
+    if (!this._isSelectRangeMode) {
+      this.actionMenuEl.firstChild.classList.add('hidden')
+    }
+    else {
+      this.actionMenuEl.firstChild.classList.remove('hidden')
+    }
+
+    this.isThinking = false
   }
 
   private switchInputEl(showInput = true) {
@@ -600,10 +636,11 @@ export class AI {
       this.wrapContainerEl.appendChild(this.thinkContainerEl) // 添加发送按钮
       this.thinkBtnEl.addEventListener('click', () => {
         this.isBreak = true
+        this.isThinking = false
       })
     }
 
-    this.switchInputEl(false)
+    this.isThinking = true
   }
 
   // AI查询
@@ -685,6 +722,9 @@ export class AI {
 
   private handleAction(action: string) {
     switch (action) {
+      case REPLACE_SELECT:
+        this.replaceSelectText()
+        break
       case INSERT_TEXT:
         this.insertAIResponse()
         break
@@ -695,6 +735,21 @@ export class AI {
         this.closeAIPanel()
         break
     }
+  }
+
+  private replaceSelectText() {
+    if (!this.resultPopupContentEl) return
+    const range = this.quill.getSelection(true)
+    if (range && range.length > 0) {
+      // 删除选中内容
+      this.quill.deleteText(range.index, range.length)
+      // 插入AI生成的内容
+      this.quill.clipboard.dangerouslyPasteHTML(
+        range.index,
+        this.resultPopupContentEl.innerHTML,
+      )
+    }
+    this.closeAIPanel()
   }
 
   private insertAIResponse() {
@@ -721,9 +776,7 @@ export class AI {
   }
 
   private async regenerateResponse() {
-    this.switchInputEl(false)
     await this.queryAI(this.inputValue)
-    this.switchInputEl()
   }
 
   private closeAIPanel() {
@@ -744,6 +797,7 @@ export class AI {
     if (this.inputEl && this.inputEl.value.trim() !== '') {
       this.inputEl.value = '' // 清空输入框
     }
+    this.hideSelectionBubble()
   }
 
   set charCount(value: number) {
@@ -781,5 +835,10 @@ export class AI {
     this.showOperationMenu = value
     this.inputPlaceholder = value ? SELECT_PLACEHOLDER : INPUT_PLACEHOLDER
     this.hideSelectionBubble()
+  }
+
+  set isThinking(value: boolean) {
+    this._isThinking = value
+    this.switchInputEl(!value)
   }
 }

@@ -109,7 +109,7 @@
 
 // SVG图标
 @mixin toolbarSvgColor {
-  svg,
+  svg:not(.ql-ai-icon),
   polygon,
   svg:not(.ql-ai-icon) path {
     @content;
