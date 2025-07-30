@@ -127,9 +127,9 @@ export class AI {
 
     this.quill.on('selection-change', this.handleSelectionChange.bind(this))
 
-    this.host = options.host
+    this.host = options.host || 'https://api.deepseek.com/v1'
     this.apiKey = options.apiKey
-    this.model = options.model
+    this.model = options.model || 'deepseek-chat'
     this.textNumber = options.contentMaxLength || 5000
 
     this.resultMenuList = [
@@ -664,7 +664,7 @@ export class AI {
         },
         body: JSON.stringify({
           model: this.model,
-          prompt: this.inputValue,
+          prompt: `${this.inputValue}。返回结果的字数限制在${this.textNumber}以内`,
           stream: true,
         }),
       })
