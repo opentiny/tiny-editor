@@ -12,58 +12,33 @@ import {
   REBUILD_ICON,
   REFRESH_ICON,
   REPLACE_SELECT_ICON,
-  RICH_CONTENT_ICON,
   RIGHT_ARROW_ICON,
   SEND_BTN_ICON,
-  SHARE_ICON,
   STOP_ICON,
-  STREAMLINE_CONTENT_ICON,
-  SYMBOL_ICON,
   THINK_ICON,
-  TRANSLATE_ICON,
+  SHARE_ICON,
   VOICE_ICON,
 } from './icons'
+import {
+  INPUT_PLACEHOLDER,
+  SELECT_PLACEHOLDER,
+  STOP_ANSWER,
+  REPLACE_SELECT,
+  INSERT_TEXT,
+  INSERT_SUB_CONTENT_TEXT,
+  REGENERATE,
+  CLOSE,
+  THINK_TEXT,
+  RESULT_HEADER_TEXT,
+  MENU_TITLE_DATA,
+  MENU_ID_MAP,
+} from './constants'
+import type {
+  ResultMenuItem,
+  OperationMenuItem,
+  AIOptions
+} from './types'
 
-const INPUT_PLACEHOLDER = '请输入问题或“/”获取提示词'
-const SELECT_PLACEHOLDER = '向我提问/选择操作'
-const STOP_ANSWER = '停止回答'
-const REPLACE_SELECT = '替换选中内容'
-const INSERT_TEXT = '插入内容'
-const INSERT_SUB_CONTENT_TEXT = '插入内容下方'
-const REGENERATE = '重新生成'
-const CLOSE = '关闭'
-const THINK_TEXT = '正在为您分析并总结答案'
-const RESULT_HEADER_TEXT = '根据您的诉求，已为您解答，具体如下：'
-const MENU_TITLE_DATA = {
-  editor: [
-    { id: '1-1', text: '丰富内容', icon: RICH_CONTENT_ICON },
-    { id: '1-2', text: '精简内容', icon: STREAMLINE_CONTENT_ICON },
-    { id: '1-3', text: '修改标点符号', icon: SYMBOL_ICON },
-    { id: '1-4', text: '翻译', icon: TRANSLATE_ICON },
-  ],
-  tone: [
-    { id: '2-1', text: '更专业的' },
-    { id: '2-2', text: '更直接的' },
-    { id: '2-3', text: '更友善的' },
-    { id: '2-4', text: '更口语化的' },
-  ],
-  adjust: [
-    { id: '3-1', text: '提炼要点' },
-    { id: '3-2', text: '归纳总结' },
-    { id: '3-3', text: '转写成[代码块]' },
-  ],
-}
-const MENU_ID_MAP = {
-  editor: 'subMenuEditorEl',
-  tone: 'subMenuToneEl',
-  adjust: 'subMenuAdjustEl',
-}
-
-interface OperationMenuItem {
-  id: string
-  text: string
-  icon?: string
-}
 
 export class AI {
   toolbar: TypeToolbar
@@ -82,9 +57,9 @@ export class AI {
   private _showResultPopupEl: boolean = false // 结果弹窗
   selectedText: string = '' // 选择的文本
   inputValue: string = '' // 存储输入框的值
-  resultMenuList: { text: string, icon: string, selectText?: string }[] = []
-  operationMenuList: { id: string, text: string, icon: string }[] = []
-  private _operationMenuItemList: { id: string, text: string, icon?: string }[] = []
+  resultMenuList: ResultMenuItem[] = []
+  operationMenuList: OperationMenuItem[] = []
+  private _operationMenuItemList: OperationMenuItem[] = []
 
   private alertEl: HTMLDivElement | null = null
   private alertTimer: number | null = null
@@ -117,7 +92,7 @@ export class AI {
   // private resultVoiceBtnEl: HTMLSpanElement | null = null
   private actionMenuEl: HTMLDivElement | null = null
 
-  constructor(public quill: FluentEditor, public options: any) {
+  constructor(public quill: FluentEditor, public options: AIOptions) {
     this.quill = quill
     this.toolbar = quill.getModule('toolbar') as TypeToolbar
     // 添加AI按钮到工具栏
@@ -189,6 +164,7 @@ export class AI {
     // 创建事件监听
     this.addInputEvent()
     this.addResultEvent()
+    this.handleActionMenuDisplay()
     // 添加到编辑器
     this.quill.container.appendChild(this.dialogContainerEl)
   }
@@ -517,7 +493,7 @@ export class AI {
     }
   }
 
-  positionElements() {
+  private positionElements() {
     if (!this.dialogContainerEl) return
     const range = this.selectionRange
     if (range) {
@@ -610,14 +586,18 @@ export class AI {
     this.isThinking = false
   }
 
+  private handleActionMenuDisplay(value: string = 'none') {
+    if (this.actionMenuEl) {
+      this.actionMenuEl.style.display = value
+    }
+  }
+
   private switchInputEl(showInput = true) {
     if (this.inputContainerEl) {
       this.inputContainerEl.style.display = showInput ? 'flex' : 'none'
     }
 
-    if (this.actionMenuEl) {
-      this.actionMenuEl.style.display = showInput ? 'block' : 'none'
-    }
+    this.handleActionMenuDisplay(showInput ? 'block' : 'none')
 
     if (this.thinkContainerEl) {
       this.thinkContainerEl.style.display = showInput ? 'none' : 'flex'
@@ -664,7 +644,7 @@ export class AI {
         },
         body: JSON.stringify({
           model: this.model,
-          prompt: `${this.inputValue}。返回结果的字数限制在${this.textNumber}以内`,
+          prompt: this.inputValue,
           stream: true,
         }),
       })
