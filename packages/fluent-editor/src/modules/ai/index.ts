@@ -720,6 +720,8 @@ export class AI {
     if(this._charCount <= this.textNumber) {
       this.resultPopupContentEl.innerHTML = response
       this.charCount = this.resultPopupContentEl.textContent.replace(/\s+/g, '').length
+    } else {
+      this.isBreak = true
     }
     this.showResultPopupEl = true
   }
