@@ -376,3 +376,12 @@ $splitPadding: 20px; // 分隔线左/右间距
     }
   }
 }
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
