@@ -103,3 +103,7 @@
 #translate {
   display: none;
 }
+
+.VPNavBarTitle .title > span {
+  height: fit-content;
+}
