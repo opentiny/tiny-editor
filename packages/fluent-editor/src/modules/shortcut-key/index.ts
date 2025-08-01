@@ -201,6 +201,20 @@ export class ShortCutKey extends QuillShortcutKey {
         title: this.quill.getLangText('file'),
         onClick: toolbarHandler('file'),
       },
+      {
+        type: 'item' as const,
+        name: 'sldt',
+        alias: ['mind'],
+        icon: icons.mind,
+        title: this.quill.getLangText('mind'),
+        onClick(this: Quill, range: Range | null, _: any) {
+          if (!range) return
+          const mindModule = this.getModule('mind')
+          if (mindModule && typeof (mindModule as any).insertMindMapEditor === 'function') {
+            (mindModule as any).insertMindMapEditor()
+          }
+        },
+      },
     ]
   }
 }

@@ -16,6 +16,8 @@
   "dependencies": {
     "@emoji-mart/data": "^1.2.1",
     "@floating-ui/dom": "^1.7.2",
+    "@logicflow/core": "^2.0.16",
+    "@logicflow/extension": "^2.0.21",
     "@opentiny/fluent-editor": "workspace:^",
     "emoji-mart": "^5.6.0",
     "highlight.js": "^10.2.0",
@@ -26,6 +28,7 @@
     "quill-markdown-shortcuts": "^0.0.10",
     "quill-table-up": "^2.1.7",
     "quill-toolbar-tip": "^0.0.13",
+    "simple-mind-map": "0.14.0-fix.1",
     "vue": "^3.5.13",
     "vue-toastification": "2.0.0-rc.5"
   },

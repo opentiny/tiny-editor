@@ -14,6 +14,7 @@ import I18N from './modules/i18n'
 import { LinkBlot } from './modules/link' // 超链接
 import { MathliveModule } from './modules/mathlive' // latex公式
 import { Mention } from './modules/mention' // @提醒
+import { MindModule } from './modules/mind/index' // 思维导图
 import { ShortCutKey } from './modules/shortcut-key'
 import Syntax from './modules/syntax' // 代码块高亮
 import { BetterToolbar } from './modules/toolbar' // 工具栏
@@ -57,6 +58,7 @@ FluentEditor.register(
     'modules/toolbar': BetterToolbar,
     'modules/uploader': FileUploader,
     'modules/shortcut-key': ShortCutKey,
+    'modules/mind': MindModule,
 
     'themes/snow': SnowTheme,
 
