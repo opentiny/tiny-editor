@@ -16,13 +16,6 @@ export default defineConfig({
   cleanUrls: true,
   head: [
     ['link', { rel: 'icon', href: 'favicon.ico' }],
-    ['script', { src: 'https://cdn.jsdelivr.net/npm/react/umd/react.development.js' }],
-    ['script', { src: 'https://cdn.jsdelivr.net/npm/react-dom/umd/react-dom.development.js' }],
-    ['script', { src: 'https://cdn.jsdelivr.net/npm/dayjs/dayjs.min.js' }],
-    ['script', { src: 'https://cdn.jsdelivr.net/npm/antd/dist/antd.js' }],
-    ['script', { src: 'https://cdn.jsdelivr.net/npm/lottie-web/build/player/lottie.js' }],
-    ['script', { src: 'https://cdn.jsdelivr.net/npm/@petercatai/assistant@1.0.7/dist/umd/assistant.min.js' }],
-    ['link', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/@petercatai/assistant@1.0.7/dist/umd/assistant.min.css' }],
     ['script', { src: 'https://cdn.staticfile.net/translate.js/3.12.0/translate.js' }],
   ],
   themeConfig: {

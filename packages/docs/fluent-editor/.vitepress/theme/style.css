@@ -93,21 +93,7 @@
   stroke: var(--vp-dark-theme-hover-color);
 }
 
-/* PeterCat AI助手 */
-#petercat-lui-tip {
-  padding-top: 0;
-  line-height: 22px;
-}
-
 /* 翻译工具 */
 #translate {
   display: none;
-}
-
-.VPNavBarTitle .title > span {
-  height: fit-content;
-}
-
-.DocSearch-Button-Placeholder {
-  height: fit-content;
 }
