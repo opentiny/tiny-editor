@@ -107,3 +107,7 @@
 .VPNavBarTitle .title > span {
   height: fit-content;
 }
+
+.DocSearch-Button-Placeholder {
+  height: fit-content;
+}
