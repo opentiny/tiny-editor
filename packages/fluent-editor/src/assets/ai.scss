@@ -4,7 +4,7 @@
   &:hover {
     .ql-ai-icon-bubble {
       display: block;
-    } 
+    }
   }
 
   .ql-ai-icon-bubble {
@@ -66,7 +66,7 @@
   }
 
   .ql-ai-icon-linear {
-   display: none; 
+    display: none;
   }
 }
 
@@ -105,7 +105,6 @@
     }
   }
 }
-
 
 .ql-ai-think-text {
   flex: 1;
@@ -156,6 +155,10 @@
     margin-right: 8px;
   }
 
+  .ql-ai-input-right-close {
+    height: 100%;
+  }
+
   svg {
     cursor: pointer;
     width: 28px;
@@ -191,7 +194,7 @@
     }
     &::-webkit-scrollbar-thumb {
       border-radius: 2px;
-      background-color: #DBDBDB;
+      background-color: #dbdbdb;
     }
   }
 
@@ -200,6 +203,10 @@
     align-items: center;
     justify-content: space-between;
     height: 24px;
+
+    .ql-ai-result-footer-right {
+      height: 100%;
+    }
 
     svg {
       width: 24px;
@@ -300,7 +307,7 @@
     .ql-ai-main-menu > .ql-ai-menu-item:first-child {
       background: #f5f5f5;
 
-      & > svg:nth-of-type(2)  {
+      & > svg:nth-of-type(2) {
         display: inline-block;
       }
     }
@@ -309,7 +316,7 @@
     .ql-ai-main-menu > .ql-ai-menu-item:nth-of-type(2) {
       background: #f5f5f5;
 
-      & > svg:nth-of-type(2)  {
+      & > svg:nth-of-type(2) {
         display: inline-block;
       }
     }
@@ -318,7 +325,7 @@
     .ql-ai-main-menu > .ql-ai-menu-item:nth-of-type(3) {
       background: #f5f5f5;
 
-      & > svg:nth-of-type(2)  {
+      & > svg:nth-of-type(2) {
         display: inline-block;
       }
     }
@@ -328,7 +335,7 @@
 .ql-ai-main-menu {
   height: 132px;
 
-  .ql-ai-menu-item > svg:nth-of-type(2)  {
+  .ql-ai-menu-item > svg:nth-of-type(2) {
     height: 8px;
     width: 8px;
     display: none;
@@ -352,7 +359,7 @@
   }
 }
 
-.ql-ai-sub-menu{
+.ql-ai-sub-menu {
   &.tone {
     margin-top: 40px;
   }
@@ -435,6 +442,10 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
