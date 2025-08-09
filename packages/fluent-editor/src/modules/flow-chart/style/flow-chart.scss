@@ -1,0 +1,105 @@
+.ql-flow-chart {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.flow-chart-control {
+  position: absolute;
+  top: 8px;
+  right: 13px;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+  padding: 0 15px;
+  display: inline-flex;
+  gap: 6px;
+  white-space: nowrap;
+  pointer-events: auto;
+  .flow-chart-control-item {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5px 10px;
+    transition: all 0.2s ease;
+    .flow-chart-control-text {
+      height: 20px;
+      font-size: 12px;
+    }
+  }
+}
+.flow-chart-left-down-control {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+  display: inline-flex;
+  gap: 6px;
+  white-space: nowrap;
+  pointer-events: auto;
+  .flow-chart-control-item {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5px 5px;
+    transition: all 0.2s ease;
+    .flow-chart-control-text {
+      height: 20px;
+      font-size: 12px;
+    }
+  }
+}
+.flow-chart-control-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flow-chart-control-item i {
+  background-size: cover;
+  display: inline-block;
+  height: 20px;
+  vertical-align: middle;
+  width: 20px;
+}
+.flow-chart-control-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.flow-chart-control-item:hover {
+  background-color: #efefef;
+}
+.flow-chart-control-export {
+  background-image: url('../icons/exportIcon.png');
+}
+.flow-chart-control-import {
+  background-image: url('../icons/importIcon.png');
+}
+.lf-dndpanel .lf-dnd-text {
+  font-size: 12px;
+}
+
+.flow-chart-control-zoomOut {
+  background-image: url('../icons/zoomOutIcon.png');
+}
+.flow-chart-control-zoomIn {
+  background-image: url('../icons/zoomInIcon.png');
+}
+.flow-chart-control-fit {
+  background-image: url('../icons/fitIcon.png');
+}
+.flow-chart-control-back {
+  background-image: url('../icons/backIcon.png');
+}
+.flow-chart-control-forward {
+  background-image: url('../icons/forwardIcon.png');
+}
