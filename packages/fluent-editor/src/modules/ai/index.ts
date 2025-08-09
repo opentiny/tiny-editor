@@ -1,5 +1,20 @@
 import type TypeToolbar from 'quill/modules/toolbar'
 import type FluentEditor from '../../core/fluent-editor'
+import type { AIOptions, OperationMenuItem, ResultMenuItem } from './types'
+import {
+  CLOSE,
+  INPUT_PLACEHOLDER,
+  INSERT_SUB_CONTENT_TEXT,
+  INSERT_TEXT,
+  MENU_ID_MAP,
+  MENU_TITLE_DATA,
+  REGENERATE,
+  REPLACE_SELECT,
+  RESULT_HEADER_TEXT,
+  SELECT_PLACEHOLDER,
+  STOP_ANSWER,
+  THINK_TEXT,
+} from './constants'
 import {
   ADJUST_ICON,
   AI_ICON,
@@ -14,26 +29,11 @@ import {
   REPLACE_SELECT_ICON,
   RIGHT_ARROW_ICON,
   SEND_BTN_ICON,
+  SHARE_ICON,
   STOP_ICON,
   THINK_ICON,
-  SHARE_ICON,
-  VOICE_ICON
+  VOICE_ICON,
 } from './icons'
-import {
-  INPUT_PLACEHOLDER,
-  SELECT_PLACEHOLDER,
-  STOP_ANSWER,
-  REPLACE_SELECT,
-  INSERT_TEXT,
-  INSERT_SUB_CONTENT_TEXT,
-  REGENERATE,
-  CLOSE,
-  THINK_TEXT,
-  RESULT_HEADER_TEXT,
-  MENU_TITLE_DATA,
-  MENU_ID_MAP
-} from './constants'
-import type { ResultMenuItem, OperationMenuItem, AIOptions } from './types'
 
 export class AI {
   toolbar: TypeToolbar
@@ -89,7 +89,7 @@ export class AI {
 
   constructor(
     public quill: FluentEditor,
-    public options: AIOptions
+    public options: AIOptions,
   ) {
     this.quill = quill
     this.toolbar = quill.getModule('toolbar') as TypeToolbar
@@ -109,13 +109,13 @@ export class AI {
       { text: REPLACE_SELECT, icon: REPLACE_SELECT_ICON },
       { text: INSERT_TEXT, icon: INSERT_ICON, selectText: INSERT_SUB_CONTENT_TEXT },
       { text: REGENERATE, icon: REBUILD_ICON },
-      { text: CLOSE, icon: MENU_CLOSE_ICON }
+      { text: CLOSE, icon: MENU_CLOSE_ICON },
     ]
 
     this.operationMenuList = [
       { id: 'editor', text: '编辑调整内容', icon: EDITOR_ICON },
       { id: 'tone', text: '改写口吻', icon: CALL_ICON },
-      { id: 'adjust', text: '整理选区内容', icon: ADJUST_ICON }
+      { id: 'adjust', text: '整理选区内容', icon: ADJUST_ICON },
     ]
   }
 
@@ -127,7 +127,8 @@ export class AI {
     this.selectionRange = this.quill.getSelection()
     if (this.selectionRange.length) {
       this.isSelectRangeMode = true
-    } else {
+    }
+    else {
       this.isSelectRangeMode = false
     }
     // 定位到编辑器焦点位置
@@ -196,6 +197,7 @@ export class AI {
       // this.resultVoiceBtnEl.className = 'ql-ai-result-footer-voice'
       // this.resultVoiceBtnEl.innerHTML = VOICE_ICON
       const resultFooterRightEl: HTMLDivElement = document.createElement('div')
+      resultFooterRightEl.className = 'ql-ai-result-footer-right'
       resultFooterRightEl.appendChild(this.resultRefreshBtnEl)
       resultFooterRightEl.appendChild(this.resultCopyBtnEl)
       // 分享和朗读功能待放开
@@ -304,7 +306,8 @@ export class AI {
       this.wrapContainerEl.appendChild(this.inputContainerEl)
       this.wrapContainerEl.appendChild(this.menuContainerEl) // 添加菜单容器
       this.dialogContainerEl.appendChild(this.wrapContainerEl)
-    } else {
+    }
+    else {
       this.dialogContainerEl.style.display = 'block'
     }
     this.hiddenInputSendBtnEl()
@@ -330,7 +333,8 @@ export class AI {
         .catch((err) => {
           this.showAlert(`复制失败:${err}`)
         })
-    } catch (err) {
+    }
+    catch (err) {
       this.showAlert(`复制失败:${err}`)
       // 兼容不支持clipboard API的浏览器
       const textarea = document.createElement('textarea')
@@ -440,11 +444,13 @@ export class AI {
       this.selectionRange = range
       this.showSelectionBubble()
       this.selectedText = this.quill.getText(range.index, range.length)
-    } else {
+    }
+    else {
       if (range && range.index !== null) {
         this.selectedText = ''
         this.closeAIPanel()
-      } else {
+      }
+      else {
         this.hideSelectionBubble()
       }
     }
@@ -543,7 +549,8 @@ export class AI {
     let quetion = ''
     if (id.startsWith('1-') || id.startsWith('3-')) {
       quetion = `将目标文字${text}，目标文字为：${this.selectedText}`
-    } else if (id.startsWith('2-')) {
+    }
+    else if (id.startsWith('2-')) {
       quetion = `改写目标文字的口吻，让其变得${text}，目标文字为：${this.selectedText}`
     }
     this.showOperationMenu = false
@@ -569,7 +576,8 @@ export class AI {
     if (!this._isSelectRangeMode) {
       this.actionMenuEl.firstChild.classList.add('hidden')
       secondMenuItemText.textContent = INSERT_TEXT
-    } else {
+    }
+    else {
       this.actionMenuEl.firstChild.classList.remove('hidden')
       secondMenuItemText.textContent = INSERT_SUB_CONTENT_TEXT
     }
@@ -631,13 +639,13 @@ export class AI {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.apiKey}`
+          'Authorization': `Bearer ${this.apiKey}`,
         },
         body: JSON.stringify({
           model: this.model,
           prompt: this.inputValue,
-          stream: true
-        })
+          stream: true,
+        }),
       })
 
       if (!response.ok) {
@@ -658,14 +666,15 @@ export class AI {
         if (done) break
 
         const chunk = decoder.decode(value)
-        const lines = chunk.split('\n').filter((line) => line.trim() !== '')
+        const lines = chunk.split('\n').filter(line => line.trim() !== '')
 
         for (const line of lines) {
           try {
             const data = JSON.parse(line)
             content += data.response || ''
             this.showAIResponse(content)
-          } catch (e) {
+          }
+          catch (e) {
             console.error('解析错误:', e)
           }
         }
@@ -676,7 +685,8 @@ export class AI {
       this.inputEl.value = '' // 清空输入框
       this.hiddenInputSendBtnEl()
       return content
-    } catch (error) {
+    }
+    catch (error) {
       console.error('AI查询失败:', error)
       return 'AI查询失败，请重试'
     }
@@ -689,7 +699,8 @@ export class AI {
     if (this._charCount <= this.textNumber) {
       this.resultPopupContentEl.innerHTML = response
       this.charCount = this.resultPopupContentEl.textContent.replace(/\s+/g, '').length
-    } else {
+    }
+    else {
       this.isBreak = true
     }
     this.showResultPopupEl = true
