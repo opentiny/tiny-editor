@@ -64,7 +64,6 @@ const editor = new FluentEditor('#editor', {
   modules: {
     cursors: true,
     collaboration: {
-      cursors: true,
       provider: {
         // WebSocket 配置
         type: 'websocket',
