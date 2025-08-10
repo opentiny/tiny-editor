@@ -4,7 +4,7 @@ TinyEditor 支持多人实时协作编辑功能，基于 Yjs 实现，支持 Web
 
 ## 在线协同演示
 
-下面是一个完整的协同编辑演示，包含两个编辑器实例，模拟不同用户的协同编辑场景：
+下面是一个完整的协同编辑演示：
 
 :::demo src=demos/collaborative-editing.vue
 :::
