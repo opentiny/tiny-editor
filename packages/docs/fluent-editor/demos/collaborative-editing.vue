@@ -49,7 +49,6 @@ onMounted(() => {
           },
         },
         'collaboration': {
-          cursors: true,
           provider: {
             type: 'websocket',
             options: {
@@ -81,7 +80,6 @@ onMounted(() => {
           },
         },
         'collaboration': {
-          cursors: true,
           provider: {
             type: 'websocket',
             options: {

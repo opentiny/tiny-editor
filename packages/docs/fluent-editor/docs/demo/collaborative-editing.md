@@ -50,6 +50,10 @@ HOST=localhost PORT=1234 YPERSISTENCE=./dbDir npx y-websocket
 HOST=localhost PORT=4444 npx y-webrtc
 ```
 
+### 自定义持久化
+
+如果你有需要自定义持久化(存储到第三方数据库服务器)，可以参考 [y-websocket-custom-persistence](https://github.com/Yinlin124/y-websocket-custom-persistence), 对 y-websocket-server 进行修改
+
 ## 基本用法
 
 通过配置 `collaboration` 模块可以开启协作编辑功能：
