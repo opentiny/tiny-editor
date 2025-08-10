@@ -53,7 +53,7 @@ onMounted(() => {
           provider: {
             type: 'websocket',
             options: {
-              serverUrl: 'wss://demos.yjs.dev/ws',
+              serverUrl: 'ws://120.26.92.145:1234',
               roomName: ROOM_NAME,
             },
           },
@@ -85,7 +85,7 @@ onMounted(() => {
           provider: {
             type: 'websocket',
             options: {
-              serverUrl: 'wss://demos.yjs.dev/ws',
+              serverUrl: 'ws://120.26.92.145:1234',
               roomName: ROOM_NAME,
             },
           },
