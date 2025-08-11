@@ -82,28 +82,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="collaborative-demo">
-    <div class="editor-container">
-      <h3>TinyEditor 编辑器</h3>
+  <div>
+    <div>
       <div ref="editorRef" class="editor" />
     </div>
   </div>
 </template>
 
 <style scoped>
-.collaborative-demo {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.editor-container {
-  margin-bottom: 30px;
-}
-
-.editor {
-  min-height: 400px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
 </style>

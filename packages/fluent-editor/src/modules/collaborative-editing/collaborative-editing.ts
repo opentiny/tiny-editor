@@ -79,9 +79,8 @@ export class CollaborativeEditor {
       console.error('Failed to initialize collaborative editor: no valid provider configured')
     }
 
-    if (this.options.offline) {
+    if (this.options.offline !== false)
       setupIndexedDB(this.ydoc, typeof this.options.offline === 'object' ? this.options.offline : undefined)
-    }
   }
 
   public getAwareness() {
