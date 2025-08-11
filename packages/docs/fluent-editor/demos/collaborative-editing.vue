@@ -45,13 +45,12 @@ onMounted(() => {
 
     FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)
     CollaborationModule.register()
-    FluentEditor.register('modules/collaboration', CollaborationModule, true)
+    FluentEditor.register('modules/collaborative-editing', CollaborationModule, true)
 
     editor = new FluentEditor(editorRef.value, {
       theme: 'snow',
       modules: {
         'toolbar': TOOLBAR_CONFIG,
-        'cursors': true,
         'file': true,
         'emoji': true,
         'table-up': {
@@ -61,7 +60,7 @@ onMounted(() => {
             tableMenu: TableMenuContextmenu,
           },
         },
-        'collaboration': {
+        'collaborative-editing': {
           provider: {
             type: 'websocket',
             options: {
@@ -73,6 +72,12 @@ onMounted(() => {
             state: {
               color: '#ff6b6b',
             },
+          },
+          cursors: {
+            hideDelayMs: 300,
+            hideSpeedMs: 300,
+            selectionChangeSource: null,
+            transformOnTextChange: true,
           },
         },
       },

@@ -1,5 +1,6 @@
 import type FluentEditor from '../../fluent-editor'
 import type { YjsOptions } from './types'
+import QuillCursors from 'quill-cursors'
 import { Awareness } from 'y-protocols/awareness'
 import { QuillBinding } from 'y-quill'
 import * as Y from 'yjs'
@@ -17,10 +18,13 @@ export class CollaborativeEditor {
 
   constructor(
     public quill: FluentEditor,
-    private options: YjsOptions,
+    public options: YjsOptions,
   ) {
     this.ydoc = this.options.ydoc || new Y.Doc()
-    this.cursors = this.quill.getModule('cursors')
+
+    const cursorsOptions = typeof this.options.cursors === 'object' ? this.options.cursors : {}
+    this.cursors = new QuillCursors(quill, cursorsOptions)
+    console.log('cursors', this.cursors)
 
     if (this.options.awareness) {
       const awareness = setupAwareness(this.options.awareness, new Awareness(this.ydoc))
@@ -28,6 +32,7 @@ export class CollaborativeEditor {
         throw new Error('Failed to initialize awareness')
       }
       this.awareness = awareness
+      this.bindAwarenessToCursors()
     }
     else {
       this.awareness = new Awareness(this.ydoc)
@@ -81,6 +86,42 @@ export class CollaborativeEditor {
 
     if (this.options.offline !== false)
       setupIndexedDB(this.ydoc, typeof this.options.offline === 'object' ? this.options.offline : undefined)
+  }
+
+  private bindAwarenessToCursors() {
+    if (!this.cursors || !this.awareness) return
+
+    this.awareness.on('change', () => {
+      const states = this.awareness.getStates()
+
+      states.forEach((state, clientId) => {
+        if (clientId === this.awareness.clientID) return
+
+        if (state.cursor) {
+          const cursor = this.cursors.createCursor(
+            clientId.toString(),
+            state.user?.name || `User ${clientId}`,
+            state.user?.color || '#ff6b6b',
+          )
+          this.cursors.moveCursor(clientId.toString(), state.cursor)
+        }
+        else {
+          this.cursors.removeCursor(clientId.toString())
+        }
+      })
+    })
+
+    this.quill.on('selection-change', (range) => {
+      if (range) {
+        this.awareness.setLocalStateField('cursor', {
+          index: range.index,
+          length: range.length,
+        })
+      }
+      else {
+        this.awareness.setLocalStateField('cursor', null)
+      }
+    })
   }
 
   public getAwareness() {
