@@ -45,7 +45,6 @@ FluentEditor.register('modules/collaborative-editing', CollaborationModule, true
 const editor = new FluentEditor('#editor', {
   theme: 'snow',
   modules: {
-    'cursors': true,
     'collaborative-editing': {
       provider: {
         type: 'websocket',
@@ -111,4 +110,95 @@ git clone https://github.com/Yinlin124/y-websocket-custom-persistence.git
 cd y-websocket-custom-persistence
 pnpm i
 MONGODB_URL="mongodb://localhost:27017" MONGODB_DB="yjs_documents" MONGODB_COLLECTION="documents" HOST="0.0.0.0" PORT="1234" npm start
+```
+
+## 配置说明
+
+### 配置参数表格
+
+| 参数           | 类型                                                                      | 必填 | 说明                |
+| -------------- | ------------------------------------------------------------------------- | ---- | ------------------- |
+| `provider`     | `WebRTCProviderConfig \| WebsocketProviderConfig \| CustomProviderConfig` | 是   | 连接提供者配置      |
+| `awareness`    | `AwarenessOptions`                                                        | 否   | 用户感知配置        |
+| `cursors`      | `boolean \| object`                                                       | 否   | 光标显示配置        |
+| `ydoc`         | `Y.Doc`                                                                   | 否   | 自定义 Yjs 文档实例 |
+| `onConnect`    | `() => void`                                                              | 否   | 连接成功回调        |
+| `onDisconnect` | `() => void`                                                              | 否   | 连接断开回调        |
+| `onError`      | `(error: Error) => void`                                                  | 否   | 错误处理回调        |
+| `onSyncChange` | `(isSynced: boolean) => void`                                             | 否   | 同步状态变化回调    |
+
+### provider（连接提供者）
+
+**WebSocket 提供者配置：**
+
+```javascript
+provider: {
+  type: 'websocket',
+  options: {
+    serverUrl: 'ws://localhost:1234',  // WebSocket 服务器地址
+    roomName: 'my-document',          // 房间名称
+    connect: true,                    // 是否自动连接，默认 true
+    params: {},                       // 连接参数
+    protocols: [],                    // WebSocket 协议
+    resyncInterval: -1,               // 重新同步间隔（毫秒）
+    maxBackoffTime: 2500,             // 最大退避时间
+    disableBc: false                  // 是否禁用广播通道
+  }
+}
+```
+
+**WebRTC 提供者配置：**
+
+```javascript
+provider: {
+  type: 'webrtc',
+  options: {
+    signaling: ['wss://signaling-server.com','wss://localhost:4444'], // 信令服务器列表
+    roomName: 'my-document',          // 房间名称
+    password: null,                   // 房间密码
+    awareness: true,                  // 是否启用感知
+    maxConns: 20,                     // 最大连接数
+    filterBcConns: true,              // 是否过滤广播连接
+    peerOpts: {}                      // WebRTC 对等连接选项
+  }
+}
+```
+
+**自定义提供者配置：(待写)**
+
+### awareness（用户感知）
+
+用于配置用户状态信息，让其他用户能够看到当前用户的信息：
+
+```javascript
+awareness: {
+  state: {
+    name: 'John Doe',                 // 用户名称，显示在光标旁
+    color: '#ff6b6b'                  // 用户颜色，用于光标和选区
+  },
+  timeout: 30000,                     // 用户状态超时时间（毫秒）
+}
+```
+
+#### 事件回调
+
+| 回调函数       | 参数                | 说明                                      |
+| -------------- | ------------------- | ----------------------------------------- |
+| `onConnect`    | 无                  | 成功连接到协作服务器时触发                |
+| `onDisconnect` | 无                  | 与协作服务器连接断开时触发                |
+| `onError`      | `error: Error`      | 发生错误时触发，包含错误信息              |
+| `onSyncChange` | `isSynced: boolean` | 文档同步状态变化时触发，`true` 表示已同步 |
+
+#### 光标配置
+
+具体含义可参照 [quill-cursors](https://github.com/reedsy/quill-cursors)
+
+```javascript
+cursors: {
+  template: '<div class="custom-cursor">...</div>',
+  hideDelayMs: 5000,
+  hideSpeedMs: 0,
+  selectionChangeSource: null,
+  transformOnTextChange: true,
+},
 ```
