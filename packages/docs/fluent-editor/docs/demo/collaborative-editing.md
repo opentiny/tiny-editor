@@ -4,7 +4,7 @@ TinyEditor 支持多人实时协作编辑功能，基于 Yjs 实现，支持 Web
 
 ## 在线协同演示
 
-下面是一个完整的协同编辑演示，包含两个编辑器实例，模拟不同用户的协同编辑场景：
+下面是一个完整的协同编辑演示：
 
 :::demo src=demos/collaborative-editing.vue
 :::
@@ -50,6 +50,10 @@ HOST=localhost PORT=1234 YPERSISTENCE=./dbDir npx y-websocket
 HOST=localhost PORT=4444 npx y-webrtc
 ```
 
+### 自定义持久化
+
+如果你有需要自定义持久化(存储到第三方数据库服务器)，可以参考 [y-websocket-custom-persistence](https://github.com/Yinlin124/y-websocket-custom-persistence), 对 y-websocket-server 进行修改
+
 ## 基本用法
 
 通过配置 `collaboration` 模块可以开启协作编辑功能：
@@ -64,7 +68,6 @@ const editor = new FluentEditor('#editor', {
   modules: {
     cursors: true,
     collaboration: {
-      cursors: true,
       provider: {
         // WebSocket 配置
         type: 'websocket',

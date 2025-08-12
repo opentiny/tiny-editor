@@ -2,7 +2,7 @@
 import type FluentEditor from '@opentiny/fluent-editor'
 import katex from 'katex'
 import { onMounted } from 'vue'
-import 'katex/contrib/mhchem/mhchem'
+import 'katex/contrib/mhchem'
 import 'katex/dist/katex.min.css'
 
 window.katex = katex
