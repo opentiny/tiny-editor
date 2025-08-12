@@ -28,3 +28,42 @@ export function setupAwareness(options?: AwarenessOptions, defaultAwareness?: Aw
 
   return awareness
 }
+
+export function bindAwarenessToCursors(
+  awareness: Awareness,
+  cursors: any,
+  quill: any,
+) {
+  if (!cursors || !awareness) return
+
+  awareness.on('change', () => {
+    const states = awareness.getStates()
+    states.forEach((state, clientId) => {
+      if (clientId === awareness.clientID) return
+
+      if (state.cursor) {
+        const cursor = cursors.createCursor(
+          clientId.toString(),
+          state.user?.name || `User ${clientId}`,
+          state.user?.color || '#ff6b6b',
+        )
+        cursors.moveCursor(clientId.toString(), state.cursor)
+      }
+      else {
+        cursors.removeCursor(clientId.toString())
+      }
+    })
+  })
+
+  quill.on('selection-change', (range) => {
+    if (range) {
+      awareness.setLocalStateField('cursor', {
+        index: range.index,
+        length: range.length,
+      })
+    }
+    else {
+      awareness.setLocalStateField('cursor', null)
+    }
+  })
+}

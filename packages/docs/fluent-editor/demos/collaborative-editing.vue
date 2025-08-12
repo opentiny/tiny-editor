@@ -45,13 +45,12 @@ onMounted(() => {
 
     FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)
     CollaborationModule.register()
-    FluentEditor.register('modules/collaboration', CollaborationModule, true)
+    FluentEditor.register('modules/collaborative-editing', CollaborationModule, true)
 
     editor = new FluentEditor(editorRef.value, {
       theme: 'snow',
       modules: {
         'toolbar': TOOLBAR_CONFIG,
-        'cursors': true,
         'file': true,
         'emoji': true,
         'table-up': {
@@ -61,7 +60,7 @@ onMounted(() => {
             tableMenu: TableMenuContextmenu,
           },
         },
-        'collaboration': {
+        'collaborative-editing': {
           provider: {
             type: 'websocket',
             options: {
@@ -74,6 +73,12 @@ onMounted(() => {
               color: '#ff6b6b',
             },
           },
+          cursors: {
+            hideDelayMs: 300,
+            hideSpeedMs: 300,
+            selectionChangeSource: null,
+            transformOnTextChange: true,
+          },
         },
       },
     })
@@ -82,28 +87,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="collaborative-demo">
-    <div class="editor-container">
-      <h3>TinyEditor 编辑器</h3>
+  <div>
+    <div>
       <div ref="editorRef" class="editor" />
     </div>
   </div>
 </template>
 
 <style scoped>
-.collaborative-demo {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.editor-container {
-  margin-bottom: 30px;
-}
-
-.editor {
-  min-height: 400px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
 </style>
