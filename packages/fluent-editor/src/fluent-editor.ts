@@ -3,6 +3,7 @@ import { EN_US } from './config/i18n/en-us'
 import { ZH_CN } from './config/i18n/zh-cn'
 import FluentEditor from './core/fluent-editor'
 import { EmojiBlot, SoftBreak, StrikeBlot, Video } from './formats'
+import { AI } from './modules/ai' // AI
 import Counter from './modules/counter' // 字符统计
 import { CustomClipboard } from './modules/custom-clipboard' // 粘贴板
 import { BlotFormatter } from './modules/custom-image' // 图片
@@ -52,6 +53,7 @@ FluentEditor.register(
     'modules/i18n': I18N,
     'modules/image': BlotFormatter,
     'modules/mathlive': MathliveModule,
+    'modules/ai': AI,
     'modules/mention': Mention,
     'modules/syntax': Syntax,
     'modules/toolbar': BetterToolbar,

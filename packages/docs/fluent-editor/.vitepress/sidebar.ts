@@ -27,6 +27,7 @@ export function sidebar() {
         { text: '模拟语雀文档', link: 'https://opentiny.github.io/tiny-editor/projects' },
         { text: '图片工具栏', link: '/docs/demo/image-tool' },
         { text: '协同编辑', link: '/docs/demo/collaborative-editing' },
+        { text: 'AI', link: '/docs/demo/ai' },
       ],
     },
     {
