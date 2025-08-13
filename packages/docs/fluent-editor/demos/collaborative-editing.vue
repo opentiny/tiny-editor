@@ -60,6 +60,7 @@ onMounted(() => {
             tableMenu: TableMenuContextmenu,
           },
         },
+
         'collaborative-editing': {
           provider: {
             type: 'websocket',
@@ -87,12 +88,14 @@ onMounted(() => {
 </script>
 
 <template>
+
   <div>
     <div>
       <div ref="editorRef" class="editor" />
     </div>
   </div>
 </template>
+
 
 <style scoped>
 </style>

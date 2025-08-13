@@ -24,7 +24,6 @@ export class CollaborativeEditor {
 
     const cursorsOptions = typeof this.options.cursors === 'object' ? this.options.cursors : {}
     this.cursors = new QuillCursors(quill, cursorsOptions)
-    console.log('cursors', this.cursors)
 
     if (this.options.awareness) {
       const awareness = setupAwareness(this.options.awareness, new Awareness(this.ydoc))
