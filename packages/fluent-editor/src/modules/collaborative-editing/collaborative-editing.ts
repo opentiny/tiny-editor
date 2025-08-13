@@ -1,9 +1,10 @@
 import type FluentEditor from '../../fluent-editor'
 import type { YjsOptions } from './types'
+import QuillCursors from 'quill-cursors'
 import { Awareness } from 'y-protocols/awareness'
 import { QuillBinding } from 'y-quill'
 import * as Y from 'yjs'
-import { setupAwareness } from './awareness'
+import { bindAwarenessToCursors, setupAwareness } from './awareness'
 import { setupIndexedDB } from './awareness/y-indexeddb'
 import { createProvider } from './provider/customProvider'
 
@@ -17,10 +18,13 @@ export class CollaborativeEditor {
 
   constructor(
     public quill: FluentEditor,
-    private options: YjsOptions,
+    public options: YjsOptions,
   ) {
     this.ydoc = this.options.ydoc || new Y.Doc()
-    this.cursors = this.quill.getModule('cursors')
+
+    const cursorsOptions = typeof this.options.cursors === 'object' ? this.options.cursors : {}
+    this.cursors = new QuillCursors(quill, cursorsOptions)
+    console.log('cursors', this.cursors)
 
     if (this.options.awareness) {
       const awareness = setupAwareness(this.options.awareness, new Awareness(this.ydoc))
@@ -28,6 +32,7 @@ export class CollaborativeEditor {
         throw new Error('Failed to initialize awareness')
       }
       this.awareness = awareness
+      bindAwarenessToCursors(this.awareness, this.cursors, this.quill)
     }
     else {
       this.awareness = new Awareness(this.ydoc)
@@ -79,9 +84,8 @@ export class CollaborativeEditor {
       console.error('Failed to initialize collaborative editor: no valid provider configured')
     }
 
-    if (this.options.offline) {
+    if (this.options.offline !== false)
       setupIndexedDB(this.ydoc, typeof this.options.offline === 'object' ? this.options.offline : undefined)
-    }
   }
 
   public getAwareness() {

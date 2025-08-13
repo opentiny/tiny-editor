@@ -21,7 +21,7 @@ export interface EmojiModuleOptions {
   dynamicWidth?: boolean
 }
 
-const DEFAULT_OPTIONS: Readonly<EmojiModuleOptions> = {
+const DEFAULT_OPTIONS: EmojiModuleOptions = {
   theme: 'light',
   set: 'native',
   skinTonePosition: 'none',
@@ -33,7 +33,7 @@ const DEFAULT_OPTIONS: Readonly<EmojiModuleOptions> = {
   navPosition: 'top',
   noCountryFlags: false,
   dynamicWidth: false,
-} as const
+}
 
 const PICKER_DOM_ID = 'emoji-picker'
 

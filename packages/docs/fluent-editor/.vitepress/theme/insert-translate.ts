@@ -12,7 +12,6 @@ export function insertTranslate() {
 
     translate.ignore.class.push('ql-container');
     translate.ignore.class.push('ql-editor');
-    translate.ignore.class.push('petercat-lui-assistant');
     translate.ignore.class.push('translate-switch');
 
     translate.execute();
