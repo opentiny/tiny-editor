@@ -22,8 +22,6 @@ $splitPadding: 20px; // 分隔线左/右间距
 
 // 模块：工具栏 toolbar
 @mixin toolbar {
-  @import 'quill-easy-color/dist/index.css';
-
   .ql-toolbar {
     position: relative;
     border: solid 1px #adb0b8;

@@ -19,8 +19,9 @@
 
 // 使用 load-css 导入纯 CSS 文件（现代化方式）
 @use 'sass:meta';
-@include meta.load-css('quill/dist/quill.snow');
+@include meta.load-css('quill/dist/quill.snow.css');
 @include meta.load-css('quill-shortcut-key/index.css');
+@include meta.load-css('quill-easy-color/dist/index.css');
 
 @font-face {
   font-family: 'iconfont'; /* Project id 3231649 */
