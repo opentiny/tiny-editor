@@ -1,9 +1,9 @@
-import type FluentEditor from '../../fluent-editor'
 import type { YjsOptions } from './types'
 import QuillCursors from 'quill-cursors'
 import { Awareness } from 'y-protocols/awareness'
 import { QuillBinding } from 'y-quill'
 import * as Y from 'yjs'
+import FluentEditor from '../../fluent-editor'
 import { bindAwarenessToCursors, setupAwareness } from './awareness'
 import { setupIndexedDB } from './awareness/y-indexeddb'
 import { createProvider } from './provider/customProvider'
@@ -20,6 +20,8 @@ export class CollaborativeEditor {
     public quill: FluentEditor,
     public options: YjsOptions,
   ) {
+    FluentEditor.register('modules/cursors', QuillCursors, true)
+
     this.ydoc = this.options.ydoc || new Y.Doc()
 
     const cursorsOptions = typeof this.options.cursors === 'object' ? this.options.cursors : {}

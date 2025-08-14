@@ -35,7 +35,6 @@ npm i y-webrtc
 
 ```javascript
 import FluentEditor from '@opentiny/fluent-editor'
-CollaborationModule.register()
 FluentEditor.register('modules/collaborative-editing', CollaborationModule, true)
 ```
 

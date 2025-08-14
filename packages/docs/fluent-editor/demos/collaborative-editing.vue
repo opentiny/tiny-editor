@@ -44,7 +44,6 @@ onMounted(() => {
     if (!editorRef.value) return
 
     FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)
-    CollaborationModule.register()
     FluentEditor.register('modules/collaborative-editing', CollaborationModule, true)
 
     editor = new FluentEditor(editorRef.value, {
