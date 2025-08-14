@@ -1,4 +1,5 @@
 import type { Awareness } from 'y-protocols/awareness'
+import type FluentEditor from '../../../core/fluent-editor'
 
 export interface AwarenessState {
   name?: string
@@ -29,33 +30,44 @@ export function setupAwareness(options?: AwarenessOptions, defaultAwareness?: Aw
   return awareness
 }
 
+interface QuillCursors {
+  createCursor: (id: string, name: string, color: string) => any
+  moveCursor: (id: string, range: { index: number, length: number }) => void
+  removeCursor: (id: string) => void
+}
+
+interface QuillEditor {
+  on: (event: 'selection-change', handler: (range: { index: number, length: number } | null) => void) => void
+  off: (event: 'selection-change', handler: Function) => void
+}
+
 export function bindAwarenessToCursors(
   awareness: Awareness,
-  cursors: any,
-  quill: any,
-) {
-  if (!cursors || !awareness) return
+  cursorsModule: QuillCursors,
+  quill: FluentEditor,
+): (() => void) | void {
+  if (!cursorsModule || !awareness) return
 
-  awareness.on('change', () => {
+  const awarenessChangeHandler = () => {
     const states = awareness.getStates()
     states.forEach((state, clientId) => {
       if (clientId === awareness.clientID) return
 
       if (state.cursor) {
-        const cursor = cursors.createCursor(
+        cursorsModule.createCursor(
           clientId.toString(),
           state.user?.name || `User ${clientId}`,
           state.user?.color || '#ff6b6b',
         )
-        cursors.moveCursor(clientId.toString(), state.cursor)
+        cursorsModule.moveCursor(clientId.toString(), state.cursor)
       }
       else {
-        cursors.removeCursor(clientId.toString())
+        cursorsModule.removeCursor(clientId.toString())
       }
     })
-  })
+  }
 
-  quill.on('selection-change', (range) => {
+  const selectionChangeHandler = (range) => {
     if (range) {
       awareness.setLocalStateField('cursor', {
         index: range.index,
@@ -65,5 +77,14 @@ export function bindAwarenessToCursors(
     else {
       awareness.setLocalStateField('cursor', null)
     }
-  })
+  }
+
+  awareness.on('change', awarenessChangeHandler)
+  quill.on('selection-change', selectionChangeHandler)
+
+  // 返回清理函数
+  return () => {
+    awareness.off('change', awarenessChangeHandler)
+    quill.off('selection-change', selectionChangeHandler)
+  }
 }

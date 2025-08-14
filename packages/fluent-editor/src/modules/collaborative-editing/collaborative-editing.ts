@@ -15,6 +15,7 @@ export class CollaborativeEditor {
   private cursors: any
   private _isConnected = false
   private _isSynced = false
+  private cleanupBindings: (() => void) | null = null
 
   constructor(
     public quill: FluentEditor,
@@ -33,7 +34,7 @@ export class CollaborativeEditor {
         throw new Error('Failed to initialize awareness')
       }
       this.awareness = awareness
-      bindAwarenessToCursors(this.awareness, this.cursors, this.quill)
+      this.cleanupBindings = bindAwarenessToCursors(this.awareness, this.cursors, quill) || null
     }
     else {
       this.awareness = new Awareness(this.ydoc)
@@ -111,5 +112,13 @@ export class CollaborativeEditor {
 
   public getCursors() {
     return this.cursors
+  }
+
+  public destroy() {
+    this.cleanupBindings?.()
+    this.provider?.destroy?.()
+    this.cursors?.destroy?.()
+    this.awareness?.destroy?.()
+    this.ydoc?.destroy?.()
   }
 }
