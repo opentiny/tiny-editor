@@ -16,4 +16,8 @@ export class CollaborationModule {
   public getCursors() {
     return this.collaborativeEditor.getCursors()
   }
+
+  public getAwareness() {
+    return this.collaborativeEditor.getAwareness()
+  }
 }
