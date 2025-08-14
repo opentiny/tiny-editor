@@ -571,8 +571,10 @@ export class AI {
       this.wrapContainerEl.appendChild(this.actionMenuEl)
     }
     const secondMenuItemText = this.actionMenuEl.children[1].querySelector('.ql-ai-result-menu-text') as HTMLDivElement
+
+    const firstChild = this.actionMenuEl.firstChild
+
     if (!this._isSelectRangeMode) {
-      const firstChild = this.actionMenuEl.firstChild
       if (firstChild instanceof Element) {
         firstChild.classList.add('hidden')
       }
@@ -580,9 +582,8 @@ export class AI {
       secondMenuItemText.textContent = INSERT_TEXT
     }
     else {
-      const firstChild = this.actionMenuEl.firstChild
       if (firstChild instanceof Element) {
-        firstChild.classList.add('hidden')
+        firstChild.classList.remove('hidden')
       }
 
       secondMenuItemText.textContent = INSERT_SUB_CONTENT_TEXT
