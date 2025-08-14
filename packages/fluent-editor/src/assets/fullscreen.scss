@@ -1,4 +1,5 @@
 @use './common/config.scss' as *;
+@use './common';
 
 :-webkit-full-screen {
   background-color: white !important;
@@ -25,25 +26,25 @@
   &.ql {
     &-toolbar,
     &-container {
-      @include setCssVar(fullscreen-z-index, $fullscreenZIndex-normal);
+      @include common.setCssVar(fullscreen-z-index, $fullscreenZIndex-normal);
 
       position: fixed;
       width: 100%;
       left: 0;
-      background-color: getCssVar(editor-bg-color);
-      z-index: getCssVar(fullscreen-z-index);
+      background-color: common.getCssVar(editor-bg-color);
+      z-index: common.getCssVar(fullscreen-z-index);
     }
     &-toolbar {
-      @include setCssVar(fullscreen-container-z-index, $fullscreenZIndex-full);
+      @include common.setCssVar(fullscreen-container-z-index, $fullscreenZIndex-full);
 
       top: 0;
-      z-index: getCssVar(fullscreen-container-z-index);
+      z-index: common.getCssVar(fullscreen-container-z-index);
     }
     &-container {
-      @include setCssVar(top, 0px);
+      @include common.setCssVar(top, 0px);
 
-      top: getCssVar(top);
-      height: calc(100% - getCssVar(top));
+      top: common.getCssVar(top);
+      height: calc(100% - common.getCssVar(top));
     }
   }
 }
