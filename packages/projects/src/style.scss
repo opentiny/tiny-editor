@@ -2,4 +2,4 @@
 @use '@opentiny/fluent-editor/style.scss';
 @include meta.load-css('quill-header-list/dist/index.css');
 @include meta.load-css('quill-table-up/index.css');
-@include meta.load-css('quill-table-creator/index.css');
+@include meta.load-css('quill-table-up/table-creator.css');
