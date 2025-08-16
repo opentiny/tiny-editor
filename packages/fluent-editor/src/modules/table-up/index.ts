@@ -4,6 +4,7 @@ import type Picker from 'quill/ui/picker'
 import type { Constructor } from '../../config/types'
 import type FluentEditor from '../../core/fluent-editor'
 import { CHANGE_LANGUAGE_EVENT } from '../../config'
+import { isFunction } from '../../utils/is'
 
 interface QuillTheme extends BaseTheme {
   pickers: QuillThemePicker[]
@@ -38,11 +39,11 @@ export function generateTableUp(QuillTableUp: Constructor) {
         }
 
         Object.keys(this.modules).forEach((key) => {
-          if (typeof this.modules[key].destroy === 'function') {
+          if (isFunction(this.modules[key].destroy)) {
             this.modules[key].destroy()
-            this.modules[key] = null
           }
         })
+        this.modules = {}
         this.initModules()
       })
     }

@@ -60,7 +60,7 @@ export function FormatPainter(this: Toolbar & FormatData) {
   }
   const unbindFormatSelect = () => {
     this.quill.off(Quill.events.SELECTION_CHANGE, formatRange)
-    this.formatPainter.rangeFormat = undefined
+    this.formatPainter.rangeFormat = {}
     btnRemoveActive()
     this.formatPainter.isFormating = false
     this.formatPainter.isFormatterLock = false
