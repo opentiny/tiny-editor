@@ -29,10 +29,8 @@ import {
   REPLACE_SELECT_ICON,
   RIGHT_ARROW_ICON,
   SEND_BTN_ICON,
-  SHARE_ICON,
   STOP_ICON,
   THINK_ICON,
-  VOICE_ICON,
 } from './icons'
 
 export class AI {
@@ -174,14 +172,14 @@ export class AI {
       this.resultPopupEl.className = 'ql-ai-result'
       this.resultPopupHeaderEl = document.createElement('div')
       this.resultPopupHeaderEl.className = 'ql-ai-result-header'
-      this.resultPopupHeaderEl.innerText = RESULT_HEADER_TEXT
+      this.resultPopupHeaderEl.textContent = RESULT_HEADER_TEXT
       this.resultPopupContentEl = document.createElement('div')
       this.resultPopupContentEl.className = 'ql-ai-result-content'
       this.resultPopupFooterEl = document.createElement('div')
       this.resultPopupFooterEl.className = 'ql-ai-result-footer'
       this.resultPopupFooterTextEl = document.createElement('span')
       this.resultPopupFooterTextEl.className = 'ql-ai-result-footer-text'
-      this.resultPopupFooterTextEl.innerText = `0`
+      this.resultPopupFooterTextEl.textContent = `0`
       this.resultRefreshBtnEl = document.createElement('span')
       this.resultRefreshBtnEl.className = 'ql-ai-result-footer-refresh'
       this.resultRefreshBtnEl.innerHTML = REFRESH_ICON
@@ -574,11 +572,11 @@ export class AI {
     }
     const secondMenuItemText = this.actionMenuEl.children[1].querySelector('.ql-ai-result-menu-text') as HTMLDivElement
     if (!this._isSelectRangeMode) {
-      this.actionMenuEl.firstChild.classList.add('hidden')
+      (this.actionMenuEl.firstChild as HTMLElement).classList.add('hidden')
       secondMenuItemText.textContent = INSERT_TEXT
     }
     else {
-      this.actionMenuEl.firstChild.classList.remove('hidden')
+      (this.actionMenuEl.firstChild as HTMLElement).classList.remove('hidden')
       secondMenuItemText.textContent = INSERT_SUB_CONTENT_TEXT
     }
 
@@ -767,6 +765,10 @@ export class AI {
     this.hideSelectionBubble()
   }
 
+  get charCount() {
+    return this._charCount
+  }
+
   set charCount(value: number) {
     // 清除之前的定时器
     if (this._debounceTimer) {
@@ -776,11 +778,15 @@ export class AI {
     this._debounceTimer = setTimeout(() => {
       this._charCount = value
       if (this.resultPopupFooterTextEl) {
-        this.resultPopupFooterTextEl.innerText = `${this._charCount}/${this.textNumber}`
+        this.resultPopupFooterTextEl.textContent = `${this._charCount}/${this.textNumber}`
       }
       clearTimeout(this._debounceTimer)
       this._debounceTimer = null
     }, 210)
+  }
+
+  get inputPlaceholder() {
+    return this._inputPlaceholder
   }
 
   set inputPlaceholder(value: string) {
@@ -790,11 +796,19 @@ export class AI {
     }
   }
 
+  get showOperationMenu() {
+    return this._showOperationMenu
+  }
+
   set showOperationMenu(value: boolean) {
     this._showOperationMenu = value
     if (this.menuContainerEl) {
       this.menuContainerEl.style.display = value ? 'flex' : 'none'
     }
+  }
+
+  get isSelectRangeMode() {
+    return this._isSelectRangeMode
   }
 
   set isSelectRangeMode(value: boolean) {
@@ -804,9 +818,17 @@ export class AI {
     this.hideSelectionBubble()
   }
 
+  get isThinking() {
+    return this._isThinking
+  }
+
   set isThinking(value: boolean) {
     this._isThinking = value
     this.switchInputEl(!value)
+  }
+
+  get showResultPopupEl() {
+    return this._showResultPopupEl
   }
 
   set showResultPopupEl(value: boolean) {

@@ -7,7 +7,7 @@ const TOOLBAR_CONFIG = [
   ['ai', { header: [] }],
   ['bold', 'italic', 'underline', 'link'],
   [{ list: 'ordered' }, { list: 'bullet' }],
-  ['clean']
+  ['clean'],
 ]
 
 onMounted(() => {
@@ -19,15 +19,15 @@ onMounted(() => {
       theme: 'snow',
       modules: {
         toolbar: {
-          container: TOOLBAR_CONFIG
+          container: TOOLBAR_CONFIG,
         },
         ai: {
           host: 'http://localhost:11434',
           model: 'deepseek-r1:8b',
           apiKey: '',
-          contentMaxLength: 1000
-        }
-      }
+          contentMaxLength: 1000,
+        },
+      },
     })
   })
 })
