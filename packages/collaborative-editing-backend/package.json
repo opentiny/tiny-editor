@@ -1,0 +1,23 @@
+{
+  "name": "collaborative-editor-backend",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "npm run build && node --env-file=.env --no-warnings ./dist/server.js",
+    "type-check": "tsc --noEmit",
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "dependencies": {
+    "@y/protocols": "^1.0.6-1",
+    "lib0": "^0.2.102",
+    "mongodb": "^6.0.0",
+    "ws": "^8.0.0",
+    "yjs": "^14.0.0-7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@types/ws": "^8.18.1",
+    "typescript": "^5.9.2"
+  }
+}

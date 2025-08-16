@@ -1,0 +1,26 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: yjs-mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin!123
+    volumes:
+      - mongodb_data:/data/db
+
+  websocket-server:
+    build: .
+    container_name: yjs-websocket-server
+    restart: always
+    ports:
+      - "${PORT:-1234}:${PORT:-1234}"
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+
+volumes:
+  mongodb_data:
