@@ -24,7 +24,7 @@
     "mathlive": "^0.101.0",
     "quill-header-list": "0.0.2",
     "quill-markdown-shortcuts": "^0.0.10",
-    "quill-table-up": "^2.1.7",
+    "quill-table-up": "^3.0.1",
     "quill-toolbar-tip": "^0.0.13",
     "vue": "^3.5.13",
     "vue-toastification": "2.0.0-rc.5"

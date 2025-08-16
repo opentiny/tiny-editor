@@ -34,10 +34,10 @@ onMounted(() => {
           'toolbar': TOOLBAR_CONFIG,
           'table-up': {
             customSelect: defaultCustomSelect,
-            selection: TableSelection,
-            selectionOptions: {
-              tableMenu: TableMenuSelect,
-            },
+            modules: [
+              { module: TableSelection },
+              { module: TableMenuSelect },
+            ],
           },
         },
       })
@@ -49,10 +49,10 @@ onMounted(() => {
           'toolbar': TOOLBAR_CONFIG,
           'table-up': {
             customSelect: defaultCustomSelect,
-            selection: TableSelection,
-            selectionOptions: {
-              tableMenu: TableMenuContextmenu,
-            },
+            modules: [
+              { module: TableSelection },
+              { module: TableMenuContextmenu },
+            ],
           },
         },
       })

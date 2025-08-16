@@ -1,4 +1,3 @@
-import type { Parchment } from 'quill'
 import type Toolbar from 'quill/modules/toolbar'
 import type BaseTheme from 'quill/themes/base'
 import type Picker from 'quill/ui/picker'
@@ -10,40 +9,9 @@ interface QuillTheme extends BaseTheme {
   pickers: QuillThemePicker[]
 }
 type QuillThemePicker = (Picker & { options: HTMLElement })
-interface InternalModule {
-  show: () => void
-  hide: () => void
-  update: () => void
-  destroy: () => void
-}
-export interface InternalTableSelectionModule extends InternalModule {
-  dragging: boolean
-  boundary: {
-    x: number
-    y: number
-    x1: number
-    y1: number
-    width: number
-    height: number
-  } | null
-  selectedTds: Parchment.Blot[]
-  cellSelect: HTMLElement
-  tableMenu?: InternalModule
-  computeSelectedTds: (
-    startPoint: {
-      x: number
-      y: number
-    },
-    endPoint: {
-      x: number
-      y: number
-    }
-  ) => Parchment.Blot[]
-  updateWithSelectedTds: () => void
-}
+
 export function generateTableUp(QuillTableUp: Constructor) {
   return class extends QuillTableUp {
-    tableSelection?: InternalTableSelectionModule
     constructor(public quill: FluentEditor, options: Partial<any>) {
       super(quill, options)
 
@@ -68,13 +36,14 @@ export function generateTableUp(QuillTableUp: Constructor) {
             }
           }
         }
-        if (this.tableSelection) {
-          this.tableSelection.destroy()
-        }
-        if (this.options.selection) {
-          // eslint-disable-next-line new-cap
-          this.tableSelection = new this.options.selection(this, this.quill, this.options.selectionOptions)
-        }
+
+        Object.keys(this.modules).forEach((key) => {
+          if (typeof this.modules[key].destroy === 'function') {
+            this.modules[key].destroy()
+            this.modules[key] = null
+          }
+        })
+        this.initModules()
       })
     }
 

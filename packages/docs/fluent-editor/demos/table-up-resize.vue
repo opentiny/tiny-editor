@@ -36,7 +36,9 @@ onMounted(() => {
           'toolbar': TOOLBAR_CONFIG,
           'table-up': {
             customSelect: defaultCustomSelect,
-            resize: TableResizeBox,
+            modules: [
+              { module: TableResizeBox },
+            ],
           },
         },
       })
@@ -48,7 +50,9 @@ onMounted(() => {
           'toolbar': TOOLBAR_CONFIG,
           'table-up': {
             customSelect: defaultCustomSelect,
-            resize: TableResizeLine,
+            modules: [
+              { module: TableResizeLine },
+            ],
           },
         },
       })
@@ -60,7 +64,9 @@ onMounted(() => {
           'toolbar': TOOLBAR_CONFIG,
           'table-up': {
             customSelect: defaultCustomSelect,
-            resizeScale: TableResizeScale,
+            modules: [
+              { module: TableResizeScale },
+            ],
           },
         },
       })

@@ -57,12 +57,12 @@ onMounted(() => {
       },
       'table-up': {
         customSelect: defaultCustomSelect,
-        selection: TableSelection,
-        selectionOptions: {
-          tableMenu: TableMenuContextmenu,
-        },
-        resize: TableResizeLine,
-        resizeScale: TableResizeScale,
+        modules: [
+          { module: TableResizeLine },
+          { module: TableResizeScale },
+          { module: TableSelection },
+          { module: TableMenuContextmenu },
+        ],
       },
       'shortcut-key': {
         menuItems: [tableUpConfig],
