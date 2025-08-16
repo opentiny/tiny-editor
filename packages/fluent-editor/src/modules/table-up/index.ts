@@ -47,6 +47,15 @@ export function generateTableUp(QuillTableUp: Constructor) {
     constructor(public quill: FluentEditor, options: Partial<any>) {
       super(quill, options)
 
+      if (!this.quill.options['format-painter']) this.quill.options['format-painter'] = {}
+      const currentIgnoreFormat = this.quill.options['format-painter'].ignoreFormat || []
+      this.quill.options['format-painter'].ignoreFormat = Array.from(
+        new Set([
+          ...currentIgnoreFormat,
+          'table-up-cell-inner',
+        ]),
+      )
+
       this.quill.emitter.on(CHANGE_LANGUAGE_EVENT, () => {
         this.options.texts = this.resolveTexts(options.texts)
         const toolbar = this.quill.getModule('toolbar') as Toolbar
