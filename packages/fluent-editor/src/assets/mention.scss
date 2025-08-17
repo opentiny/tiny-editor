@@ -1,4 +1,4 @@
-@import './common';
+@use './common';
 // @import './styles-var/private/z-index';
 
 // 模块：@提醒 mention
@@ -44,5 +44,5 @@
       }
     }
   }
-  @include mentionLink;
+  @include common.mentionLink;
 }

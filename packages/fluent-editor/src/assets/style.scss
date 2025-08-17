@@ -1,4 +1,28 @@
+@use './common' as *;
 @use './video.scss' as *;
+@use './variable.scss' as *;
+@use './mention';
+@use './toolbar';
+@use './editor' as *;
+@use './counter';
+@use './size' as *;
+@use './font' as *;
+@use './lineHeight' as *;
+@use './fileBar' as *;
+@use './imageBar';
+@use './custom-image';
+@use './link' as *;
+@use './fullscreen' as *;
+@use './screenshot' as *;
+@use './mathlive' as *;
+@use './ai.scss' as *;
+
+// 使用 load-css 导入纯 CSS 文件（现代化方式）
+@use 'sass:meta';
+@include meta.load-css('quill/dist/quill.snow.css');
+@include meta.load-css('quill-shortcut-key/index.css');
+@include meta.load-css('quill-easy-color/dist/index.css');
+
 @font-face {
   font-family: 'iconfont'; /* Project id 3231649 */
   src:
@@ -6,37 +30,17 @@
     url('./iconfont/iconfont.woff') format('woff'),
     url('./iconfont/iconfont.ttf') format('truetype');
 }
-@import 'quill/dist/quill.snow';
-@import 'quill-shortcut-key/index.css';
-
-@import './variable.scss';
-@import './common';
-@import './mention';
-@import './toolbar';
-@import './editor';
-@import './counter';
-@import './size';
-@import './font';
-@import './lineHeight';
-@import './custom-image';
-@import './fileBar';
-@import './imageBar';
-@import './link';
-@import './fullscreen';
-@import './screenshot';
-@import './mathlive';
-@import './ai.scss';
 
 // 模块：字数统计 counter
-@include counter;
+@include counter.counter;
 
 // 模块：@提醒 mention
-@include mention;
+@include mention.mention;
 
 // 模块：工具栏 toolbar
-@include toolbar;
+@include toolbar.toolbar;
 
-// @include lineHeightList;
+// @include lineHeight.lineHeightList;
 
 // 图片预览
-@include imagePreview;
+@include custom-image.imagePreview;

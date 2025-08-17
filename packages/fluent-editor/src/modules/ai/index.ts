@@ -571,12 +571,21 @@ export class AI {
       this.wrapContainerEl.appendChild(this.actionMenuEl)
     }
     const secondMenuItemText = this.actionMenuEl.children[1].querySelector('.ql-ai-result-menu-text') as HTMLDivElement
+
+    const firstChild = this.actionMenuEl.firstChild
+
     if (!this._isSelectRangeMode) {
-      (this.actionMenuEl.firstChild as HTMLElement).classList.add('hidden')
+      if (firstChild instanceof Element) {
+        firstChild.classList.add('hidden')
+      }
+
       secondMenuItemText.textContent = INSERT_TEXT
     }
     else {
-      (this.actionMenuEl.firstChild as HTMLElement).classList.remove('hidden')
+      if (firstChild instanceof Element) {
+        firstChild.classList.remove('hidden')
+      }
+
       secondMenuItemText.textContent = INSERT_SUB_CONTENT_TEXT
     }
 
@@ -765,10 +774,6 @@ export class AI {
     this.hideSelectionBubble()
   }
 
-  get charCount() {
-    return this._charCount
-  }
-
   set charCount(value: number) {
     // 清除之前的定时器
     if (this._debounceTimer) {
@@ -785,8 +790,8 @@ export class AI {
     }, 210)
   }
 
-  get inputPlaceholder() {
-    return this._inputPlaceholder
+  get charCount() {
+    return this._charCount
   }
 
   set inputPlaceholder(value: string) {
@@ -796,8 +801,8 @@ export class AI {
     }
   }
 
-  get showOperationMenu() {
-    return this._showOperationMenu
+  get inputPlaceholder() {
+    return this._inputPlaceholder
   }
 
   set showOperationMenu(value: boolean) {
@@ -807,8 +812,8 @@ export class AI {
     }
   }
 
-  get isSelectRangeMode() {
-    return this._isSelectRangeMode
+  get showOperationMenu() {
+    return this._showOperationMenu
   }
 
   set isSelectRangeMode(value: boolean) {
@@ -818,8 +823,8 @@ export class AI {
     this.hideSelectionBubble()
   }
 
-  get isThinking() {
-    return this._isThinking
+  get isSelectRangeMode() {
+    return this._isSelectRangeMode
   }
 
   set isThinking(value: boolean) {
@@ -827,8 +832,8 @@ export class AI {
     this.switchInputEl(!value)
   }
 
-  get showResultPopupEl() {
-    return this._showResultPopupEl
+  get isThinking() {
+    return this._isThinking
   }
 
   set showResultPopupEl(value: boolean) {
@@ -836,5 +841,9 @@ export class AI {
     if (this.resultPopupEl) {
       this.resultPopupEl.style.display = value ? 'block' : 'none'
     }
+  }
+
+  get showResultPopupEl() {
+    return this._showResultPopupEl
   }
 }

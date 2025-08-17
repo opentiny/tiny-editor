@@ -1,18 +1,18 @@
 @use './common/config.scss' as *;
-@import './common';
+@use './common';
 
 html {
   .toolbar-tip__tooltip {
-    @include setCssVar(text-color, #ffffff);
-    @include setCssVar(bg-color, #303133);
+    @include common.setCssVar(text-color, #ffffff);
+    @include common.setCssVar(bg-color, #303133);
 
     z-index: $fullscreenZIndex-full;
-    color: getCssVar(text-color);
-    background-color: getCssVar(bg-color);
+    color: common.getCssVar(text-color);
+    background-color: common.getCssVar(bg-color);
   }
   &.dark .toolbar-tip__tooltip {
-    @include setCssVar(text-color, #141414);
-    @include setCssVar(bg-color, #f5f5f5);
+    @include common.setCssVar(text-color, #141414);
+    @include common.setCssVar(bg-color, #f5f5f5);
   }
 }
 
@@ -22,14 +22,12 @@ $splitPadding: 20px; // 分隔线左/右间距
 
 // 模块：工具栏 toolbar
 @mixin toolbar {
-  @import 'quill-easy-color/dist/index.css';
-
   .ql-toolbar {
     position: relative;
     border: solid 1px #adb0b8;
-    @include fontFamilyList;
-    @include fontSizeList;
-    @include lineHeightList;
+    @include common.fontFamilyList;
+    @include common.fontSizeList;
+    @include common.lineHeightList;
 
     &.toolbar-top {
       border-bottom: 0;
@@ -41,7 +39,7 @@ $splitPadding: 20px; // 分隔线左/右间距
     }
 
     &.ql-snow {
-      background-color: getCssVar(editor-bg-color);
+      background-color: common.getCssVar(editor-bg-color);
       button {
         display: inline-flex;
         align-items: center;
@@ -127,7 +125,7 @@ $splitPadding: 20px; // 分隔线左/右间距
     }
 
     .ql-picker.ql-header {
-      @include toolbarPicker('', 98px);
+      @include common.toolbarPicker('', 98px);
     }
   }
 
@@ -309,7 +307,7 @@ $splitPadding: 20px; // 分隔线左/右间距
       }
 
       i.icon {
-        @include arrowIcon;
+        @include common.arrowIcon;
         position: static;
         margin-top: 2.5px;
       }
@@ -340,10 +338,10 @@ $splitPadding: 20px; // 分隔线左/右间距
       .ql-picker-label {
         &:hover,
         &.ql-active {
-          @include toolbarSvgColor {
+          @include common.toolbarSvgColor {
             fill: #252b3a;
           }
-          @include toolbarFontIconColor {
+          @include common.toolbarFontIconColor {
             color: #252b3a;
           }
         }
@@ -353,22 +351,22 @@ $splitPadding: 20px; // 分隔线左/右间距
     .ql-picker-label {
       &:hover,
       &.ql-active {
-        @include toolbarSvgColor {
+        @include common.toolbarSvgColor {
           fill: #5e7ce0;
         }
-        @include toolbarFontIconColor {
+        @include common.toolbarFontIconColor {
           color: #5e7ce0;
         }
       }
-      @include toolbarSvgColor {
+      @include common.toolbarSvgColor {
         fill: #252b3a;
       }
-      @include toolbarFontIconColor {
+      @include common.toolbarFontIconColor {
         color: #252b3a;
       }
 
       &.ql-disabled {
-        @include toolbarSvgColor {
+        @include common.toolbarSvgColor {
           fill: #adb0b8;
           cursor: not-allowed;
         }
