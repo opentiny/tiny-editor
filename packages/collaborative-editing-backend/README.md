@@ -4,38 +4,61 @@
 
 ## 快速开始
 
-### 本地开发部署
+### 环境变量配置
 
 ```bash
 cp .env.example .env
-npm install
-npm start
 ```
 
-### Docker 容器化部署
+参照下方表格进行配置 `.env` 文件
+| 变量名 | 必需 | 默认值 | 说明 |
+| -------------------- | ---- | ------ | -------------------------------------------------------------- |
+| `HOST` | ✅ | - | 服务器监听地址 |
+| `PORT` | ✅ | - | WebSocket 服务端口 |
+| `MONGODB_URL` | ✅ | - | MongoDB 连接字符串 |
+| `MONGODB_DB` | ✅ | - | MongoDB 数据库名称 |
+| `MONGODB_COLLECTION` | ✅ | - | MongoDB 集合名称 |
+| `YDOC_TEXT_KEY` | ❌ | `tiny-editor` | Yjs 文档中文本内容的键名,已与前端对应 |
+| `GC` | ❌ | `true` | 是否启用 Yjs 垃圾回收 |
+
+### Docker 容器化部署(推荐)
 
 使用 Docker Compose 一键启动（包含 MongoDB）：
 
 ```bash
-cp .env.example .env
 docker compose up --build
 ```
 
-## 环境变量配置
+### 本地开发部署
 
-创建 `.env` 文件并配置以下环境变量：
+```bash
+npm install
+npm start
+```
 
-### 环境变量说明
+## 前端配置
 
-| 变量名               | 必需 | 默认值 | 说明                                                      |
-| -------------------- | ---- | ------ | --------------------------------------------------------- |
-| `HOST`               | ✅   | -      | 服务器监听地址                                            |
-| `PORT`               | ✅   | -      | WebSocket 服务端口                                        |
-| `MONGODB_URL`        | ✅   | -      | MongoDB 连接字符串                                        |
-| `MONGODB_DB`         | ✅   | -      | MongoDB 数据库名称                                        |
-| `MONGODB_COLLECTION` | ✅   | -      | MongoDB 集合名称                                          |
-| `YDOC_TEXT_KEY`      | ❌   | -      | Yjs 文档中文本内容的键名(默认为 tiny-editor 已与前端对应) |
-| `GC`                 | ❌   | `true` | 是否启用 Yjs 垃圾回收                                     |
+(非完整前端配置主要参考 provider 部分)
+
+```javascript
+import TinyEditor from '@opentiny/fluent-editor'
+
+const editor = new TinyEditor('#editor', {
+  theme: 'snow',
+  modules: {
+    cursors: true,
+    collaboration: {
+      provider: {
+        type: 'websocket',
+        options: {
+          serverUrl: 'ws://localhost:1234',
+          roomName: 'my-document',
+        },
+      },
+    },
+  },
+})
+```
 
 ## 开发指南
 
@@ -74,9 +97,8 @@ const text = ydoc.getText('content').toString()
 
 ### 替代方案
 
-如果需要更强大的功能，可以考虑以下开源方案：
+如果需要更强大的功能或其他持久化支持，可以考虑以下开源方案：
 
 - **[@y/websocket-server](https://github.com/yjs/y-websocket-server/)**: 官方 WebSocket 服务器
-- **[Hocuspocus](https://tiptap.dev/hocuspocus)**: 功能丰富的协同编辑服务器
-- **[y-sweet](https://github.com/drifting-in-space/y-sweet)**: Rust 实现的高性能服务器
-- **[yrs-warp](https://github.com/y-crdt/yrs-warp)**: 基于 Warp 的 Rust 服务器
+- **[y-redis](https://github.com/yjs/y-redis)**
+- **[y-postgresql](https://github.com/MaxNoetzold/y-postgresql)**
