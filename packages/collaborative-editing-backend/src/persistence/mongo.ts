@@ -6,6 +6,7 @@ import { MONGODB_COLLECTION, MONGODB_DB, MONGODB_URL, YDOC_TEXT_KEY } from '../e
 export class MongoPersistence implements Persistence {
   private client: MongoClient
   private ready?: Promise<MongoClient>
+  private saveTimeouts = new WeakMap<Y.Doc, NodeJS.Timeout>()
 
   constructor() {
     if (!MONGODB_URL) throw new Error('缺少必需的环境变量: MONGODB_URL')
@@ -33,12 +34,14 @@ export class MongoPersistence implements Persistence {
       Y.applyUpdate(ydoc, new Uint8Array(existing.data))
     }
 
-    let saveTimeout: NodeJS.Timeout | undefined
     ydoc.on('update', () => {
-      if (saveTimeout) clearTimeout(saveTimeout)
-      saveTimeout = setTimeout(async () => {
+      const existingTimeout = this.saveTimeouts.get(ydoc)
+      if (existingTimeout) clearTimeout(existingTimeout)
+      const newTimeout = setTimeout(async () => {
         await this.saveData(docName, ydoc)
+        this.saveTimeouts.delete(ydoc)
       }, 500)
+      this.saveTimeouts.set(ydoc, newTimeout)
     })
   }
 
@@ -57,7 +60,16 @@ export class MongoPersistence implements Persistence {
     )
   }
 
+  public clearDocumentTimeout(ydoc: Y.Doc): void {
+    const timeout = this.saveTimeouts.get(ydoc)
+    if (timeout) {
+      clearTimeout(timeout)
+      this.saveTimeouts.delete(ydoc)
+    }
+  }
+
   async close(): Promise<void> {
+    this.saveTimeouts = new WeakMap()
     await this.client.close()
   }
 }
