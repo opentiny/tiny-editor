@@ -116,7 +116,10 @@ function closeConn(doc: WSSharedDoc, conn: WebSocket): void {
     const persistence = getPersistence()
     if (doc.conns.size === 0 && persistence !== null) {
       persistence.writeState(doc.name, doc).then(() => {
-        doc.destroy()
+        if (doc.conns.size === 0) {
+          doc.destroy()
+          docs.delete(doc.name)
+        }
       })
       docs.delete(doc.name)
     }
