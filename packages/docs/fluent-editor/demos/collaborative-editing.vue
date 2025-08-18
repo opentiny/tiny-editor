@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import type FluentEditor from '@opentiny/fluent-editor'
+import katex from 'katex'
 import { onMounted, ref } from 'vue'
 import 'quill-table-up/index.css'
 import 'quill-table-up/table-creator.css'
+import 'katex/dist/katex.min.css'
 
+window.katex = katex
 let editor: FluentEditor
 const editorRef = ref<HTMLElement>()
 
