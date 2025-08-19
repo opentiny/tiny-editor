@@ -177,7 +177,9 @@ class SnowTheme extends OriginSnowTheme {
     const toolbar = this.quill.getModule('toolbar') as TypeToolbar
     ColorPicker.clearText = this.quill.getLangText('clear-color')
     ColorPicker.customText = this.quill.getLangText('custom-color')
+
     if (!toolbar || !this.pickers) return
+
     this.pickers.forEach((picker) => {
       if (picker instanceof ColorPicker) {
         // EasyColorPicker have not dts. abd origin quill ColorPicker dts not complete. use any to resovle ts type error
@@ -190,6 +192,24 @@ class SnowTheme extends OriginSnowTheme {
         })
         colorPicker.buildOptions()
         colorPicker.createUsedColor()
+      }
+
+      if (picker.select && picker.select.classList.contains('ql-header')) {
+        const select = picker.select as HTMLSelectElement
+
+        Array.from(select.options).forEach((option) => {
+          const value = option.getAttribute('value')
+          const trText = this.quill.getLangText(value ? `h${value}` : 'normal')
+
+          if (option.getAttribute('selected')) {
+            picker.label.setAttribute('data-label', trText)
+          }
+
+          option.textContent = trText
+        })
+
+        picker.options.remove()
+        picker.buildOptions()
       }
     })
   }
