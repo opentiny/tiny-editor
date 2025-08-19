@@ -48,7 +48,13 @@ export function bindAwarenessToCursors(
 ): (() => void) | void {
   if (!cursorsModule || !awareness) return
 
-  const awarenessChangeHandler = () => {
+  const awarenessChangeHandler = (changes?: { added: number[], updated: number[], removed: number[] }) => {
+    if (changes?.removed?.length) {
+      changes.removed.forEach((clientId) => {
+        cursorsModule.removeCursor(clientId.toString())
+      })
+    }
+
     const states = awareness.getStates()
     states.forEach((state, clientId) => {
       if (clientId === awareness.clientID) return
@@ -81,8 +87,8 @@ export function bindAwarenessToCursors(
 
   awareness.on('change', awarenessChangeHandler)
   quill.on('selection-change', selectionChangeHandler)
+  awarenessChangeHandler()
 
-  // 返回清理函数
   return () => {
     awareness.off('change', awarenessChangeHandler)
     quill.off('selection-change', selectionChangeHandler)
