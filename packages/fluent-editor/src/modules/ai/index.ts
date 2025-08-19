@@ -642,7 +642,7 @@ export class AI {
     this.isBreak = false // 重置打断标记，防止重复打断ai
     // 这里实现实际的AI查询逻辑
     try {
-      const response = await fetch(`${this.host}/api/generate`, {
+      const response = await fetch(`${this.host}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -709,6 +709,7 @@ export class AI {
     }
     else {
       this.isBreak = true
+      this.charCount = 0
     }
     this.showResultPopupEl = true
   }

@@ -22,7 +22,7 @@ onMounted(() => {
           container: TOOLBAR_CONFIG,
         },
         ai: {
-          host: 'http://localhost:11434',
+          host: 'http://localhost:11434/api/generate',
           model: 'deepseek-r1:8b',
           apiKey: '',
           contentMaxLength: 1000,
