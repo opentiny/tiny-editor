@@ -1,5 +1,4 @@
 import type FluentEditor from '../../fluent-editor'
-import QuillCursors from 'quill-cursors'
 import { CollaborativeEditor } from './collaborative-editing'
 
 export class CollaborationModule {
