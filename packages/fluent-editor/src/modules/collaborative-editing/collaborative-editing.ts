@@ -1,3 +1,4 @@
+import type { UnifiedProvider } from './provider/customProvider'
 import type { YjsOptions } from './types'
 import QuillCursors from 'quill-cursors'
 import { Awareness } from 'y-protocols/awareness'
@@ -10,9 +11,9 @@ import { createProvider } from './provider/customProvider'
 
 export class CollaborativeEditor {
   private ydoc: Y.Doc = new Y.Doc()
-  private provider: any
+  private provider: UnifiedProvider
   private awareness: Awareness
-  private cursors: any
+  private cursors: QuillCursors | null
   private _isConnected = false
   private _isSynced = false
   private cleanupBindings: (() => void) | null = null
@@ -25,8 +26,10 @@ export class CollaborativeEditor {
 
     this.ydoc = this.options.ydoc || new Y.Doc()
 
-    const cursorsOptions = typeof this.options.cursors === 'object' ? this.options.cursors : {}
-    this.cursors = new QuillCursors(quill, cursorsOptions)
+    if (this.options.cursors !== false) {
+      const cursorsOptions = typeof this.options.cursors === 'object' ? this.options.cursors : {}
+      this.cursors = new QuillCursors(quill, cursorsOptions)
+    }
 
     if (this.options.awareness) {
       const awareness = setupAwareness(this.options.awareness, new Awareness(this.ydoc))
@@ -117,7 +120,7 @@ export class CollaborativeEditor {
   public destroy() {
     this.cleanupBindings?.()
     this.provider?.destroy?.()
-    this.cursors?.destroy?.()
+    this.cursors?.clearCursors()
     this.awareness?.destroy?.()
     this.ydoc?.destroy?.()
   }
