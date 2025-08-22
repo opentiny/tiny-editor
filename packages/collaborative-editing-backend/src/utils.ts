@@ -75,7 +75,7 @@ export class WSSharedDoc extends Y.Doc {
 }
 
 export function getYDoc(docname: string, gc = true): WSSharedDoc {
-  return map.setIfUndefined(docs, docname, () => {
+  return map.setIfUndefined(docs as Map<string, WSSharedDoc>, docname, () => {
     const doc = new WSSharedDoc(docname)
     doc.gc = gc
     const persistence = getPersistence()

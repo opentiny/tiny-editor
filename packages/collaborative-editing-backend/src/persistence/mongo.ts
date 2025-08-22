@@ -26,7 +26,7 @@ export class MongoPersistence implements Persistence {
 
     this.mongodbPersistence = new MongodbPersistence(connectionObj, {
       collectionName: MONGODB_COLLECTION,
-      flushSize: 10,
+      flushSize: 50,
       multipleCollections: true,
     })
   }
