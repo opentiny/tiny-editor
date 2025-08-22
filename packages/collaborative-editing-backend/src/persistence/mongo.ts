@@ -1,12 +1,19 @@
+import type { Db } from 'mongodb'
 import type { Persistence } from './index.js'
 import { MongoClient } from 'mongodb'
+import { MongodbPersistence } from 'y-mongodb-provider'
 import * as Y from 'yjs'
-import { MONGODB_COLLECTION, MONGODB_DB, MONGODB_URL, YDOC_TEXT_KEY } from '../env.js'
+import { MONGODB_COLLECTION, MONGODB_DB, MONGODB_URL } from '../env.js'
+
+interface MongoConnectionObj {
+  client: MongoClient
+  db: Db
+}
 
 export class MongoPersistence implements Persistence {
+  private mongodbPersistence: MongodbPersistence
   private client: MongoClient
-  private ready?: Promise<MongoClient>
-  private saveTimeouts = new WeakMap<Y.Doc, NodeJS.Timeout>()
+  private connected = false
 
   constructor() {
     if (!MONGODB_URL) throw new Error('缺少必需的环境变量: MONGODB_URL')
@@ -14,62 +21,46 @@ export class MongoPersistence implements Persistence {
     if (!MONGODB_COLLECTION) throw new Error('缺少必需的环境变量: MONGODB_COLLECTION')
 
     this.client = new MongoClient(MONGODB_URL)
-  }
+    const db = this.client.db(MONGODB_DB)
+    const connectionObj: MongoConnectionObj = { client: this.client, db }
 
-  private async ensureReady() {
-    if (!this.ready) {
-      this.ready = this.client.connect()
-    }
-    await this.ready
-  }
-
-  private get db() {
-    return this.client.db(MONGODB_DB)
-  }
-
-  async bindState(docName: string, ydoc: Y.Doc): Promise<void> {
-    await this.ensureReady()
-    const existing = await this.db.collection(MONGODB_COLLECTION).findOne<{ data?: number[] }>({ docName })
-    if (existing?.data) {
-      Y.applyUpdate(ydoc, new Uint8Array(existing.data))
-    }
-
-    ydoc.on('update', () => {
-      const existingTimeout = this.saveTimeouts.get(ydoc)
-      if (existingTimeout) clearTimeout(existingTimeout)
-      const newTimeout = setTimeout(async () => {
-        await this.saveData(docName, ydoc)
-        this.saveTimeouts.delete(ydoc)
-      }, 500)
-      this.saveTimeouts.set(ydoc, newTimeout)
+    this.mongodbPersistence = new MongodbPersistence(connectionObj, {
+      collectionName: MONGODB_COLLECTION,
+      flushSize: 10,
+      multipleCollections: true,
     })
   }
 
-  async writeState(docName: string, ydoc: Y.Doc): Promise<void> {
-    await this.ensureReady()
-    await this.saveData(docName, ydoc)
-  }
-
-  private async saveData(docName: string, ydoc: Y.Doc) {
-    const update = Y.encodeStateAsUpdate(ydoc)
-    const text = ydoc.getText(YDOC_TEXT_KEY).toString()
-    await this.db.collection(MONGODB_COLLECTION).replaceOne(
-      { docName },
-      { docName, data: Array.from(update), text },
-      { upsert: true },
-    )
-  }
-
-  public clearDocumentTimeout(ydoc: Y.Doc): void {
-    const timeout = this.saveTimeouts.get(ydoc)
-    if (timeout) {
-      clearTimeout(timeout)
-      this.saveTimeouts.delete(ydoc)
+  async connect() {
+    if (!this.connected) {
+      await this.client.connect()
+      this.connected = true
     }
   }
 
-  async close(): Promise<void> {
-    this.saveTimeouts = new WeakMap()
+  async bindState(docName: string, ydoc: Y.Doc) {
+    await this.connect()
+
+    const persistedYDoc = await this.mongodbPersistence.getYDoc(docName)
+
+    const newUpdates = Y.encodeStateAsUpdate(ydoc)
+    if (newUpdates.byteLength > 0) {
+      this.mongodbPersistence.storeUpdate(docName, newUpdates)
+    }
+
+    Y.applyUpdate(ydoc, Y.encodeStateAsUpdate(persistedYDoc))
+
+    ydoc.on('update', (update: Uint8Array) => {
+      this.mongodbPersistence.storeUpdate(docName, update)
+    })
+  }
+
+  async writeState(docName: string, ydoc: Y.Doc) {
+    return Promise.resolve()
+  }
+
+  async close() {
+    this.mongodbPersistence.destroy()
     await this.client.close()
   }
 }

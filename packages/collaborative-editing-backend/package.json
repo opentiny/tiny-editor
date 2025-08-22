@@ -13,6 +13,7 @@
     "lib0": "^0.2.102",
     "mongodb": "^6.0.0",
     "ws": "^8.0.0",
+    "y-mongodb-provider": "0.2.1",
     "yjs": "^14.0.0-7"
   },
   "devDependencies": {

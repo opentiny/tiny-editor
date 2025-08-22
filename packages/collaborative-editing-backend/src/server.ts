@@ -21,6 +21,6 @@ server.listen(PORT, HOST, () => {
 })
 
 process.on('SIGINT', async () => {
-  await mongoPersistence.close?.()
+  await mongoPersistence.close()
   process.exit(0)
 })
