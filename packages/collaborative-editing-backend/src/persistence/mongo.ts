@@ -3,7 +3,7 @@ import type { Persistence } from './index.js'
 import { MongoClient } from 'mongodb'
 import { MongodbPersistence } from 'y-mongodb-provider'
 import * as Y from 'yjs'
-import { MONGODB_COLLECTION, MONGODB_DB, MONGODB_URL } from '../env.js'
+import { MONGODB_COLLECTION, MONGODB_DB, MONGODB_URL } from '../env.ts'
 
 interface MongoConnectionObj {
   client: MongoClient

@@ -7,8 +7,8 @@ import * as encoding from 'lib0/encoding'
 import * as map from 'lib0/map'
 import * as Y from 'yjs'
 
-import { GC_ENABLED } from './env.js'
-import { getPersistence } from './persistence/index.js'
+import { GC_ENABLED } from './env.ts'
+import { getPersistence } from './persistence/index.ts'
 
 const wsReadyStateConnecting = 0
 const wsReadyStateOpen = 1

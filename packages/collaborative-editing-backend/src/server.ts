@@ -1,9 +1,9 @@
 import http from 'node:http'
 import { WebSocketServer } from 'ws'
-import { HOST, PORT } from './env.js'
-import { setPersistence } from './persistence/index.js'
-import { MongoPersistence } from './persistence/mongo.js'
-import { setupWSConnection } from './utils.js'
+import { HOST, PORT } from './env.ts'
+import { setPersistence } from './persistence/index.ts'
+import { MongoPersistence } from './persistence/mongo.ts'
+import { setupWSConnection } from './utils.ts'
 
 const server = http.createServer((_request, response) => {
   response.writeHead(200, { 'Content-Type': 'text/plain' })
