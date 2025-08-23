@@ -4,10 +4,12 @@ import './formats/mind-map-blot'
 export class MindMapModule {
   quill: Quill
   toolbar: any
+  static currentQuill: Quill | null = null
 
   constructor(quill: Quill, options: any) {
     this.quill = quill
     this.toolbar = quill.getModule('toolbar')
+    MindMapModule.currentQuill = quill
     const domNode = document.querySelector('.ql-mind-map')
 
     if (domNode) {
@@ -41,8 +43,9 @@ export class MindMapModule {
         ],
         smmVersion: '0.14.0-fix.1',
       }
-      this.quill.insertEmbed(range.index, 'mind-map-placeholder', defaultData, 'user')
-      this.quill.setSelection(range.index + 1, 0)
+      this.quill.insertText(range.index, '\n', 'user')
+      this.quill.insertEmbed(range.index + 1, 'mind-map-placeholder', defaultData, 'user')
+      this.quill.insertText(range.index + 2, '\n', 'user')
     }
   }
 }

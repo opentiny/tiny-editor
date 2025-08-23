@@ -1,8 +1,19 @@
 import type FluentEditor from '../../../core/fluent-editor'
 import type MindMapPlaceholderBlot from '../formats/mind-map-blot'
+import { nodeIconList } from 'simple-mind-map/src/svg/icons'
 import { CHANGE_LANGUAGE_EVENT } from '../../../config'
 import { I18N } from '../../../modules/i18n'
 import { registerMindMapI18N } from '../i18n'
+import catalogOrganizationIcon from '../icons/catalogOrganizationIcon.png'
+import contractIcon from '../icons/contractIcon.png'
+import expandIcon from '../icons/expandIcon.png'
+import fishboneIcon from '../icons/fishboneIcon.png'
+import fullScreenIcon from '../icons/fullScreenIcon.png'
+import logicalStructureIcon from '../icons/logicalStructureIcon.png'
+import mindMapIcon from '../icons/mindMapIcon.png'
+import organizationStructureIcon from '../icons/organizationStructureIcon.png'
+import smallScreenIcon from '../icons/smallScreenIcon.png'
+import timelineIcon from '../icons/timelineIcon.png'
 
 class MindMapControlPanelHandler {
   private texts: Record<string, string>
@@ -12,8 +23,9 @@ class MindMapControlPanelHandler {
   }
 
   constructor(private quill: FluentEditor, private blot: MindMapPlaceholderBlot) {
+    const i18nModule = this.quill.getModule('i18n') as I18N
     registerMindMapI18N(I18N)
-    this.lang = 'en-US'
+    this.lang = i18nModule.options.lang
     this.texts = this.resolveTexts()
     this.quill.emitter.on(CHANGE_LANGUAGE_EVENT, (lang: string) => {
       this.lang = lang
@@ -23,46 +35,62 @@ class MindMapControlPanelHandler {
   }
 
   resolveTexts() {
-    return {
-      zoomOut: I18N.parserText('mindMap.controlPanel.zoomOut', this.lang),
-      zoomIn: I18N.parserText('mindMap.controlPanel.zoomIn', this.lang),
-      fit: I18N.parserText('mindMap.controlPanel.fit', this.lang),
-      back: I18N.parserText('mindMap.controlPanel.back', this.lang),
-      forward: I18N.parserText('mindMap.controlPanel.forward', this.lang),
-      export: I18N.parserText('mindMap.controlPanel.export', this.lang),
-      import: I18N.parserText('mindMap.controlPanel.import', this.lang),
-      inserChildNode: I18N.parserText('mindMap.controlPanel.inserChildNode', this.lang),
-      inserNode: I18N.parserText('mindMap.controlPanel.inserNode', this.lang),
-      inserParentNode: I18N.parserText('mindMap.controlPanel.inserParentNode', this.lang),
-      removeNode: I18N.parserText('mindMap.controlPanel.removeNode', this.lang),
+    const textKeys = [
+      'zoomOutTitle',
+      'zoomInTitle',
+      'fitTitle',
+      'backTitle',
+      'forwardTitle',
+      'inserChildNodeTitle',
+      'inserNodeTitle',
+      'insertIconTitle',
+      'inserParentNodeTitle',
+      'removeNodeTitle',
+      'setLayoutTitle',
+      'logicalStructureLayout',
+      'catalogOrganizationLayout',
+      'mindMapLayout',
+      'organizationStructureLayout',
+      'timelineLayout',
+      'fishboneLayout',
+      'panelStatusTitle',
+      'screenTypeTitle',
+    ]
 
-      zoomOutTitle: I18N.parserText('mindMap.controlPanel.zoomOutTitle', this.lang),
-      zoomInTitle: I18N.parserText('mindMap.controlPanel.zoomInTitle', this.lang),
-      fitTitle: I18N.parserText('mindMap.controlPanel.fitTitle', this.lang),
-      backTitle: I18N.parserText('mindMap.controlPanel.backTitle', this.lang),
-      forwardTitle: I18N.parserText('mindMap.controlPanel.forwardTitle', this.lang),
-      exportTitle: I18N.parserText('mindMap.controlPanel.exportTitle', this.lang),
-      importTitle: I18N.parserText('mindMap.controlPanel.importTitle', this.lang),
-      inserChildNodeTitle: I18N.parserText('mindMap.controlPanel.inserChildNodeTitle', this.lang),
-      inserNodeTitle: I18N.parserText('mindMap.controlPanel.inserNodeTitle', this.lang),
-      inserParentNodeTitle: I18N.parserText('mindMap.controlPanel.inserParentNodeTitle', this.lang),
-      removeNodeTitle: I18N.parserText('mindMap.controlPanel.removeNodeTitle', this.lang),
-    }
+    return textKeys.reduce((acc, key) => {
+      if (!key.includes('Title')) {
+        acc[key] = I18N.parserText(`mindMap.layout.${key.replace('Layout', '')}`, this.lang)
+      }
+      else {
+        acc[key] = I18N.parserText(`mindMap.controlPanel.${key}`, this.lang)
+      }
+      return acc
+    }, {} as Record<string, string>)
   }
 
   updateControlPanelTexts() {
     const controlItems = this.blot.domNode.querySelectorAll('.ql-mind-map-control-item')
+
+    const controlItemMap: Record<string, string> = {
+      'zoom-out': 'zoomOutTitle',
+      'zoom-in': 'zoomInTitle',
+      'fit': 'fitTitle',
+      'back': 'backTitle',
+      'forward': 'forwardTitle',
+      'insert-child-node': 'inserChildNodeTitle',
+      'insert-node': 'inserNodeTitle',
+      'insert-icon': 'insertIconTitle',
+      'insert-parent-node': 'inserParentNodeTitle',
+      'remove-node': 'removeNodeTitle',
+      'set-layout-icon': 'setLayoutTitle',
+      'panel-status': 'panelStatusTitle',
+      'screen-type': 'screenTypeTitle',
+    }
+
     controlItems.forEach((item) => {
-      const icon = item.querySelector('i')
-      if (icon) {
-        const iconClass = icon.className.split('-')[4]
-        if (this.texts[iconClass]) {
-          const textSpan = item.querySelector('.ql-mind-map-control-text')
-          if (textSpan) {
-            textSpan.textContent = this.texts[iconClass]
-          }
-          (item as HTMLElement).title = this.texts[`${iconClass}Title`] || ''
-        }
+      const controlType = (item as HTMLElement).dataset.controlType
+      if (controlType && controlItemMap[controlType] && this.texts[controlItemMap[controlType]]) {
+        (item as HTMLElement).title = this.texts[controlItemMap[controlType]]
       }
     })
   }
@@ -75,12 +103,16 @@ const ENABLED_OPACITY = '1'
 export function createControlPanel(blot: MindMapPlaceholderBlot, quill: FluentEditor): void {
   let isStart = true
   let isEnd = true
-  // 右上的控制面板
+  let selectedNodes: any[] = []
+  blot.mindMap.on('node_active', (...args: unknown[]) => {
+    selectedNodes = Array.isArray(args[1]) ? args[1] : []
+  })
+  // 中间的控制面板
   const controlPanel = document.createElement('div')
   controlPanel.className = 'ql-mind-map-control'
-  // 左下的控制面板
-  const controlLeftDownPanel = document.createElement('div')
-  controlLeftDownPanel.className = 'ql-mind-map-left-down-control'
+  // 右上的控制面板
+  const controlRightUpPanel = document.createElement('div')
+  controlRightUpPanel.className = 'ql-mind-map-right-up-control'
   // 左上的控制面板
   const controlLeftUpPanel = document.createElement('div')
   controlLeftUpPanel.className = 'ql-mind-map-left-up-control'
@@ -88,26 +120,27 @@ export function createControlPanel(blot: MindMapPlaceholderBlot, quill: FluentEd
   const handler = new MindMapControlPanelHandler(quill, blot)
   controlPanelHandlers.set(blot, handler)
 
-  const zoomOutBtn = createControlItem('zoomOut', handler.getText('zoomOut'), handler.getText('zoomOutTitle'), () => handleZoomOut(blot))
-  const zoomInBtn = createControlItem('zoomIn', handler.getText('zoomIn'), handler.getText('zoomInTitle'), () => handleZoomIn(blot))
-  const resetBtn = createControlItem('fit', handler.getText('fit'), handler.getText('fitTitle'), () => handleResetZoom(blot))
-  const backBtn = createControlItem('back', handler.getText('back'), handler.getText('backTitle'), () => {
+  const zoomOutBtn = createControlItem('zoom-out', handler.getText('zoomOutTitle'), () => handleZoomOut(blot))
+  const zoomInBtn = createControlItem('zoom-in', handler.getText('zoomInTitle'), () => handleZoomIn(blot))
+  const resetBtn = createControlItem('fit', handler.getText('fitTitle'), () => handleResetZoom(blot))
+  const backBtn = createControlItem('back', handler.getText('backTitle'), () => {
     if (!isStart) {
       blot.mindMap.execCommand('BACK')
     }
   })
-  const forwardBtn = createControlItem('forward', handler.getText('forward'), handler.getText('forwardTitle'), () => {
+  const forwardBtn = createControlItem('forward', handler.getText('forwardTitle'), () => {
     if (!isEnd) {
       blot.mindMap.execCommand('FORWARD')
     }
   })
-  const exportJSON = createControlItem('export', handler.getText('export'), handler.getText('exportTitle'), () => handleExport(blot))
-  const importJSON = createControlItem('import', handler.getText('import'), handler.getText('importTitle'), () => handleImport(blot))
-  const insertChildNode = createControlItem('inserChildNode', handler.getText('inserChildNode'), handler.getText('inserChildNodeTitle'), () => handleInsertChildNode(blot))
-  const insertNode = createControlItem('inserNode', handler.getText('inserNode'), handler.getText('inserNodeTitle'), () => handleInsertNode(blot))
-  const insertParentNode = createControlItem('inserParentNode', handler.getText('inserParentNode'), handler.getText('inserParentNodeTitle'), () => handleInsertParentNode(blot))
-  const removeNode = createControlItem('removeNode', handler.getText('removeNode'), handler.getText('removeNodeTitle'), () => handleRemoveNode(blot))
-
+  const insertChildNode = createControlItem('insert-child-node', handler.getText('inserChildNodeTitle'), () => handleInsertChildNode(blot))
+  const insertNode = createControlItem('insert-node', handler.getText('inserNodeTitle'), () => handleInsertNode(blot))
+  const insertParentNode = createControlItem('insert-parent-node', handler.getText('inserParentNodeTitle'), () => handleInsertParentNode(blot))
+  const removeNode = createControlItem('remove-node', handler.getText('removeNodeTitle'), () => handleRemoveNode(blot))
+  const insertIconBtn = createControlItem('insert-icon', handler.getText('insertIconTitle'), () => handleInsertIcon(blot, selectedNodes))
+  const setLayoutBtn = createControlItem('set-layout-icon', handler.getText('setLayoutTitle'), () => handleSetLayoutBtn(blot))
+  const panelStatusBtn = createControlItem('panel-status', handler.getText('panelStatusTitle'), () => handlePanelStatusBtn(blot))
+  const screenTypeBtn = createControlItem('screen-type', handler.getText('screenTypeTitle'), () => handleScreenTypeBtn(blot))
   const updateButtonState = (index: number, len: number) => {
     isStart = index <= 0
     isEnd = index >= len - 1
@@ -120,30 +153,25 @@ export function createControlPanel(blot: MindMapPlaceholderBlot, quill: FluentEd
   blot.mindMap.on('back_forward', (index: number, len: number) => {
     updateButtonState(index, len)
   })
-  controlPanel.append(zoomOutBtn, zoomInBtn, resetBtn, backBtn, forwardBtn)
+  controlPanel.append(zoomOutBtn, zoomInBtn, resetBtn, screenTypeBtn, backBtn, forwardBtn)
   blot.domNode.appendChild(controlPanel)
-  controlLeftDownPanel.append(exportJSON, importJSON)
-  blot.domNode.appendChild(controlLeftDownPanel)
-  controlLeftUpPanel.append(insertChildNode, insertNode, insertParentNode, removeNode)
+  controlRightUpPanel.append(panelStatusBtn)
+  blot.domNode.appendChild(controlRightUpPanel)
+  controlLeftUpPanel.append(insertChildNode, insertNode, insertParentNode, removeNode, insertIconBtn, setLayoutBtn)
   blot.domNode.appendChild(controlLeftUpPanel)
 }
 
-function createControlItem(iconClass: string, text: string, title: string, onClick: () => void, disabled = false) {
+function createControlItem(iconClass: string, title: string, onClick: () => void, disabled = false) {
   const controlItem = document.createElement('div')
   controlItem.className = 'ql-mind-map-control-item'
   controlItem.title = title
+  controlItem.dataset.controlType = iconClass
   controlItem.style.cursor = disabled ? 'not-allowed' : 'pointer'
   controlItem.style.opacity = disabled ? DISABLED_OPACITY : ENABLED_OPACITY
 
   const icon = document.createElement('i')
   icon.className = `ql-mind-map-control-${iconClass}`
-
-  const textSpan = document.createElement('span')
-  textSpan.className = 'ql-mind-map-control-text'
-  textSpan.textContent = text
-
   controlItem.appendChild(icon)
-  controlItem.appendChild(textSpan)
 
   if (!disabled) {
     controlItem.addEventListener('click', onClick)
@@ -168,54 +196,6 @@ function handleRemoveNode(blot: MindMapPlaceholderBlot): void {
   blot.mindMap.execCommand('REMOVE_CURRENT_NODE')
 }
 
-function handleExport(blot: MindMapPlaceholderBlot): void {
-  blot.mindMap.getElRectInfo()
-  if (blot.mindMap) {
-    blot.mindMap.export('json', true, '思维导图')
-  }
-}
-
-function handleImport(blot: MindMapPlaceholderBlot): void {
-  const fileInput = document.createElement('input')
-  fileInput.type = 'file'
-  fileInput.accept = '.json'
-  fileInput.style.display = 'none'
-
-  // 监听文件选择事件
-  fileInput.addEventListener('change', (e) => {
-    const file = (e.target as HTMLInputElement).files?.[0]
-    if (!file) return
-
-    const reader = new FileReader()
-    reader.onload = (event) => {
-      try {
-        const jsonData = JSON.parse(event.target?.result as string)
-        if (blot.mindMap) {
-          if (jsonData.root) {
-            blot.mindMap.setFullData(jsonData)
-          }
-          else {
-            blot.mindMap.setData(jsonData)
-          }
-          blot.mindMap.view.reset()
-          blot.data = blot.mindMap.getData({})
-          blot.domNode.setAttribute('data-mind-map', JSON.stringify(blot.data))
-          blot.scroll.update([], {})
-        }
-      }
-      catch (error) {
-        alert('文件解析错误，请确保选择的是有效的JSON文件')
-      }
-    }
-    reader.readAsText(file)
-  })
-
-  // 触发文件选择对话框
-  document.body.appendChild(fileInput)
-  fileInput.click()
-  document.body.removeChild(fileInput)
-}
-
 function handleZoomIn(blot: MindMapPlaceholderBlot): void {
   if (blot.mindMap && blot.mindMap.view) {
     const containerRect = blot.mindMap.el.getBoundingClientRect()
@@ -237,6 +217,7 @@ function handleZoomOut(blot: MindMapPlaceholderBlot): void {
 }
 
 function handleResetZoom(blot: MindMapPlaceholderBlot): void {
+  blot.mindMap.renderer.setRootNodeCenter()
   if (!blot.mindMap || !blot.mindMap.view || blot.zoomCount === 0) return
   const containerRect = blot.mindMap.el.getBoundingClientRect()
   const centerX = containerRect.width / 2
@@ -252,4 +233,247 @@ function handleResetZoom(blot: MindMapPlaceholderBlot): void {
     }
   }
   blot.zoomCount = 0
+}
+
+function handleInsertIcon(blot: MindMapPlaceholderBlot, selectedNodes: any[]): void {
+  (blot as any).selectedNodes = selectedNodes
+  const heightStr = blot.domNode.getAttribute('height') || '500px'
+  const height = Number.parseInt(heightStr.replace(/[^\d.]/g, ''), 10) || 500
+  let iconList = []
+  iconList = nodeIconList
+  const leftUpControl = blot.domNode.querySelector('.ql-mind-map-left-up-control') as HTMLElement
+  let iconPanel = leftUpControl.querySelector('.ql-mind-map-icon-panel') as HTMLElement
+  if (!iconPanel) {
+    iconPanel = document.createElement('div')
+    iconPanel.className = 'ql-mind-map-icon-panel'
+
+    iconList.forEach((group) => {
+      const groupContainer = document.createElement('div')
+      groupContainer.className = 'ql-mind-map-icon-group-container'
+
+      group.list.forEach((icon: { icon: string, name: string }) => {
+        const iconItem = document.createElement('div')
+        iconItem.className = 'ql-mind-map-icon-item'
+        iconItem.innerHTML = icon.icon
+
+        iconItem.addEventListener('click', () => {
+          const currentSelectedNodes = (blot as any).selectedNodes || []
+          if (currentSelectedNodes.length > 0) {
+            const node = currentSelectedNodes[0]
+
+            if (node.getData('icon') && node.getData('icon')[0] === `${group.type}_${icon.name}`) {
+              node.setIcon([])
+            }
+            else {
+              node.setIcon([`${group.type}_${icon.name}`])
+            }
+            blot.data = blot.mindMap.getData({})
+            blot.domNode.setAttribute('data-mind-map', JSON.stringify(blot.data))
+          }
+          iconPanel.style.display = 'none'
+        })
+        groupContainer.appendChild(iconItem)
+      })
+      iconPanel.appendChild(groupContainer)
+    })
+    if (height < 395) {
+      iconPanel.style.height = `${height - 130}px`
+    }
+    else {
+      iconPanel.style.height = '270px'
+    }
+    leftUpControl.appendChild(iconPanel)
+  }
+  else {
+    if (height < 395) {
+      iconPanel.style.height = `${height - 130}px`
+    }
+    else {
+      iconPanel.style.height = '270px'
+    }
+    iconPanel.style.display = 'block'
+  }
+
+  const handleOutsideClick = (e: MouseEvent) => {
+    let insertIconBtn: HTMLElement | null = null
+    const controlItems = leftUpControl.querySelectorAll('.ql-mind-map-control-item')
+
+    controlItems.forEach((item) => {
+      const iconEl = item.querySelector('i')
+      if (iconEl && iconEl.className.includes('insert-icon')) {
+        insertIconBtn = item as HTMLElement
+      }
+    })
+
+    if (!iconPanel.contains(e.target as Node) && (!insertIconBtn || !insertIconBtn.contains(e.target as Node))) {
+      iconPanel.style.display = 'none'
+      document.removeEventListener('click', handleOutsideClick)
+    }
+  }
+  document.removeEventListener('click', handleOutsideClick)
+  document.addEventListener('click', handleOutsideClick)
+}
+
+function handleSetLayoutBtn(blot: MindMapPlaceholderBlot): void {
+  const handler = controlPanelHandlers.get(blot)
+  const leftUpControl = blot.domNode.querySelector('.ql-mind-map-left-up-control') as HTMLElement
+  let layoutPanel = leftUpControl.querySelector('.ql-mind-map-layout-panel') as HTMLElement
+  const heightStr = blot.domNode.getAttribute('height') || '500'
+  const height = Number.parseInt(heightStr.replace(/[^\d.]/g, ''), 10) || 500
+
+  if (!layoutPanel) {
+    layoutPanel = document.createElement('div')
+    layoutPanel.className = 'ql-mind-map-layout-panel'
+
+    const layouts = [
+      {
+        name: 'logicalStructure',
+        displayName: handler?.getText('logicalStructureLayout'),
+        icon: logicalStructureIcon,
+      },
+      {
+        name: 'catalogOrganization',
+        displayName: handler?.getText('catalogOrganizationLayout'),
+        icon: catalogOrganizationIcon,
+      },
+      {
+        name: 'mindMap',
+        displayName: handler?.getText('mindMapLayout'),
+        icon: mindMapIcon,
+      },
+      {
+        name: 'organizationStructure',
+        displayName: handler?.getText('organizationStructureLayout'),
+        icon: organizationStructureIcon,
+      },
+      {
+        name: 'timeline',
+        displayName: handler?.getText('timelineLayout'),
+        icon: timelineIcon,
+      },
+      {
+        name: 'fishbone',
+        displayName: handler?.getText('fishboneLayout'),
+        icon: fishboneIcon,
+      },
+    ]
+
+    layouts.forEach((layout) => {
+      const layoutItem = document.createElement('div')
+      layoutItem.className = 'ql-mind-map-layout-item'
+
+      const iconContainer = document.createElement('div')
+      iconContainer.className = 'ql-mind-map-layout-icon-container'
+
+      const img = document.createElement('div')
+      img.className = 'ql-mind-map-layout-icon'
+      img.style.backgroundImage = `url(${layout.icon})`
+
+      iconContainer.appendChild(img)
+
+      const nameText = document.createElement('div')
+      nameText.className = 'ql-mind-map-layout-name'
+      nameText.textContent = layout.displayName
+
+      layoutItem.appendChild(iconContainer)
+      layoutItem.appendChild(nameText)
+      layoutItem.addEventListener('click', () => {
+        blot.mindMap.setLayout(layout.name)
+        blot.data = blot.mindMap.getData({})
+        blot.domNode.setAttribute('data-mind-map', JSON.stringify(blot.data))
+        layoutPanel.style.display = 'none'
+      })
+      layoutPanel.appendChild(layoutItem)
+    })
+    leftUpControl.appendChild(layoutPanel)
+    if (height < 395) {
+      layoutPanel.style.height = `${height - 130}px`
+    }
+    else {
+      layoutPanel.style.height = '270px'
+    }
+  }
+  else {
+    if (height < 395) {
+      layoutPanel.style.height = `${height - 130}px`
+    }
+    else {
+      layoutPanel.style.height = '270px'
+    }
+    layoutPanel.style.display = 'block'
+  }
+
+  const handleOutsideClick = (e: MouseEvent) => {
+    let setLayoutBtn: HTMLElement | null = null
+    const controlItems = leftUpControl.querySelectorAll('.ql-mind-map-control-item')
+
+    controlItems.forEach((item) => {
+      const iconEl = item.querySelector('i')
+      if (iconEl && iconEl.className.includes('set-layout-icon')) {
+        setLayoutBtn = item as HTMLElement
+      }
+    })
+
+    if (!layoutPanel.contains(e.target as Node) && (!setLayoutBtn || !setLayoutBtn.contains(e.target as Node))) {
+      layoutPanel.style.display = 'none'
+      document.removeEventListener('click', handleOutsideClick)
+    }
+  }
+  document.removeEventListener('click', handleOutsideClick)
+  document.addEventListener('click', handleOutsideClick)
+}
+
+function handlePanelStatusBtn(blot: MindMapPlaceholderBlot): void {
+  const leftUpControl = blot.domNode.querySelector('.ql-mind-map-left-up-control') as HTMLElement | null
+  const control = blot.domNode.querySelector('.ql-mind-map-control') as HTMLElement | null
+  const panelStatusIcon = blot.domNode.querySelector('.ql-mind-map-control-panel-status') as HTMLElement | null
+  if (!leftUpControl || !control) return
+  const isVisible = leftUpControl.style.display !== 'none' && control.style.display !== 'none'
+  if (isVisible) {
+    leftUpControl.style.display = 'none'
+    control.style.display = 'none'
+    if (panelStatusIcon) {
+      panelStatusIcon.style.backgroundImage = `url(${contractIcon})`
+    }
+  }
+  else {
+    leftUpControl.style.display = 'inline-flex'
+    control.style.display = 'flex'
+    if (panelStatusIcon) {
+      panelStatusIcon.style.backgroundImage = `url(${expandIcon})`
+    }
+  }
+}
+
+function handleScreenTypeBtn(blot: MindMapPlaceholderBlot): void {
+  const screenTypeIconElement = document.querySelector('.ql-mind-map-control-screen-type') as HTMLElement | null
+  const mindMapContainer = blot.domNode
+  if (!screenTypeIconElement || !mindMapContainer) return
+  const isFullscreen = mindMapContainer.style.position === 'fixed'
+  if (isFullscreen) {
+    const originalPosition = mindMapContainer.getAttribute('data-original-position')
+    const originalWidth = mindMapContainer.getAttribute('data-original-width')
+    const originalHeight = mindMapContainer.getAttribute('data-original-height')
+    if (originalPosition && originalWidth && originalHeight) {
+      mindMapContainer.style.position = originalPosition
+      mindMapContainer.style.width = originalWidth
+      mindMapContainer.style.height = originalHeight
+      mindMapContainer.style.zIndex = '0'
+    }
+    screenTypeIconElement.style.backgroundImage = `url(${fullScreenIcon})`
+  }
+  else {
+    mindMapContainer.setAttribute('data-original-position', mindMapContainer.style.position || '')
+    mindMapContainer.setAttribute('data-original-width', mindMapContainer.style.width || '')
+    mindMapContainer.setAttribute('data-original-height', mindMapContainer.style.height || '')
+    mindMapContainer.style.position = 'fixed'
+    mindMapContainer.style.top = '0'
+    mindMapContainer.style.left = '0'
+    mindMapContainer.style.width = '100vw'
+    mindMapContainer.style.height = '100vh'
+    mindMapContainer.style.zIndex = '100'
+    screenTypeIconElement.style.backgroundImage = `url(${smallScreenIcon})`
+  }
+  blot.mindMap.renderer.setRootNodeCenter()
+  blot.mindMap.resize()
 }
