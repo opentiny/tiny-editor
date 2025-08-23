@@ -18,7 +18,6 @@ cp .env.example .env
 | `MONGODB_URL` | ✅ | - | MongoDB 连接字符串 |
 | `MONGODB_DB` | ✅ | - | MongoDB 数据库名称 |
 | `MONGODB_COLLECTION` | ✅ | - | MongoDB 集合名称 |
-| `YDOC_TEXT_KEY` | ❌ | `tiny-editor` | Yjs 文档中文本内容的键名,已与前端对应 |
 | `GC` | ❌ | `true` | 是否启用 Yjs 垃圾回收 |
 
 ### Docker 容器化部署(推荐)
