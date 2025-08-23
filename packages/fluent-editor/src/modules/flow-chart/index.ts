@@ -6,10 +6,12 @@ import '@logicflow/extension/lib/style/index.css'
 export class FlowChartModule {
   quill: Quill
   toolbar: any
+  static currentQuill: Quill | null = null
 
   constructor(quill: Quill, options: any) {
     this.quill = quill
     this.toolbar = quill.getModule('toolbar')
+    FlowChartModule.currentQuill = quill
     const domNode = document.querySelector('.ql-flow-chart')
 
     if (domNode) {
@@ -31,8 +33,9 @@ export class FlowChartModule {
           { id: 'edge1', sourceNodeId: 'node1', targetNodeId: 'node2', type: 'polyline' },
         ],
       }
-      this.quill.insertEmbed(range.index, 'flow-chart-placeholder', defaultData, 'user')
-      this.quill.setSelection(range.index + 1, 0)
+      this.quill.insertText(range.index, '\n', 'user')
+      this.quill.insertEmbed(range.index + 1, 'flow-chart-placeholder', defaultData, 'user')
+      this.quill.insertText(range.index + 2, '\n', 'user')
     }
   }
 }

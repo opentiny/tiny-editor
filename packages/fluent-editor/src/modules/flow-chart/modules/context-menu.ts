@@ -12,8 +12,9 @@ class FlowChartContextMenuHandler {
   }
 
   constructor(private quill: FluentEditor, private blot: FlowChartPlaceholderBlot) {
+    const i18nModule = this.quill.getModule('i18n') as I18N
     registerFlowChartI18N(I18N)
-    this.lang = 'en-US'
+    this.lang = i18nModule.options.lang
     this.texts = this.resolveTexts()
     this.quill.emitter.on(CHANGE_LANGUAGE_EVENT, (lang: string) => {
       this.lang = lang
@@ -173,7 +174,6 @@ function handleDeleteContent(blot: FlowChartPlaceholderBlot): void {
     }
     blot.data = blot.flowChart.getGraphData()
     blot.domNode.setAttribute('data-flow-chart', JSON.stringify(blot.data))
-    blot.scroll.update([], {})
   }
   hideContextMenu(blot)
 }
@@ -183,7 +183,6 @@ function handleDeleteNode(blot: FlowChartPlaceholderBlot): void {
     blot.flowChart.deleteNode(blot.currentElement.data.id)
     blot.data = blot.flowChart.getGraphData()
     blot.domNode.setAttribute('data-flow-chart', JSON.stringify(blot.data))
-    blot.scroll.update([], {})
   }
   hideContextMenu(blot)
 }
@@ -193,7 +192,6 @@ function handleDeleteEdge(blot: FlowChartPlaceholderBlot): void {
     blot.flowChart.deleteEdge(blot.currentElement.data.id)
     blot.data = blot.flowChart.getGraphData()
     blot.domNode.setAttribute('data-flow-chart', JSON.stringify(blot.data))
-    blot.scroll.update([], {})
   }
   hideContextMenu(blot)
 }

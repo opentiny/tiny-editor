@@ -1,3 +1,18 @@
+@mixin flowChartControlBackground {
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+}
+@mixin flowChartControlItem {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5px 5px;
+  border-radius: inherit;
+  transition: all 0.2s ease;
+}
 .ql-flow-chart {
   position: relative;
   width: 100%;
@@ -7,54 +22,29 @@
 .ql-flow-chart-control {
   position: absolute;
   top: 8px;
-  right: 13px;
-  background-color: rgba(255, 255, 255, 0.85);
-  border-radius: 8px;
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+  right: 50px;
   padding: 0 15px;
-  display: inline-flex;
+  display: none;
   gap: 6px;
   white-space: nowrap;
   pointer-events: auto;
+  padding: 5px 5px;
+  @include flowChartControlBackground;
   .ql-flow-chart-control-item {
-    align-items: center;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 5px 10px;
-    transition: all 0.2s ease;
-    .ql-flow-chart-control-text {
-      height: 20px;
-      font-size: 12px;
+    @include flowChartControlItem;
+  }
+}
+.ql-flow-chart {
+  .lf-dndpanel {
+    display: none;
+    top: 15%;
+    .ql-flow-chart-control-item {
+      height: 35.99px;
+      @include flowChartControlItem;
     }
   }
 }
-.ql-flow-chart-left-down-control {
-  position: absolute;
-  bottom: 6px;
-  left: 6px;
-  background-color: rgba(255, 255, 255, 0.85);
-  border-radius: 8px;
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
-  display: inline-flex;
-  gap: 6px;
-  white-space: nowrap;
-  pointer-events: auto;
-  .ql-flow-chart-control-item {
-    align-items: center;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 5px 5px;
-    transition: all 0.2s ease;
-    .ql-flow-chart-control-text {
-      height: 20px;
-      font-size: 12px;
-    }
-  }
-}
+
 .ql-flow-chart-control-icon {
   width: 16px;
   height: 16px;
@@ -78,20 +68,64 @@
 .ql-flow-chart-control-item:hover {
   background-color: #efefef;
 }
-.ql-flow-chart-control-export {
-  background-image: url('../icons/exportIcon.png');
-}
-.ql-flow-chart-control-import {
-  background-image: url('../icons/importIcon.png');
-}
 .ql-flow-chart .lf-dndpanel .lf-dnd-text {
   font-size: 12px;
 }
 
-.ql-flow-chart-control-zoomOut {
+.ql-flow-chart-edge-panel {
+  width: 130px;
+  position: absolute;
+  left: 50px;
+  top: 220px;
+  padding: 3px;
+  z-index: 1000;
+  max-height: 400px;
+  @include flowChartControlBackground;
+  .ql-flow-chart-edge-item {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid #eee;
+    border-radius: inherit;
+    padding: 2px;
+    transition: box-shadow 0.3s ease;
+    .ql-flow-chart-edge-type-icon {
+      width: 20px;
+      height: 20px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+  .ql-flow-chart-edge-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+.ql-flow-chart .lf-text-input {
+  display: none !important;
+}
+.ql-flow-chart-right-up-control {
+  position: absolute;
+  top: 8px;
+  right: 6px;
+  display: inline-flex;
+  gap: 6px;
+  white-space: nowrap;
+  pointer-events: auto;
+  padding: 5px 5px;
+  @include flowChartControlBackground;
+  .ql-flow-chart-control-item {
+    @include flowChartControlItem;
+  }
+}
+
+.ql-flow-chart-control-zoom-out {
   background-image: url('../icons/zoomOutIcon.png');
 }
-.ql-flow-chart-control-zoomIn {
+.ql-flow-chart-control-zoom-in {
   background-image: url('../icons/zoomInIcon.png');
 }
 .ql-flow-chart-control-fit {
@@ -103,6 +137,12 @@
 .ql-flow-chart-control-forward {
   background-image: url('../icons/forwardIcon.png');
 }
-.ql-flow-chart .lf-text-input {
-  display: none !important;
+.ql-flow-chart-control-set-edge-type {
+  background-image: url('../icons/lineIcon.png');
+}
+.ql-flow-chart-control-panel-status {
+  background-image: url('../icons/contractIcon.png');
+}
+.ql-flow-chart-control-screen-type {
+  background-image: url('../icons/fullScreenIcon.png');
 }

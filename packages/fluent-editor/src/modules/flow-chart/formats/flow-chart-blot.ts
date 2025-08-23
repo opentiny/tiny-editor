@@ -2,11 +2,20 @@ import type { Root } from 'parchment'
 import type { BlockEmbed as TypeBlockEmbed } from 'quill/blots/block'
 import type FluentEditor from '../../../core/fluent-editor'
 import LogicFlow from '@logicflow/core'
-import { DndPanel, SelectionSelect } from '@logicflow/extension'
+import { DndPanel, SelectionSelect, Snapshot } from '@logicflow/extension'
 import Quill from 'quill'
+import circleIcon from '../icons/circleIcon.png'
+import contractIcon from '../icons/contractIcon.png'
+import diamondIcon from '../icons/diamondIcon.png'
+import ellipseIcon from '../icons/ellipseIcon.png'
+import expandIcon from '../icons/expandIcon.png'
+import rectangleIcon from '../icons/rectangleIcon.png'
+import selectRegionIcon from '../icons/selectRegionIcon.png'
+import { FlowChartModule } from '../index'
 import { initContextMenu } from '../modules/context-menu'
 import { createControlPanel } from '../modules/control-panel'
 import { FlowChartResizeAction } from '../modules/custom-resize-action'
+
 import '../style/flow-chart.scss'
 
 const BlockEmbed = Quill.import('blots/embed') as typeof TypeBlockEmbed
@@ -22,6 +31,8 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
   width: number = 100
   height: number = 500
   parentObserver: MutationObserver | null = null
+  nextPObserver: MutationObserver | null = null
+  quill: FluentEditor | null = null
 
   constructor(scroll: Root, domNode: HTMLElement) {
     super(scroll, domNode)
@@ -32,8 +43,10 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
     this.domNode.style.height = `${this.height}px`
     this.domNode.style.maxWidth = '100%'
     this.domNode.style.border = '1px solid #e8e8e8'
-
+    this.domNode.setAttribute('contenteditable', 'false')
     this.data = FlowChartPlaceholderBlot.value(this.domNode)
+    this.quill = FlowChartModule.currentQuill as FluentEditor
+    console.warn('this.quill', this.quill)
     this.initFlowChart()
   }
 
@@ -63,6 +76,7 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
       node.setAttribute('height', String(value.height))
       node.style.height = `${value.height}px`
     }
+    node.setAttribute('contenteditable', 'false')
     return node
   }
 
@@ -99,26 +113,104 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
         type: 'dot',
         size: 20,
       },
-      plugins: [DndPanel, SelectionSelect],
+      plugins: [DndPanel, SelectionSelect, Snapshot],
     })
+    this.flowChart.setPatternItems([
+      {
+        icon: selectRegionIcon,
+        callback: () => {
+          this.flowChart.openSelectionSelect()
+          this.flowChart.once('selection:selected', () => {
+            this.flowChart.closeSelectionSelect()
+          })
+        },
+      },
+      {
+        type: 'rect',
+        text: '矩形',
+        icon: rectangleIcon,
+      },
+      {
+        type: 'circle',
+        text: '圆形',
+        icon: circleIcon,
+      },
+      {
+        type: 'ellipse',
+        text: '椭圆',
+        icon: ellipseIcon,
+      },
+      {
+        type: 'diamond',
+        text: '菱形',
+        icon: diamondIcon,
+      },
+    ])
     new FlowChartResizeAction(this)
-    const quill = this.scroll as unknown as FluentEditor
-    createControlPanel(this, quill) // 创建控制面板
-    initContextMenu(this, quill) // 初始化右键菜单
+    createControlPanel(this, this.quill) // 创建控制面板
+    initContextMenu(this, this.quill) // 初始化右键菜单
     this.observeOwnParentChange()
+    this.observeNextPElement()
+    this.addMouseHoverEvents()
     this.flowChart.render(this.data)
     this.flowChart.on('graph:updated', () => {
       this.data = this.flowChart.getGraphData()
       this.domNode.setAttribute('data-flow-chart', JSON.stringify(this.data))
-      this.scroll.update([], {})
     })
     this.flowChart.on('history:change', () => {
       this.data = this.flowChart.getGraphData()
       this.domNode.setAttribute('data-flow-chart', JSON.stringify(this.data))
-      this.scroll.update([], {})
     })
     this.flowChart.on('node:dbclick', this.handleNodeDblClick.bind(this))
     this.flowChart.on('edge:dbclick', this.handleNodeDblClick.bind(this))
+    this.domNode.addEventListener('click', (e) => {
+      if (this.quill) {
+        const flowChartBlot = Quill.find(this.domNode)
+        const index = this.quill.getIndex(flowChartBlot as FlowChartPlaceholderBlot)
+        if (index && typeof index === 'number') {
+          this.quill.setSelection(index + 1, 0)
+        }
+      }
+    })
+  }
+
+  addMouseHoverEvents(): void {
+    this.domNode.addEventListener('mouseenter', () => {
+      this.showControlPanel()
+    })
+
+    this.domNode.addEventListener('mouseleave', () => {
+      this.hideControlPanel()
+    })
+  }
+
+  getControlElements(): { leftUpControl: HTMLElement | null, control: HTMLElement | null, panelStatusIcon: HTMLElement | null } {
+    const leftUpControl = this.domNode.querySelector('.lf-dndpanel') as HTMLElement | null
+    const control = this.domNode.querySelector('.ql-flow-chart-control') as HTMLElement | null
+    const panelStatusIcon = this.domNode.querySelector('.ql-flow-chart-control-panel-status') as HTMLElement | null
+    return { leftUpControl, control, panelStatusIcon }
+  }
+
+  showControlPanel(): void {
+    const { leftUpControl, control, panelStatusIcon } = this.getControlElements()
+    if (!leftUpControl || !control) return
+
+    leftUpControl.style.display = 'block'
+    control.style.display = 'flex'
+    if (panelStatusIcon) {
+      panelStatusIcon.style.backgroundImage = `url(${expandIcon})`
+    }
+  }
+
+  hideControlPanel(): void {
+    const { leftUpControl, control, panelStatusIcon } = this.getControlElements()
+    if (!leftUpControl || !control) return
+
+    leftUpControl.style.display = 'none'
+    control.style.display = 'none'
+    if (panelStatusIcon) {
+      panelStatusIcon.style.backgroundImage = `url(${contractIcon})`
+    }
   }
 
   observeOwnParentChange(): void {
@@ -138,7 +230,6 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
   }
 
   observeParentAlignment(): void {
-    // 移除旧的监听器
     if (this.parentObserver) {
       this.parentObserver.disconnect()
     }
@@ -151,7 +242,6 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
       })
     })
 
-    // 保存新的监听器引用
     this.parentObserver = observer
 
     const parent = this.domNode.parentElement
@@ -160,7 +250,6 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
         attributes: true,
         attributeFilter: ['class'],
       })
-      // 强制更新一次对齐样式
       this.updateAlignmentStyle()
     }
   }
@@ -183,6 +272,39 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
       this.domNode.style.marginLeft = '0'
       this.domNode.style.marginRight = 'auto'
     }
+  }
+
+  observeNextPElement(): void {
+    if (this.nextPObserver) {
+      this.nextPObserver.disconnect()
+    }
+
+    const parentElement = this.domNode.parentElement
+    if (!parentElement) {
+      return
+    }
+
+    const trackedParentElement = parentElement
+
+    const parentElementId = parentElement.getAttribute('id') || `flow-chart-parent-${Date.now()}`
+    parentElement.setAttribute('id', parentElementId)
+
+    const observer = new MutationObserver(() => {
+      if (!document.contains(trackedParentElement)) {
+        const elementById = document.getElementById(parentElementId)
+        if (!elementById) {
+          this.remove()
+          observer.disconnect()
+        }
+      }
+    })
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    })
+
+    this.nextPObserver = observer
   }
 
   // 处理节点双击事件
@@ -262,6 +384,10 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
     }
     const editInputs = document.querySelectorAll('.ql-flow-chart-edit-input')
     editInputs.forEach(input => input.remove())
+    if (this.nextPObserver) {
+      this.nextPObserver.disconnect()
+      this.nextPObserver = null
+    }
   }
 
   remove() {

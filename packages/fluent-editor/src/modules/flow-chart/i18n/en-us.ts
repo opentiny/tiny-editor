@@ -1,8 +1,7 @@
 export const FLOW_CHART_EN_US = {
   'flowChart.controlPanel.export': 'Export',
   'flowChart.controlPanel.import': 'Import',
-  'flowChart.controlPanel.exportTitle': 'Export Flow Chart',
-  'flowChart.controlPanel.importTitle': 'Import Flow Chart',
+  'flowChart.controlPanel.setEdgeTypeTitle': 'Set Edge Type',
   'flowChart.dndPanel.selection': 'Selection',
   'flowChart.dndPanel.rectangle': 'Rectangle',
   'flowChart.dndPanel.circle': 'Circle',
@@ -22,4 +21,6 @@ export const FLOW_CHART_EN_US = {
   'flowChart.contextMenu.deleteContent': 'Delete',
   'flowChart.contextMenu.deleteNode': 'Delete Node',
   'flowChart.contextMenu.deleteEdge': 'Delete Edge',
+  'flowChart.controlPanel.panelStatusTitle': 'Panel Status',
+  'flowChart.controlPanel.screenTypeTitle': 'Screen Type',
 }

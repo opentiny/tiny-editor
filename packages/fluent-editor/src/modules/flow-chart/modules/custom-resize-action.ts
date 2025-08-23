@@ -1,5 +1,5 @@
-const MIN_WIDTH = 300
-const MIN_HEIGHT = 200
+const MIN_WIDTH = 350
+const MIN_HEIGHT = 290
 
 export class FlowChartResizeAction {
   topLeftHandle: HTMLElement
@@ -23,6 +23,11 @@ export class FlowChartResizeAction {
     this.init()
   }
 
+  isFullscreen(): boolean {
+    const container = this.blot.domNode
+    return container.style.position === 'fixed' && container.style.width === '100vw' && container.style.height === '100vh'
+  }
+
   init() {
     const container = this.blot.domNode
     container.style.position = 'relative'
@@ -37,15 +42,17 @@ export class FlowChartResizeAction {
     const box = document.createElement('div')
     box.classList.add('ql-flow-chart-resize-handle')
     box.setAttribute('data-position', position)
-    box.style.cursor = cursor
-    box.style.position = 'absolute'
-    box.style.width = '10px'
-    box.style.height = '10px'
-    box.style.background = '#4285f4'
-    box.style.border = '1px solid white'
-    box.style.borderRadius = '50%'
-    box.style.zIndex = '100'
-    box.style.userSelect = 'none'
+    Object.assign(box.style, {
+      cursor,
+      position: 'absolute',
+      width: '10px',
+      height: '10px',
+      background: '#4285f4',
+      border: '1px solid white',
+      borderRadius: '50%',
+      zIndex: '99',
+      userSelect: 'none',
+    })
     box.addEventListener('mousedown', this.onMouseDown.bind(this))
     return box
   }
@@ -73,6 +80,9 @@ export class FlowChartResizeAction {
   }
 
   onMouseDown(event: MouseEvent) {
+    if (this.isFullscreen()) {
+      return
+    }
     if (!(event.target instanceof HTMLElement)) {
       return
     }
@@ -135,7 +145,6 @@ export class FlowChartResizeAction {
     this.blot.data.width = newWidth
     this.blot.data.height = newHeight
     container.setAttribute('data-flow-chart', JSON.stringify(this.blot.data))
-    this.blot.scroll.update([], {})
   }
 
   onMouseUp() {

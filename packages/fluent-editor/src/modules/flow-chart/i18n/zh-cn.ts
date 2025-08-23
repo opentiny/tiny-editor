@@ -1,8 +1,7 @@
 export const FLOW_CHART_ZH_CN = {
   'flowChart.controlPanel.export': '导出',
   'flowChart.controlPanel.import': '导入',
-  'flowChart.controlPanel.exportTitle': '导出流程图',
-  'flowChart.controlPanel.importTitle': '导入流程图',
+  'flowChart.controlPanel.setEdgeTypeTitle': '设置边类型',
   'flowChart.dndPanel.selection': '选区',
   'flowChart.dndPanel.rectangle': '矩形',
   'flowChart.dndPanel.circle': '圆形',
@@ -22,4 +21,6 @@ export const FLOW_CHART_ZH_CN = {
   'flowChart.contextMenu.deleteContent': '删除',
   'flowChart.contextMenu.deleteNode': '删除节点',
   'flowChart.contextMenu.deleteEdge': '删除边',
+  'flowChart.controlPanel.panelStatusTitle': '面板状态',
+  'flowChart.controlPanel.screenTypeTitle': '屏幕类型',
 }
