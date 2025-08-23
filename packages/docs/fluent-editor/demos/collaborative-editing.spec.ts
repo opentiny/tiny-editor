@@ -2,6 +2,8 @@ import { type Browser, expect, type Page, test } from '@playwright/test'
 
 const DEMO_URL = 'http://localhost:5173/tiny-editor/docs/demo/collaborative-editing'
 
+test.describe.configure({ mode: 'serial' })
+
 async function openTwoPages(browser: Browser): Promise<[Page, Page]> {
   const page1 = await browser.newPage()
   const page2 = await browser.newPage()
