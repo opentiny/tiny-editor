@@ -1,9 +1,8 @@
-// @ts-nocheck
-import { expect, test } from '@playwright/test'
+import { type Browser, expect, type Page, test } from '@playwright/test'
 
 const DEMO_URL = 'http://localhost:5173/tiny-editor/docs/demo/collaborative-editing'
 
-async function openTwoPages(browser) {
+async function openTwoPages(browser: Browser): Promise<[Page, Page]> {
   const page1 = await browser.newPage()
   const page2 = await browser.newPage()
   await Promise.all([
@@ -17,17 +16,17 @@ async function openTwoPages(browser) {
   return [page1, page2]
 }
 
-async function typeSync(page1, page2, text) {
+async function typeSync(page1: Page, page2: Page, text: string): Promise<void> {
   await page1.locator('.ql-editor').click()
   await page1.keyboard.type(text)
   await expect.poll(async () => (await page2.locator('.ql-editor').textContent() || '').includes(text)).toBeTruthy()
 }
 
-async function selectAll(page) {
+async function selectAll(page: Page): Promise<void> {
   await page.locator('.ql-editor').press('ControlOrMeta+a')
 }
 
-let p1, p2
+let p1: Page, p2: Page
 
 test.beforeEach(async ({ browser }) => {
   [p1, p2] = await openTwoPages(browser)
@@ -77,7 +76,7 @@ test('clean collaborative-editing test', async () => {
 })
 
 // <hN> 或带 .ql-header-N 的段落
-async function headingMatched(page, level, text) {
+async function headingMatched(page: Page, level: number, text: string): Promise<boolean> {
   const editor = page.locator('.ql-editor')
   if (await editor.locator(`h${level}:has-text("${text}")`).count() > 0) return true
   if (await editor.locator(`.ql-header-${level}:has-text("${text}")`).count() > 0) return true
@@ -119,7 +118,9 @@ test('size collaborative-editing test', async () => {
     await p1.getByRole('button', { name: current }).click()
     await p1.getByRole('button', { name: next }).click()
 
-    const size = next.match(/\d+px/)[0]
+    const sizeMatch = next.match(/\d+px/)
+    if (!sizeMatch) continue
+    const size = sizeMatch[0]
     if (size === '12px') {
       await expect.poll(async () => {
         const hasParagraph = await p2.locator('.ql-editor p:has-text("HEAD")').count()
@@ -160,7 +161,7 @@ test('line-height collaborative-editing test', async () => {
     await typeSync(p1, p2, fmt)
     await selectAll(p1)
     await p1.getByLabel(fmt).click()
-    const tagMap = { bold: 'strong', italic: 'em', underline: 'u', strike: '.ql-custom-strike' }
+    const tagMap: Record<string, string> = { bold: 'strong', italic: 'em', underline: 'u', strike: '.ql-custom-strike' }
     const tag = tagMap[fmt]
     await expect.poll(async () => (await p2.locator(`.ql-editor ${tag}`).count()) > 0).toBeTruthy()
   })
