@@ -28,7 +28,21 @@ cp .env.example .env
 docker compose up --build
 ```
 
-### 本地开发部署
+### 本地部署
+
+启动 mongodb
+
+```bash
+docker run -d \
+  --name mongodb \
+  -p 27017:27017 \
+  -e MONGO_INITDB_ROOT_USERNAME=admin \
+  -e MONGO_INITDB_ROOT_PASSWORD=admin!123 \
+  -v mongodb_data:/data/db \
+  mongo:latest
+```
+
+启动本地服务器
 
 ```bash
 npm install
@@ -45,7 +59,6 @@ import TinyEditor from '@opentiny/fluent-editor'
 const editor = new TinyEditor('#editor', {
   theme: 'snow',
   modules: {
-    cursors: true,
     collaboration: {
       provider: {
         type: 'websocket',
@@ -61,43 +74,26 @@ const editor = new TinyEditor('#editor', {
 
 ## 开发指南
 
-### 自定义持久化
+### MongoDB 持久化拓展
 
-项目使用 [`MongoPersistence`](src/persistence/mongo.ts) 类实现 MongoDB 持久化。你可以实现 `Persistence` 接口来支持其他数据库：
+当前项目在 [`src/persistence/mongo.ts`](./src/persistence/mongo.ts) 类实现 MongoDB 持久化，基于 [`y-mongodb-provider`](https://github.com/MaxNoetzold/y-mongodb-provider) 库。
 
-```typescript
-interface Persistence {
-  bindState: (docName: string, doc: Y.Doc) => Promise<void>
-  writeState: (docName: string, doc: Y.Doc) => Promise<void>
-  close?: () => Promise<void>
-}
-```
+需要拓展当前持久化能力时，可参考 API 文档：[y-mongodb-provider API](https://github.com/MaxNoetzold/y-mongodb-provider?tab=readme-ov-file#api)
 
-#### 核心方法说明
+### 自定义持久化接口
 
-- `bindState`: 文档初始化时调用，从数据库加载历史状态到 Y.Doc
-- `writeState`: 文档变更时调用，将 Y.Doc 状态保存到数据库
-- `close`: 服务器关闭时调用，清理资源
+要支持其他数据库（如 PostgreSQL、Redis 等），需要实现 `Persistence` 接口
 
-#### Yjs 核心 API
+| 方法名       | 参数                              | 返回值          | 说明                                         |
+| ------------ | --------------------------------- | --------------- | -------------------------------------------- |
+| `bindState`  | `docName: string`<br>`doc: Y.Doc` | `Promise<void>` | 文档初始化时调用，加载历史状态并设置实时同步 |
+| `writeState` | `docName: string`<br>`doc: Y.Doc` | `Promise<void>` | 手动保存文档状态（可选使用）                 |
+| `close`      | -                                 | `Promise<void>` | 服务器关闭时调用，清理资源                   |
 
-```typescript
-import * as Y from 'yjs'
+### 更多社区持久化支持
 
-// 将更新应用到文档
-Y.applyUpdate(ydoc, update)
+[`adapter for Yjs`](https://github.com/search?q=adapter%20for%20Yjs&type=repositories)：
 
-// 将文档编码为更新
-const update = Y.encodeStateAsUpdate(ydoc)
-
-// 获取文档文本内容
-const text = ydoc.getText('content').toString()
-```
-
-### 替代方案
-
-如果需要更强大的功能或其他持久化支持，可以考虑以下开源方案：
-
-- **[@y/websocket-server](https://github.com/yjs/y-websocket-server/)**: 官方 WebSocket 服务器
-- **[y-redis](https://github.com/yjs/y-redis)**
-- **[y-postgresql](https://github.com/MaxNoetzold/y-postgresql)**
+- [y-mongodb-provider](https://github.com/yjs/y-mongodb-provider)
+- [y-redis](https://github.com/yjs/y-redis)
+- [y-postgres](https://github.com/MaxNoetzold/y-postgresql)
