@@ -1,12 +1,16 @@
-import { type Browser, expect, type Page, test } from '@playwright/test'
+import { type Browser, chromium, expect, type Page, test } from '@playwright/test'
 
 const DEMO_URL = 'http://localhost:5173/tiny-editor/docs/demo/collaborative-editing'
 
 test.describe.configure({ mode: 'serial' })
 
-async function openTwoPages(browser: Browser): Promise<[Page, Page]> {
-  const page1 = await browser.newPage()
-  const page2 = await browser.newPage()
+async function openTwoPages(): Promise<[Page, Page, Browser, Browser]> {
+  const browser1 = await chromium.launch()
+  const browser2 = await chromium.launch()
+
+  const page1 = await browser1.newPage()
+  const page2 = await browser2.newPage()
+
   await Promise.all([
     page1.goto(DEMO_URL),
     page2.goto(DEMO_URL),
@@ -15,7 +19,7 @@ async function openTwoPages(browser: Browser): Promise<[Page, Page]> {
   const editor2 = page2.locator('.ql-editor')
   await expect(editor1).toBeVisible()
   await expect(editor2).toBeVisible()
-  return [page1, page2]
+  return [page1, page2, browser1, browser2]
 }
 
 async function typeSync(page1: Page, page2: Page, text: string): Promise<void> {
@@ -28,10 +32,10 @@ async function selectAll(page: Page): Promise<void> {
   await page.locator('.ql-editor').press('ControlOrMeta+a')
 }
 
-let p1: Page, p2: Page
+let p1: Page, p2: Page, b1: Browser, b2: Browser
 
-test.beforeEach(async ({ browser }) => {
-  [p1, p2] = await openTwoPages(browser)
+test.beforeEach(async () => {
+  [p1, p2, b1, b2] = await openTwoPages()
 })
 
 test.afterEach(async () => {
@@ -45,8 +49,8 @@ test.afterEach(async () => {
     }
   }
   await Promise.all([
-    p1?.close().catch(() => {}),
-    p2?.close().catch(() => {}),
+    b1?.close().catch(() => {}),
+    b2?.close().catch(() => {}),
   ])
 })
 
@@ -158,7 +162,8 @@ test('line-height collaborative-editing test', async () => {
   await expect.poll(async () => (await p2.locator('.ql-editor p[style*="line-height: 1.15"]').count()) > 0).toBeTruthy()
 })
 
-;['bold', 'italic', 'underline', 'strike'].forEach((fmt) => {
+const formatTypes = ['bold', 'italic', 'underline', 'strike']
+formatTypes.forEach((fmt) => {
   test(`${fmt} collaborative-editing test`, async () => {
     await typeSync(p1, p2, fmt)
     await selectAll(p1)
@@ -179,7 +184,7 @@ test('background collaborative-editing test', async () => {
   await selectAll(p1)
   await p1.locator('.ql-background > .ql-picker-expand').click()
   await p1.getByRole('button', { name: 'rgb(229, 239, 255)' }).click()
-  await expect.poll(async () => (await p2.locator('.ql-editor p span[style*="background-color"]').count()) > 0).toBeTruthy()
+  await expect.poll(async () => (await p2.locator('.ql-editor p span[style*="background-color: rgb(229, 239, 255)"]').count()) > 0).toBeTruthy()
 })
 
 test('align collaborative-editing test', async () => {
@@ -243,10 +248,10 @@ test('link collaborative-editing test', async () => {
   await p1.getByLabel('link', { exact: true }).click()
   const promptInput = p1.locator('input[type="text"]:visible')
   if (await promptInput.first().isVisible()) {
-    await promptInput.first().fill('http://localhost:5173/tiny-editor/docs/demo/collaborative-editing')
+    await promptInput.first().fill(DEMO_URL)
     await promptInput.first().press('Enter')
   }
-  await expect.poll(async () => (await p2.locator('.ql-editor p a[href="http://localhost:5173/tiny-editor/docs/demo/collaborative-editing"]').count()) > 0).toBeTruthy()
+  await expect.poll(async () => (await p2.locator(`.ql-editor p a[href="${DEMO_URL}"]`).count()) > 0).toBeTruthy()
 })
 
 test('blockquote collaborative-editing test', async () => {
