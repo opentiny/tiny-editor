@@ -1,5 +1,5 @@
 import type { Db } from 'mongodb'
-import type { Persistence } from './index.js'
+import type { Persistence } from './index.ts'
 import { MongoClient } from 'mongodb'
 import { MongodbPersistence } from 'y-mongodb-provider'
 import * as Y from 'yjs'
