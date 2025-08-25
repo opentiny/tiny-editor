@@ -5,4 +5,5 @@ COPY package.json ./
 RUN npm install --no-package-lock
 COPY . .
 
-CMD [ "npm", "start" ]
+RUN npm run build
+CMD [ "npx", "pm2-runtime", "start", "ecosystem.config.cjs" ]

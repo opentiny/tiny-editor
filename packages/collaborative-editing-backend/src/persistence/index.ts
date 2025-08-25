@@ -1,6 +1,7 @@
 import type * as Y from 'yjs'
 
 export interface Persistence {
+  connect: () => Promise<void>
   bindState: (docName: string, doc: Y.Doc) => Promise<void>
   writeState: (docName: string, doc: Y.Doc) => Promise<void>
   close?: () => Promise<void>

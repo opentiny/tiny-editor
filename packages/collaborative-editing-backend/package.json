@@ -3,7 +3,8 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "start": "npm run build && node --env-file=.env --no-warnings ./dist/server.js",
+    "start": "npm run build && pm2 start ecosystem.config.cjs",
+    "stop": "pm2 stop ecosystem.config.cjs",
     "build": "vite build"
   },
   "dependencies": {
@@ -17,6 +18,7 @@
   "devDependencies": {
     "@types/node": "^24.3.0",
     "@types/ws": "^8.18.1",
+    "pm2": "^6.0.8",
     "typescript": "^5.7.9",
     "vite": "^7.1.3"
   }

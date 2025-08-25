@@ -13,14 +13,19 @@ const server = http.createServer((_request, response) => {
 const wss = new WebSocketServer({ server })
 wss.on('connection', setupWSConnection)
 
-const mongoPersistence = new MongoPersistence()
-setPersistence(mongoPersistence)
+const persistence = new MongoPersistence()
+setPersistence(persistence)
 
-server.listen(PORT, HOST, () => {
-  console.warn(`Server running on http://${HOST}:${PORT}`)
+persistence.connect().then(() => {
+  server.listen(PORT, HOST, () => {
+    console.warn(`Server running on http://${HOST}:${PORT}`)
+  })
+}).catch((error) => {
+  console.error('Failed to connect to MongoDB:', error)
+  process.exit(1)
 })
 
 process.on('SIGINT', async () => {
-  await mongoPersistence.close()
+  await persistence.close()
   process.exit(0)
 })

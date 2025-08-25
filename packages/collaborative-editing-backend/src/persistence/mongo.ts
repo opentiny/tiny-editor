@@ -20,7 +20,11 @@ export class MongoPersistence implements Persistence {
     if (!MONGODB_DB) throw new Error('缺少必需的环境变量: MONGODB_DB')
     if (!MONGODB_COLLECTION) throw new Error('缺少必需的环境变量: MONGODB_COLLECTION')
 
-    this.client = new MongoClient(MONGODB_URL)
+    this.client = new MongoClient(MONGODB_URL, {
+      connectTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 5000,
+    })
     const db = this.client.db(MONGODB_DB)
     const connectionObj: MongoConnectionObj = { client: this.client, db }
 
