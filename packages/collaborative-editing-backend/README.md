@@ -45,6 +45,7 @@ docker run -d \
 启动本地服务器
 
 ```bash
+npm install -g pm2
 npm install
 npm start
 ```

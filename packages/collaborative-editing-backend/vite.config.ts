@@ -1,44 +1,30 @@
-import { resolve } from 'node:path'
+import path from 'node:path'
+import { globSync } from 'glob'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
   build: {
-    target: 'node18',
+    ssr: true,
     outDir: 'dist',
-    lib: {
-      entry: resolve(__dirname, 'src/server.ts'),
-      name: 'CollaborativeEditingBackend',
-      fileName: 'server',
-      formats: ['es'],
-    },
+    emptyOutDir: true,
+    target: 'es2022',
+    sourcemap: true,
     rollupOptions: {
-      external: [
-        'node:http',
-        'node:fs',
-        'node:path',
-        'node:url',
-        'ws',
-        'mongodb',
-        'yjs',
-        'y-mongodb-provider',
-        'lib0',
-        '@y/protocols',
-      ],
+      // 遍历 src 下所有 ts 文件作为入口
+      input: Object.fromEntries(
+        globSync('src/**/*.ts', { ignore: ['**/*.d.ts'] }).map(file => [
+          file.replace(/\.ts$/, ''),
+          path.resolve(file),
+        ]),
+      ),
       output: {
-        format: 'es',
-        entryFileNames: 'server.js',
+        format: 'esm',
+        preserveModules: true, // 保留模块和目录
+        preserveModulesRoot: 'src', // 以 src 为根
+        entryFileNames: '[name].js', // 扩展名改为 .js
+        chunkFileNames: '[name].js',
+        assetFileNames: '[name][extname]',
       },
     },
-    minify: false,
-    sourcemap: true,
-  },
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, 'src'),
-    },
-  },
-  esbuild: {
-    target: 'node18',
-    platform: 'node',
   },
 })
