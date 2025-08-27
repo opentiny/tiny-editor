@@ -13,7 +13,7 @@ export default defineConfig({
       // 遍历 src 下所有 ts 文件作为入口
       input: Object.fromEntries(
         globSync('src/**/*.ts', { ignore: ['**/*.d.ts'] }).map(file => [
-          file.replace(/\.ts$/, ''),
+          path.relative('src', file).replace(/\.ts$/, ''),
           path.resolve(file),
         ]),
       ),

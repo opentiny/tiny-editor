@@ -37,9 +37,15 @@ docker run -d \
   --name mongodb \
   -p 27017:27017 \
   -e MONGO_INITDB_ROOT_USERNAME=admin \
-  -e MONGO_INITDB_ROOT_PASSWORD=admin!123 \
+  -e MONGO_INITDB_ROOT_PASSWORD="admin!123" \
   -v mongodb_data:/data/db \
   mongo:latest
+```
+
+修改 `.env MongoDB URL`
+
+```bash
+MONGODB_URL=mongodb://admin:admin!123@localhost:27017/?authSource=admin
 ```
 
 启动本地服务器
