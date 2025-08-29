@@ -26,6 +26,7 @@ export function sidebar() {
         { text: '只读模式', link: '/docs/demo/readonly' },
         { text: '模拟语雀文档', link: 'https://opentiny.github.io/tiny-editor/projects' },
         { text: '图片工具栏', link: '/docs/demo/image-tool' },
+        { text: '流程图', link: '/docs/demo/flow-chart' },
       ],
     },
     {
