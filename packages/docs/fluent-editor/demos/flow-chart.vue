@@ -21,7 +21,9 @@ onMounted(() => {
       theme: 'snow',
       modules: {
         'toolbar': TOOLBAR_CONFIG,
-        'flow-chart': true,
+        'flow-chart': {
+          resize: true,
+        },
       },
     })
   })

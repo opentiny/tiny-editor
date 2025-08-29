@@ -6,6 +6,13 @@ TinyEditor 的流程图功能依赖 `LogicFlow` ，使用前请先安装 `LogicF
 npm install @logicflow/core @logicflow/extension
 ```
 
+## 基础使用
+
+通过配置工具栏按钮 `flow-chart`，并启用 `flow-chart`模块: `'flow-chart': true` 可以开启流程图功能。
+
+:::demo src=demos/flow-chart.vue
+:::
+
 ## 网格配置
 
 流程图模块支持配置网格样式，可以配置网格大小、颜色、类型等设置。
@@ -28,6 +35,22 @@ npm install @logicflow/core @logicflow/extension
 :::
 
 ## 配置
+
+当`'flow-chart'` 模块设置为 `true`时，默认配置为
+
+```typescript
+grid: {
+  size: 20
+  visible: true
+  type: 'dot'
+  config: {
+    color: '#ababab'
+    thickness: 1
+  };
+}
+background:false
+resize: false
+```
 
 ### modules['flow-chart'].grid
 
@@ -55,3 +78,7 @@ npm install @logicflow/core @logicflow/extension
 | 属性   | 类型      | 说明                   | 默认值 |
 | ------ | --------- | ---------------------- | ------ |
 | resize | `boolean` | 是否允许调整流程图大小 | false  |
+
+```
+
+```
