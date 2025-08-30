@@ -15,15 +15,9 @@ export interface BackgroundConfig {
   size?: string
   opacity?: number
 }
-export interface BaseEdgeConfig {
-  stroke?: string
-  strokeWidth?: number
-}
 
 export interface FlowChartOptions {
   grid?: boolean | GridOptions
   background?: boolean | BackgroundConfig
   resize?: boolean
-  baseEdge?: boolean | BaseEdgeConfig
-  theme?: string
 }

@@ -34,20 +34,6 @@ npm install @logicflow/core @logicflow/extension
 :::demo src=demos/flow-chart-resize.vue
 :::
 
-## 连线样式
-
-流程图模块支持配置连线样式，可以配置连线颜色、宽度样式。
-
-:::demo src=demos/flow-chart-line.vue
-:::
-
-## 主题样式
-
-流程图模块支持配置连线样式，可以配置连线颜色、宽度样式。
-
-:::demo src=demos/flow-chart-theme.vue
-:::
-
 ## 配置
 
 ### modules['flow-chart'].grid
@@ -76,23 +62,3 @@ npm install @logicflow/core @logicflow/extension
 | 属性   | 类型      | 说明                   | 默认值 |
 | ------ | --------- | ---------------------- | ------ |
 | resize | `boolean` | 是否允许调整流程图大小 | false  |
-
-### modules['flow-chart'].baseEdge
-
-| 属性                 | 类型     | 说明     | 默认值 |
-| -------------------- | -------- | -------- | ------ |
-| baseEdge.stroke      | `string` | 连线颜色 | -      |
-| baseEdge.strokeWidth | `number` | 连线宽度 | -      |
-
-### modules['flow-chart'].baseEdge
-
-| 属性                 | 类型     | 说明     | 默认值 |
-| -------------------- | -------- | -------- | ------ |
-| baseEdge.stroke      | `string` | 连线颜色 | -      |
-| baseEdge.strokeWidth | `number` | 连线宽度 | -      |
-
-### modules['flow-chart'].theme
-
-| 属性  | 类型                                            | 说明     | 默认值    |
-| ----- | ----------------------------------------------- | -------- | --------- |
-| theme | `'default' \| 'dark' \| 'colorful' \| 'radius'` | 主题样式 | 'default' |
