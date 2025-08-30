@@ -29,7 +29,6 @@ onMounted(() => {
             position: 'center',
             size: 'auto',
           },
-          theme: 'minions',
         },
       },
     })
