@@ -1,10 +1,10 @@
 // 定义思维导图控制面板的通用背景样式
-@mixin mindMapControlBackground {
+@mixin mind-map-control-background {
   background-color: rgba(255, 255, 255, 0.85);
   border-radius: 8px;
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
 }
-@mixin mindMapControlItem {
+@mixin mind-map-control-item {
   align-items: center;
   cursor: pointer;
   display: flex;
@@ -18,7 +18,7 @@
     font-size: 12px;
   }
 }
-@mixin mindMapPanel {
+@mixin mind-map-panel {
   border-radius: inherit;
   width: 200px;
   position: absolute;
@@ -31,7 +31,7 @@
   max-height: 400px;
   overflow-y: auto;
 }
-@mixin hoverShadowEffect {
+@mixin hover-shadow-effect {
   transition: box-shadow 0.3s ease;
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -54,9 +54,9 @@
   white-space: nowrap;
   pointer-events: auto;
   padding: 5px 5px;
-  @include mindMapControlBackground;
+  @include mind-map-control-background;
   .ql-mind-map-control-item {
-    @include mindMapControlItem;
+    @include mind-map-control-item;
   }
 }
 .ql-mind-map-left-up-control {
@@ -70,9 +70,9 @@
   flex-direction: column;
   margin: 5px;
   padding: 5px 5px;
-  @include mindMapControlBackground;
+  @include mind-map-control-background;
   .ql-mind-map-control-item {
-    @include mindMapControlItem;
+    @include mind-map-control-item;
   }
 }
 .ql-mind-map-right-up-control {
@@ -84,13 +84,13 @@
   white-space: nowrap;
   pointer-events: auto;
   padding: 5px 5px;
-  @include mindMapControlBackground;
+  @include mind-map-control-background;
   .ql-mind-map-control-item {
-    @include mindMapControlItem;
+    @include mind-map-control-item;
   }
 }
 .ql-mind-map-icon-panel {
-  @include mindMapPanel;
+  @include mind-map-panel;
   .ql-mind-map-icon-group-container {
     display: flex;
     flex-wrap: wrap;
@@ -105,7 +105,7 @@
       border: 1px solid #eee;
       border-radius: inherit;
       padding: 2px;
-      @include hoverShadowEffect;
+      @include hover-shadow-effect;
     }
   }
 }
@@ -114,7 +114,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  @include mindMapPanel;
+  @include mind-map-panel;
   .ql-mind-map-layout-item {
     display: flex;
     flex-direction: column;
@@ -125,7 +125,7 @@
     padding: 2px;
     width: 100%;
     min-width: 100px;
-    @include hoverShadowEffect;
+    @include hover-shadow-effect;
     .ql-mind-map-layout-icon-container {
       width: 80px;
       height: 60px;

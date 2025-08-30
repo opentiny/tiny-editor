@@ -1,20 +1,37 @@
 import type Quill from 'quill'
-import './formats/mind-map-blot'
+import type { MindMapOptions } from './options'
+import Quills from 'quill'
+import MindMapPlaceholderBlot from './formats/mind-map-blot'
 
 export class MindMapModule {
   quill: Quill
   toolbar: any
-  static currentQuill: Quill | null = null
+  options: MindMapOptions
+
+  static register() {
+    Quills.register('formats/mind-map-placeholder', MindMapPlaceholderBlot, true)
+  }
 
   constructor(quill: Quill, options: any) {
+    (quill.container as any).__quillInstance = quill
     this.quill = quill
+    this.options = options
     this.toolbar = quill.getModule('toolbar')
-    MindMapModule.currentQuill = quill
-    const domNode = document.querySelector('.ql-mind-map')
-
-    if (domNode) {
-      domNode.addEventListener('click', () => {
+    if (this.toolbar) {
+      this.toolbar.addHandler('mind-map', () => {
         this.insertMindMapEditor()
+      })
+    }
+    const toolbarContainer = this.toolbar?.container
+      || document.querySelector('.ql-toolbar')
+    if (toolbarContainer) {
+      toolbarContainer.addEventListener('click', (event) => {
+        const target = event.target as HTMLElement
+        const flowChartButton = target.closest('.ql-mind-map')
+        if (flowChartButton) {
+          event.preventDefault()
+          this.insertMindMapEditor()
+        }
       })
     }
   }

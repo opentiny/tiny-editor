@@ -29,6 +29,7 @@
     "quill-table-up": "^2.1.7",
     "quill-toolbar-tip": "^0.0.13",
     "simple-mind-map": "0.14.0-fix.1",
+    "simple-mind-map-plugin-themes": "^1.0.1",
     "vue": "^3.5.13",
     "vue-toastification": "2.0.0-rc.5"
   },

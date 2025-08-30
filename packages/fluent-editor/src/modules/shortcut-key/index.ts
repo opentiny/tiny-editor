@@ -203,7 +203,7 @@ export class ShortCutKey extends QuillShortcutKey {
       },
       {
         type: 'item' as const,
-        name: 'sldt',
+        name: 'swdt',
         alias: ['mind-map'],
         icon: icons['mind-map'],
         title: this.quill.getLangText('mind-map'),
