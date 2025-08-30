@@ -50,17 +50,6 @@ const contextMenuHandlers = new WeakMap<MindMapPlaceholderBlot, MindMapContextMe
 export function initContextMenu(blot: MindMapPlaceholderBlot, quill: FluentEditor): void {
   blot.contextMenu = document.createElement('div')
   blot.contextMenu.className = 'ql-mind-map-context-menu'
-  blot.contextMenu.style.position = 'fixed'
-  blot.contextMenu.style.background = 'white'
-  blot.contextMenu.style.borderRadius = '4px'
-  blot.contextMenu.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)'
-  blot.contextMenu.style.padding = '5px 0'
-  blot.contextMenu.style.zIndex = '1000'
-  blot.contextMenu.style.display = 'block'
-  blot.contextMenu.style.visibility = 'visible'
-  blot.contextMenu.style.opacity = '1'
-  blot.contextMenu.style.width = '120px'
-  blot.contextMenu.style.height = 'auto'
   blot.domNode.appendChild(blot.contextMenu)
 
   const handler = new MindMapContextMenuHandler(quill, blot)

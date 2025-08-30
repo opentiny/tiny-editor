@@ -46,7 +46,6 @@ export class MindMapModule {
             children: [],
           },
         ],
-        smmVersion: '0.14.0-fix.1',
       }
       this.quill.insertText(range.index, '\n', 'user')
       this.quill.insertEmbed(range.index + 1, 'mind-map', defaultData, 'user')
