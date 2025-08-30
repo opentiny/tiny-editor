@@ -9,11 +9,10 @@ export class FlowChartModule {
   quill: Quill
   toolbar: any
   options: FlowChartOptions
-  currentQuill: Quill | null = null
-  static currentOptions: FlowChartOptions = {}
 
   static register() {
-    Quills.register('formats/flow-chart-placeholder', FlowChartPlaceholderBlot, true)
+    // Quills.register('formats/flow-chart-placeholder', FlowChartPlaceholderBlot, true)
+    Quills.register('formats/flow-chart', FlowChartPlaceholderBlot, true)
   }
 
   constructor(quill: Quill, options: any) {
@@ -24,18 +23,6 @@ export class FlowChartModule {
     if (this.toolbar) {
       this.toolbar.addHandler('flow-chart', () => {
         this.insertFlowChartEditor()
-      })
-    }
-    const toolbarContainer = this.toolbar?.container
-      || document.querySelector('.ql-toolbar')
-    if (toolbarContainer) {
-      toolbarContainer.addEventListener('click', (event) => {
-        const target = event.target as HTMLElement
-        const flowChartButton = target.closest('.ql-flow-chart')
-        if (flowChartButton) {
-          event.preventDefault()
-          this.insertFlowChartEditor()
-        }
       })
     }
   }
@@ -53,7 +40,7 @@ export class FlowChartModule {
         ],
       }
       this.quill.insertText(range.index, '\n', 'user')
-      this.quill.insertEmbed(range.index + 1, 'flow-chart-placeholder', defaultData, 'user')
+      this.quill.insertEmbed(range.index + 1, 'flow-chart', defaultData, 'user')
       this.quill.insertText(range.index + 2, '\n', 'user')
     }
   }

@@ -1,5 +1,5 @@
 import type Quill from 'quill'
-import type { BackgroundConfig, GridOptions } from './options'
+import type { BackgroundConfig, BaseEdgeConfig, GridOptions } from './options'
 
 export function getGridConfig(quill: Quill | null): any {
   const defaultGrid = {
@@ -89,14 +89,59 @@ export function getResizeConfig(quill: Quill | null): boolean {
   return false
 }
 
+export function getBaseEdgeConfig(quill: Quill | null): { stroke: string, strokeWidth: number } | false {
+  const defaultBaseEdge = {
+    stroke: '#000000',
+    strokeWidth: 2,
+  }
+  const flowChartModule = quill?.options.modules?.['flow-chart']
+  if (!flowChartModule || typeof flowChartModule !== 'object') {
+    return defaultBaseEdge
+  }
+  if ('baseEdge' in flowChartModule) {
+    const baseEdge = flowChartModule.baseEdge as BaseEdgeConfig | boolean | undefined
+    if (baseEdge === false) {
+      return false
+    }
+    if (baseEdge === undefined) {
+      return defaultBaseEdge
+    }
+    if (typeof baseEdge === 'object' && baseEdge !== null) {
+      const typedBaseEdge = baseEdge as BaseEdgeConfig
+      return {
+        stroke: typedBaseEdge.stroke || defaultBaseEdge.stroke,
+        strokeWidth: typedBaseEdge.strokeWidth || defaultBaseEdge.strokeWidth,
+      }
+    }
+  }
+  return defaultBaseEdge
+}
+
+export function getThemeConfig(quill: Quill | null): string {
+  const defaultThemeMode = 'default'
+  const flowChartModule = quill?.options.modules?.['flow-chart']
+  if (!flowChartModule || typeof flowChartModule !== 'object') {
+    return defaultThemeMode
+  }
+  if ('theme' in flowChartModule) {
+    const theme = flowChartModule.theme as string | undefined
+    return theme || defaultThemeMode
+  }
+  return defaultThemeMode
+}
+
 export function getAllConfigs(quill: Quill | null): {
   gridConfig: any
   backgroundConfig: false | object
   resizeConfig: boolean
+  baseEdgeConfig: { stroke: string, strokeWidth: number } | false
+  themeConfig: string
 } {
   return {
     gridConfig: getGridConfig(quill),
     backgroundConfig: getBackgroundConfig(quill),
     resizeConfig: getResizeConfig(quill),
+    baseEdgeConfig: getBaseEdgeConfig(quill),
+    themeConfig: getThemeConfig(quill),
   }
 }

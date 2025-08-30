@@ -221,13 +221,7 @@ export class ShortCutKey extends QuillShortcutKey {
         alias: ['flow-chart'],
         icon: icons['flow-chart'],
         title: this.quill.getLangText('flow-chart'),
-        onClick(this: Quill, range: Range | null, _: any) {
-          if (!range) return
-          const FlowChartModule = this.getModule('flow-chart')
-          if (FlowChartModule && typeof (FlowChartModule as any).insertFlowChartEditor === 'function') {
-            (FlowChartModule as any).insertFlowChartEditor()
-          }
-        },
+        onClick: toolbarHandler('flow-chart'),
       },
     ]
   }

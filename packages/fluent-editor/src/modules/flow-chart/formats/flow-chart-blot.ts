@@ -19,7 +19,7 @@ import '../style/flow-chart.scss'
 
 const BlockEmbed = Quill.import('blots/embed') as typeof TypeBlockEmbed
 class FlowChartPlaceholderBlot extends BlockEmbed {
-  static blotName = 'flow-chart-placeholder'
+  static blotName = 'flow-chart'
   static tagName = 'div'
   static className = 'ql-flow-chart'
   quill: Quill | null = null
@@ -110,7 +110,7 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
     this.domNode.style.height = `${this.height}px`
     this.updateAlignmentStyle()
     this.observeParentAlignment()
-    const { gridConfig, backgroundConfig, resizeConfig } = getAllConfigs(this.quill)
+    const { gridConfig, backgroundConfig, resizeConfig, baseEdgeConfig, themeConfig } = getAllConfigs(this.quill)
     this.flowChart = new LogicFlow({
       container: this.domNode,
       stopScrollGraph: true,
@@ -124,6 +124,11 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
       background: backgroundConfig,
       plugins: [DndPanel, SelectionSelect, Snapshot],
     })
+    if (baseEdgeConfig && themeConfig) {
+      this.flowChart.setTheme({
+        baseEdge: baseEdgeConfig,
+      }, themeConfig)
+    }
     this.flowChart.setPatternItems([
       {
         icon: selectRegionIcon,
