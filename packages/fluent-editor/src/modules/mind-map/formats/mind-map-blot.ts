@@ -279,7 +279,7 @@ class MindMapPlaceholderBlot extends BlockEmbed {
       return
     }
     const trackedParentElement = parentElement
-    const parentElementId = parentElement.getAttribute('id') || `flow-chart-parent-${Date.now()}`
+    const parentElementId = parentElement.getAttribute('id') || `mind-map-parent-${Date.now()}`
     parentElement.setAttribute('id', parentElementId)
     const observer = new MutationObserver(() => {
       if (!document.contains(trackedParentElement)) {

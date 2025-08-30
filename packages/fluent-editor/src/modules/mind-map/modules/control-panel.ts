@@ -446,7 +446,7 @@ function handlePanelStatusBtn(blot: MindMapPlaceholderBlot): void {
 }
 
 function handleScreenTypeBtn(blot: MindMapPlaceholderBlot): void {
-  const screenTypeIconElement = document.querySelector('.ql-mind-map-control-screen-type') as HTMLElement | null
+  const screenTypeIconElement = blot.domNode.querySelector('.ql-mind-map-control-screen-type') as HTMLElement | null
   const mindMapContainer = blot.domNode
   if (!screenTypeIconElement || !mindMapContainer) return
   const isFullscreen = mindMapContainer.style.position === 'fixed'
@@ -454,7 +454,7 @@ function handleScreenTypeBtn(blot: MindMapPlaceholderBlot): void {
     const originalPosition = mindMapContainer.getAttribute('data-original-position')
     const originalWidth = mindMapContainer.getAttribute('data-original-width')
     const originalHeight = mindMapContainer.getAttribute('data-original-height')
-    if (originalPosition && originalWidth && originalHeight) {
+    if (originalWidth && originalHeight) {
       mindMapContainer.style.position = originalPosition
       mindMapContainer.style.width = originalWidth
       mindMapContainer.style.height = originalHeight
