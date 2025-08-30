@@ -17,7 +17,7 @@ import '../style/mind-map.scss'
 const BlockEmbed = Quill.import('blots/embed') as typeof TypeBlockEmbed
 
 class MindMapPlaceholderBlot extends BlockEmbed {
-  static blotName = 'mind-map-placeholder'
+  static blotName = 'mind-map'
   static tagName = 'div'
   static className = 'ql-mind-map'
   quill: Quill | null = null
