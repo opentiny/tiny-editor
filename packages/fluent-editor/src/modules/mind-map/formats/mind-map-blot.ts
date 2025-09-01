@@ -42,6 +42,7 @@ class MindMapPlaceholderBlot extends BlockEmbed {
     this.domNode.style.border = '1px solid #e8e8e8'
     this.domNode.setAttribute('contenteditable', 'false')
     this.data = MindMapPlaceholderBlot.value(domNode)
+    this.initMindMap()
   }
 
   static value(domNode: HTMLElement): any {
@@ -86,7 +87,6 @@ class MindMapPlaceholderBlot extends BlockEmbed {
   attach() {
     super.attach()
     this.quill = MindMapPlaceholderBlot.findQuill(this.domNode)
-    this.initMindMap()
   }
 
   initMindMap(): void {
