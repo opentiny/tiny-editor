@@ -43,6 +43,7 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
     this.domNode.style.border = '1px solid #e8e8e8'
     this.domNode.setAttribute('contenteditable', 'false')
     this.data = FlowChartPlaceholderBlot.value(this.domNode)
+    this.initFlowChart()
   }
 
   static value(domNode: HTMLElement): any {
@@ -87,7 +88,6 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
   attach() {
     super.attach()
     this.quill = FlowChartPlaceholderBlot.findQuill(this.domNode)
-    this.initFlowChart()
   }
 
   initFlowChart(): void {
