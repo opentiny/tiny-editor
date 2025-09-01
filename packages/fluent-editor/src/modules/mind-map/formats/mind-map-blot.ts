@@ -142,7 +142,7 @@ class MindMapPlaceholderBlot extends BlockEmbed {
     this.domNode.addEventListener('remove', () => {
       window.removeEventListener('scroll', handleScroll)
     })
-    this.mindMap.getElRectInfo()
+
     if (resizeConfig) {
       new MindMapResizeAction(this)
     }
@@ -158,6 +158,7 @@ class MindMapPlaceholderBlot extends BlockEmbed {
     this.mindMap.on('node_dblclick', this.handleNodeDblClick.bind(this))
     this.domNode.addEventListener('click', (e) => {
       if (this.quill) {
+        this.mindMap.getElRectInfo()
         const mindMapBlot = Quill.find(this.domNode)
         const index = this.quill.getIndex(mindMapBlot as MindMapPlaceholderBlot)
         if (index && typeof index === 'number') {
