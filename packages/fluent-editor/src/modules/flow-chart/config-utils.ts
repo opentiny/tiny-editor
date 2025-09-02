@@ -3,38 +3,42 @@ import type { BackgroundConfig, GridOptions } from './options'
 
 export function getGridConfig(quill: Quill | null): any {
   const defaultGrid = {
-    type: 'dot',
     size: 20,
+    visible: true,
+    type: 'dot',
+    config: {
+      color: '#ababab',
+      thickness: 1,
+    },
   }
+
   const flowChartModule = quill?.options.modules?.['flow-chart']
   if (!flowChartModule || typeof flowChartModule !== 'object') {
     return defaultGrid
   }
+
   if ('grid' in flowChartModule) {
     const grid = flowChartModule.grid as GridOptions | boolean | undefined
     if (grid === false || grid === undefined) {
       return null
     }
+
     if (typeof grid === 'object' && grid !== null) {
       const typedGrid = grid as GridOptions
-      const gridConfig: any = {
-        type: typedGrid.type || defaultGrid.type,
+      const gridConfig = {
         size: typedGrid.size || defaultGrid.size,
+        visible: typedGrid.visible !== undefined ? typedGrid.visible : defaultGrid.visible,
+        type: typedGrid.type || defaultGrid.type,
+        config: {
+          color: typedGrid.config?.color || defaultGrid.config.color,
+          thickness: typedGrid.config?.thickness || defaultGrid.config.thickness,
+        },
       }
-      if (typedGrid.visible !== undefined) {
-        gridConfig.visible = typedGrid.visible
-      }
-      if (typedGrid.config) {
-        if (typedGrid.config.color) {
-          gridConfig.color = typedGrid.config.color
-        }
-        if (typedGrid.config.thickness) {
-          gridConfig.lineWidth = typedGrid.config.thickness
-        }
-      }
+
       return gridConfig
     }
   }
+
   return defaultGrid
 }
 

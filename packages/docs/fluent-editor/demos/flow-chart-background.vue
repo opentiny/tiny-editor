@@ -23,16 +23,18 @@ onMounted(() => {
         'toolbar': TOOLBAR_CONFIG,
         'flow-chart': {
           background: {
-            color: '#fafafa',
+            color: '#98FB98',
             // image: 'url(path/to/image.png)',
             repeat: 'repeat',
             position: 'center',
             size: 'auto',
-            opacity: 0.8,
+            opacity: 0.1,
           },
         },
       },
     })
+    const ops = [{ insert: '\n' }, { insert: { 'flow-chart': { nodes: [{ id: 'node1', type: 'rect', x: 100, y: 150, text: '开始' }, { id: 'node2', type: 'rect', x: 300, y: 150, text: '结束' }], edges: [{ id: 'edge1', sourceNodeId: 'node1', targetNodeId: 'node2', type: 'polyline' }] } } }, { insert: '\n\n' }]
+    editor.setContents(ops)
   })
 })
 </script>

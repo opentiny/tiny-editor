@@ -21,11 +21,11 @@ onMounted(() => {
       theme: 'snow',
       modules: {
         'toolbar': TOOLBAR_CONFIG,
-        'flow-chart': {
-          resize: true,
-        },
+        'flow-chart': true,
       },
     })
+    const ops = [{ insert: '\n' }, { insert: { 'flow-chart': { nodes: [{ id: 'node1', type: 'rect', x: 100, y: 150, text: '开始' }, { id: 'node2', type: 'rect', x: 300, y: 150, text: '结束' }], edges: [{ id: 'edge1', sourceNodeId: 'node1', targetNodeId: 'node2', type: 'polyline' }] } } }, { insert: '\n\n' }]
+    editor.setContents(ops)
   })
 })
 </script>
