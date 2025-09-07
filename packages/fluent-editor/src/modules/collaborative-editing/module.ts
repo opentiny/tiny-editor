@@ -6,6 +6,10 @@ export class CollaborationModule {
 
   constructor(public quill: FluentEditor, public options: any) {
     this.collaborativeEditor = new CollaborativeEditor(quill, options)
+
+    window.addEventListener('beforeunload', () => {
+      this.collaborativeEditor.destroy()
+    })
   }
 
   public getCursors() {
@@ -14,5 +18,13 @@ export class CollaborationModule {
 
   public getAwareness() {
     return this.collaborativeEditor.getAwareness()
+  }
+
+  public getProvider() {
+    return this.collaborativeEditor.getProvider()
+  }
+
+  public destroy() {
+    this.collaborativeEditor.destroy()
   }
 }

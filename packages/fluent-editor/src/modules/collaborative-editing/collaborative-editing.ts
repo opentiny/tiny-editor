@@ -1,10 +1,10 @@
+import type FluentEditor from '../../fluent-editor'
 import type { UnifiedProvider } from './provider/customProvider'
 import type { YjsOptions } from './types'
 import QuillCursors from 'quill-cursors'
 import { Awareness } from 'y-protocols/awareness'
 import { QuillBinding } from 'y-quill'
 import * as Y from 'yjs'
-import FluentEditor from '../../fluent-editor'
 import { bindAwarenessToCursors, setupAwareness } from './awareness'
 import { setupIndexedDB } from './awareness/y-indexeddb'
 import { createProvider } from './provider/customProvider'
@@ -17,13 +17,12 @@ export class CollaborativeEditor {
   private _isConnected = false
   private _isSynced = false
   private cleanupBindings: (() => void) | null = null
+  private clearIndexedDB: (() => Promise<void>) | null = null
 
   constructor(
     public quill: FluentEditor,
     public options: YjsOptions,
   ) {
-    FluentEditor.register('modules/cursors', QuillCursors, true)
-
     this.ydoc = this.options.ydoc || new Y.Doc()
 
     if (this.options.cursors !== false) {
@@ -89,8 +88,9 @@ export class CollaborativeEditor {
       console.error('Failed to initialize collaborative editor: no valid provider configured')
     }
 
-    if (this.options.offline !== false)
-      setupIndexedDB(this.ydoc, typeof this.options.offline === 'object' ? this.options.offline : undefined)
+    if (this.options.offline !== false) {
+      this.clearIndexedDB = setupIndexedDB(this.ydoc)
+    }
   }
 
   public getAwareness() {
@@ -117,11 +117,12 @@ export class CollaborativeEditor {
     return this.cursors
   }
 
-  public destroy() {
+  public async destroy() {
     this.cleanupBindings?.()
     this.provider?.destroy?.()
     this.cursors?.clearCursors()
     this.awareness?.destroy?.()
+    await this.clearIndexedDB?.()
     this.ydoc?.destroy?.()
   }
 }

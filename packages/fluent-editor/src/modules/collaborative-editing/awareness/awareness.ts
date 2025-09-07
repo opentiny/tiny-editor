@@ -36,11 +36,6 @@ interface QuillCursors {
   removeCursor: (id: string) => void
 }
 
-interface QuillEditor {
-  on: (event: 'selection-change', handler: (range: { index: number, length: number } | null) => void) => void
-  off: (event: 'selection-change', handler: Function) => void
-}
-
 export function bindAwarenessToCursors(
   awareness: Awareness,
   cursorsModule: QuillCursors,

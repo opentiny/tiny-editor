@@ -1,12 +1,14 @@
 import type { Doc } from 'yjs'
 import { IndexeddbPersistence } from 'y-indexeddb'
 
-export interface IndexedDBOptions {
-  dbName: string
-}
+export function setupIndexedDB(doc: Doc): () => Promise<void> {
+  const fullDbName = `tiny-editor-${doc.guid}`
 
-export function setupIndexedDB(doc: Doc, options?: IndexedDBOptions) {
-  const id = 'tiny-editor'
-  const dbName = options?.dbName || 'document'
-  return new IndexeddbPersistence(`${id}-${dbName}`, doc)
+  new IndexeddbPersistence(fullDbName, doc)
+
+  return (): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      indexedDB.deleteDatabase(fullDbName)
+    })
+  }
 }

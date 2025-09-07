@@ -1,5 +1,5 @@
 import type * as Y from 'yjs'
-import type { AwarenessOptions, IndexedDBOptions } from './awareness'
+import type { AwarenessOptions } from './awareness'
 import type { WebRTCProviderOptions, WebsocketProviderOptions } from './provider'
 
 export interface ProviderEventHandlers {
@@ -33,7 +33,7 @@ export interface YjsOptions {
   ydoc?: Y.Doc
   provider: (WebRTCProviderConfig | WebsocketProviderConfig | CustomProviderConfig)
   awareness?: AwarenessOptions
-  offline?: boolean | IndexedDBOptions
+  offline?: boolean
   cursors?: CursorsConfig
 
   // callback
