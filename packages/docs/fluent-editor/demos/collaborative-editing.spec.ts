@@ -296,3 +296,22 @@ test('fullscreen collaborative-editing test', async () => {
   await p1.getByLabel('fullscreen').click({ force: true })
   await expect(p1.getByLabel('fullscreen')).toBeVisible()
 })
+
+test('edit conflict simultaneously test', async () => {
+  await Promise.all([
+    p1.locator('.ql-editor').click(),
+    p2.locator('.ql-editor').click(),
+  ])
+  await Promise.all([
+    p1.keyboard.type('A'),
+    p2.keyboard.type('B'),
+  ])
+  await expect.poll(async () => {
+    const text1 = await p1.locator('.ql-editor').textContent()
+    const text2 = await p2.locator('.ql-editor').textContent()
+    if (text1 === text2 && (text1 === 'AB' || text1 === 'BA')) {
+      return true
+    }
+    return false
+  }).toBeTruthy()
+})
