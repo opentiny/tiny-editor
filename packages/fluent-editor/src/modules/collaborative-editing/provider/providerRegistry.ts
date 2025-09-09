@@ -16,7 +16,7 @@ export type ProviderConstructorProps<T = any> = {
   doc?: Y.Doc
 } & ProviderEventHandlers
 
-export interface UnifiedProvider {
+export interface UnifiedProvider extends ProviderEventHandlers {
   awareness: Awareness
   document: Y.Doc
   type: 'webrtc' | 'websocket' | string

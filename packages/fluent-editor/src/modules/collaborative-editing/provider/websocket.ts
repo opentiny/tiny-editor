@@ -4,7 +4,7 @@ import { Awareness } from 'y-protocols/awareness'
 import { WebsocketProvider } from 'y-websocket'
 import * as Y from 'yjs'
 
-export interface WebsocketProviderOptions extends ProviderEventHandlers {
+export interface WebsocketProviderOptions {
   serverUrl: string
   roomName: string
   connect?: boolean
@@ -23,10 +23,10 @@ export class WebsocketProviderWrapper implements UnifiedProvider {
   private _isConnected = false
   private _isSynced = false
 
-  private onConnect?: () => void
-  private onDisconnect?: () => void
-  private onError?: (error: Error) => void
-  private onSyncChange?: (isSynced: boolean) => void
+  onConnect?: () => void
+  onDisconnect?: () => void
+  onError?: (error: Error) => void
+  onSyncChange?: (isSynced: boolean) => void
 
   document: Y.Doc
   awareness: Awareness

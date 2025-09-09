@@ -14,8 +14,6 @@ export class CollaborativeEditor {
   private provider: UnifiedProvider
   private awareness: Awareness
   private cursors: QuillCursors | null
-  private _isConnected = false
-  private _isSynced = false
   private cleanupBindings: (() => void) | null = null
   private clearIndexedDB: (() => Promise<void>) | null = null
 
@@ -50,21 +48,10 @@ export class CollaborativeEditor {
           options: providerConfig.options,
           type: providerConfig.type,
           awareness: this.awareness,
-          onConnect: () => {
-            this._isConnected = true
-            this.options.onConnect?.()
-          },
-          onDisconnect: () => {
-            this._isConnected = false
-            this.options.onDisconnect?.()
-          },
-          onError: (error) => {
-            this.options.onError?.(error)
-          },
-          onSyncChange: (isSynced) => {
-            this._isSynced = isSynced
-            this.options.onSyncChange?.(isSynced)
-          },
+          onConnect: this.options.onConnect,
+          onDisconnect: this.options.onDisconnect,
+          onError: this.options.onError,
+          onSyncChange: this.options.onSyncChange,
         })
         this.provider = provider
       }
@@ -106,11 +93,11 @@ export class CollaborativeEditor {
   }
 
   get isConnected() {
-    return this._isConnected
+    return this.provider?.isConnected ?? false
   }
 
   get isSynced() {
-    return this._isSynced
+    return this.provider?.isSynced ?? false
   }
 
   public getCursors() {
