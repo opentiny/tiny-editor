@@ -11,12 +11,18 @@
   "dependencies": {
     "@opentiny/fluent-editor": "workspace:^",
     "@tailwindcss/vite": "^4.0.0",
+    "quill-cursors": "^4.0.4",
     "quill-header-list": "0.0.2",
     "quill-table-up": "^2.1.7",
     "sass": "^1.47.0",
     "tailwindcss": "^4.0.0",
     "vue": "^3.5.13",
-    "vue-router": "4"
+    "vue-router": "4",
+    "y-indexeddb": "^9.0.12",
+    "y-protocols": "^1.0.6",
+    "y-quill": "^1.0.0",
+    "y-websocket": "^3.0.0",
+    "yjs": "^13.6.27"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
