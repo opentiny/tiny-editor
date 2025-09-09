@@ -1,6 +1,6 @@
 import type { Awareness } from 'y-protocols/awareness'
 import type { ProviderEventHandlers } from '../types'
-import type { UnifiedProvider } from './customProvider'
+import type { UnifiedProvider } from './providerRegistry'
 import { WebrtcProvider } from 'y-webrtc'
 import * as Y from 'yjs'
 

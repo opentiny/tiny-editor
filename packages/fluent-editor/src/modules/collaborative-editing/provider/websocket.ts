@@ -1,5 +1,5 @@
 import type { ProviderEventHandlers } from '../types'
-import type { UnifiedProvider } from './customProvider'
+import type { UnifiedProvider } from './providerRegistry'
 import { Awareness } from 'y-protocols/awareness'
 import { WebsocketProvider } from 'y-websocket'
 import * as Y from 'yjs'

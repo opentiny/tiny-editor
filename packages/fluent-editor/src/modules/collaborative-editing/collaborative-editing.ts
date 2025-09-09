@@ -1,5 +1,5 @@
 import type FluentEditor from '../../fluent-editor'
-import type { UnifiedProvider } from './provider/customProvider'
+import type { UnifiedProvider } from './provider/providerRegistry'
 import type { YjsOptions } from './types'
 import QuillCursors from 'quill-cursors'
 import { Awareness } from 'y-protocols/awareness'
@@ -7,7 +7,7 @@ import { QuillBinding } from 'y-quill'
 import * as Y from 'yjs'
 import { bindAwarenessToCursors, setupAwareness } from './awareness'
 import { setupIndexedDB } from './awareness/y-indexeddb'
-import { createProvider } from './provider/customProvider'
+import { createProvider } from './provider/providerRegistry'
 
 export class CollaborativeEditor {
   private ydoc: Y.Doc = new Y.Doc()
