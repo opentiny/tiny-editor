@@ -1,7 +1,7 @@
 # 协作编辑
 
 <p align="center">
-<img src="https://yinlin-img.oss-cn-beijing.aliyuncs.com/img/tiny-editor-demo.png" alt="WhisperLiveKit Demo" width="600">
+<img src="https://yinlin-img.oss-cn-beijing.aliyuncs.com/img/tiny-editor-demo.png" alt="Tiny-editor-demo" width="600">
 </p>
 
 <p align="center"><b>TinyEditor 支持多人实时协作编辑，支持多种连接协议（如 WebSocket、WebRTC），可自定义后端持久化，适用于多场景的在线协同编辑需求。
@@ -55,6 +55,7 @@ const editor = new FluentEditor('#editor', {
 ### 后端服务
 
 安装依赖：
+
 ```bash
 git clone https://github.com/yjs/y-websocket-server.git
 cd y-websocket-server
@@ -159,8 +160,8 @@ interface UnifiedProvider {
 1. **实现 Provider 类**
 
 ```typescript
+import type { ProviderConstructorProps, UnifiedProvider } from '@opentiny/fluent-editor'
 import type { Awareness } from 'y-protocols/awareness'
-import type { UnifiedProvider, ProviderConstructorProps } from '@opentiny/fluent-editor'
 import * as Y from 'yjs'
 
 export class MyCustomProvider implements UnifiedProvider {
@@ -195,6 +196,7 @@ export class MyCustomProvider implements UnifiedProvider {
     // )
     // provider.connect();
   }
+
   disconnect = () => {}
   destroy = () => {}
 }
@@ -218,11 +220,11 @@ const editor = new FluentEditor('#editor', {
       provider: {
         type: 'my-custom',
         options: {
-          endpoint: 'https://my-service.com/api'
-        }
-      }
-    }
-  }
+          endpoint: 'https://my-service.com/api',
+        },
+      },
+    },
+  },
 })
 ```
 
@@ -327,7 +329,7 @@ pnpm i
 
 启动服务：
 
-| 操作系统           | 启动命令                                                                                 |
+| 操作系统           | 启动命令                                                                                |
 | ------------------ | --------------------------------------------------------------------------------------- |
 | Ubuntu/MacOS       | `HOST=localhost PORT=1234 YPERSISTENCE=./dbDir npx y-websocket`                         |
 | Windows PowerShell | `$env:HOST="localhost"; $env:PORT="1234"; $env:YPERSISTENCE="./dbDir"; npx y-websocket` |
@@ -350,10 +352,10 @@ pnpm i
 
 启动服务：
 
-| 操作系统           | 启动命令                                                                                 |
-| ------------------ | --------------------------------------------------------------------------------------- |
-| Ubuntu/MacOS       | `HOST=localhost PORT=4444 npx y-webrtc`                                                 |
-| Windows PowerShell | `$env:HOST="localhost"; $env:PORT="4444"; npx y-webrtc`                                 |
+| 操作系统           | 启动命令                                                |
+| ------------------ | ------------------------------------------------------- |
+| Ubuntu/MacOS       | `HOST=localhost PORT=4444 npx y-webrtc`                 |
+| Windows PowerShell | `$env:HOST="localhost"; $env:PORT="4444"; npx y-webrtc` |
 
 ---
 
