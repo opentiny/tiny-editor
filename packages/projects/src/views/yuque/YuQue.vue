@@ -16,7 +16,7 @@ const headerListRef = ref<HTMLElement>()
 
 const title = ref('测试文档')
 
-const ROOM_NAME = `yuque-document-${new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString().slice(0, 10)}`
+const ROOM_NAME = 'yuque-document-demo-room'
 
 const DEFAULT_CONTENT = `
 <p>
