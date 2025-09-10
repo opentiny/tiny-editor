@@ -7,9 +7,11 @@ export class CollaborationModule {
   constructor(public quill: FluentEditor, public options: any) {
     this.collaborativeEditor = new CollaborativeEditor(quill, options)
 
-    window.addEventListener('beforeunload', () => {
-      this.collaborativeEditor.destroy()
-    })
+    window.addEventListener(
+      'beforeunload',
+      () => { void this.collaborativeEditor.destroy().catch(err => console.warn('[yjs] destroy failed:', err)) },
+      { once: true },
+    )
   }
 
   public getCursors() {
@@ -24,7 +26,7 @@ export class CollaborationModule {
     return this.collaborativeEditor.getProvider()
   }
 
-  public destroy() {
-    this.collaborativeEditor.destroy()
+  public async destroy() {
+    await this.collaborativeEditor.destroy()
   }
 }
