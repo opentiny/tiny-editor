@@ -117,7 +117,7 @@ export function createControlPanel(blot: FlowChartPlaceholderBlot, quill: Fluent
   })
 
   setTimeout(() => {
-    const controlLeftUpPanel = document.querySelector('.lf-dndpanel') as HTMLElement | null
+    const controlLeftUpPanel = blot.domNode.querySelector('.lf-dndpanel') as HTMLElement | null
     controlLeftUpPanel.append(setEdgeTypeBtn)
   }, 0)
   controlRightUpPanel.append(panelStatusBtn)
@@ -175,7 +175,7 @@ function createControlItem(iconClass: string, title: string, onClick: () => void
 }
 
 function handleSetEdgeType(blot: FlowChartPlaceholderBlot): void {
-  const controlLeftUpPanel = document.querySelector('.lf-dndpanel') as HTMLElement | null
+  const controlLeftUpPanel = blot.domNode.querySelector('.lf-dndpanel') as HTMLElement | null
   if (!controlLeftUpPanel) return
   let edgeTypePanel = controlLeftUpPanel.querySelector('.ql-flow-chart-edge-panel') as HTMLElement
   if (!edgeTypePanel) {
@@ -275,7 +275,7 @@ function handlePanelStatusBtn(blot: FlowChartPlaceholderBlot): void {
   }
 }
 function handleScreenTypeBtn(blot: FlowChartPlaceholderBlot): void {
-  const screenTypeIconElement = document.querySelector('.ql-flow-chart-control-screen-type') as HTMLElement | null
+  const screenTypeIconElement = blot.domNode.querySelector('.ql-flow-chart-control-screen-type') as HTMLElement | null
   const flowChartContainer = blot.domNode
   if (!screenTypeIconElement || !flowChartContainer) return
   const isFullscreen = flowChartContainer.style.position === 'fixed'
@@ -283,7 +283,7 @@ function handleScreenTypeBtn(blot: FlowChartPlaceholderBlot): void {
     const originalPosition = flowChartContainer.getAttribute('data-original-position')
     const originalWidth = flowChartContainer.getAttribute('data-original-width')
     const originalHeight = flowChartContainer.getAttribute('data-original-height')
-    if (originalPosition && originalWidth && originalHeight) {
+    if (originalWidth && originalHeight) {
       flowChartContainer.style.position = originalPosition
       flowChartContainer.style.width = originalWidth
       flowChartContainer.style.height = originalHeight

@@ -1,21 +1,27 @@
 import type Quill from 'quill'
-import './formats/flow-chart-blot'
+import type { FlowChartOptions } from './options'
+import Quills from 'quill'
+import FlowChartPlaceholderBlot from './formats/flow-chart-blot'
 import '@logicflow/core/lib/style/index.css'
 import '@logicflow/extension/lib/style/index.css'
 
 export class FlowChartModule {
   quill: Quill
   toolbar: any
-  static currentQuill: Quill | null = null
+  options: FlowChartOptions
+
+  static register() {
+    // Quills.register('formats/flow-chart-placeholder', FlowChartPlaceholderBlot, true)
+    Quills.register('formats/flow-chart', FlowChartPlaceholderBlot, true)
+  }
 
   constructor(quill: Quill, options: any) {
+    (quill.container as any).__quillInstance = quill
     this.quill = quill
+    this.options = options
     this.toolbar = quill.getModule('toolbar')
-    FlowChartModule.currentQuill = quill
-    const domNode = document.querySelector('.ql-flow-chart')
-
-    if (domNode) {
-      domNode.addEventListener('click', () => {
+    if (this.toolbar) {
+      this.toolbar.addHandler('flow-chart', () => {
         this.insertFlowChartEditor()
       })
     }
@@ -34,7 +40,7 @@ export class FlowChartModule {
         ],
       }
       this.quill.insertText(range.index, '\n', 'user')
-      this.quill.insertEmbed(range.index + 1, 'flow-chart-placeholder', defaultData, 'user')
+      this.quill.insertEmbed(range.index + 1, 'flow-chart', defaultData, 'user')
       this.quill.insertText(range.index + 2, '\n', 'user')
     }
   }

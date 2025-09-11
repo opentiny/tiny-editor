@@ -4,6 +4,7 @@ import type FluentEditor from '../../../core/fluent-editor'
 import LogicFlow from '@logicflow/core'
 import { DndPanel, SelectionSelect, Snapshot } from '@logicflow/extension'
 import Quill from 'quill'
+import { getAllConfigs } from '../config-utils'
 import circleIcon from '../icons/circleIcon.png'
 import contractIcon from '../icons/contractIcon.png'
 import diamondIcon from '../icons/diamondIcon.png'
@@ -11,19 +12,17 @@ import ellipseIcon from '../icons/ellipseIcon.png'
 import expandIcon from '../icons/expandIcon.png'
 import rectangleIcon from '../icons/rectangleIcon.png'
 import selectRegionIcon from '../icons/selectRegionIcon.png'
-import { FlowChartModule } from '../index'
 import { initContextMenu } from '../modules/context-menu'
 import { createControlPanel } from '../modules/control-panel'
 import { FlowChartResizeAction } from '../modules/custom-resize-action'
-
 import '../style/flow-chart.scss'
 
 const BlockEmbed = Quill.import('blots/embed') as typeof TypeBlockEmbed
-
 class FlowChartPlaceholderBlot extends BlockEmbed {
-  static blotName = 'flow-chart-placeholder'
+  static blotName = 'flow-chart'
   static tagName = 'div'
   static className = 'ql-flow-chart'
+  quill: Quill | null = null
   flowChart: LogicFlow | null = null
   data: any
   contextMenu: HTMLElement | null = null
@@ -32,7 +31,6 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
   height: number = 500
   parentObserver: MutationObserver | null = null
   nextPObserver: MutationObserver | null = null
-  quill: FluentEditor | null = null
 
   constructor(scroll: Root, domNode: HTMLElement) {
     super(scroll, domNode)
@@ -45,8 +43,6 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
     this.domNode.style.border = '1px solid #e8e8e8'
     this.domNode.setAttribute('contenteditable', 'false')
     this.data = FlowChartPlaceholderBlot.value(this.domNode)
-    this.quill = FlowChartModule.currentQuill as FluentEditor
-    console.warn('this.quill', this.quill)
     this.initFlowChart()
   }
 
@@ -59,7 +55,6 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
     if (domNode.hasAttribute('height')) {
       value.height = Number.parseInt(domNode.getAttribute('height'), 10)
     }
-
     return dataStr.root ? dataStr.root : dataStr
   }
 
@@ -78,6 +73,21 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
     }
     node.setAttribute('contenteditable', 'false')
     return node
+  }
+
+  private static findQuill(el: HTMLElement): Quill | null {
+    let cur: HTMLElement | null = el
+    while (cur) {
+      const q = (cur as any).__quillInstance
+      if (q) return q
+      cur = cur.parentElement
+    }
+    return null
+  }
+
+  attach() {
+    super.attach()
+    this.quill = FlowChartPlaceholderBlot.findQuill(this.domNode)
   }
 
   initFlowChart(): void {
@@ -100,6 +110,7 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
     this.domNode.style.height = `${this.height}px`
     this.updateAlignmentStyle()
     this.observeParentAlignment()
+    const { gridConfig, backgroundConfig, resizeConfig } = getAllConfigs(this.quill)
     this.flowChart = new LogicFlow({
       container: this.domNode,
       stopScrollGraph: true,
@@ -109,10 +120,8 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
       editable: true,
       preventDefaultDoubleClick: true,
       preventDefault: true,
-      grid: {
-        type: 'dot',
-        size: 20,
-      },
+      grid: gridConfig,
+      background: backgroundConfig,
       plugins: [DndPanel, SelectionSelect, Snapshot],
     })
     this.flowChart.setPatternItems([
@@ -146,9 +155,11 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
         icon: diamondIcon,
       },
     ])
-    new FlowChartResizeAction(this)
-    createControlPanel(this, this.quill) // 创建控制面板
-    initContextMenu(this, this.quill) // 初始化右键菜单
+    if (resizeConfig) {
+      new FlowChartResizeAction(this)
+    }
+    createControlPanel(this, this.quill as FluentEditor) // 创建控制面板
+    initContextMenu(this, this.quill as FluentEditor) // 初始化右键菜单
     this.observeOwnParentChange()
     this.observeNextPElement()
     this.addMouseHoverEvents()
@@ -395,7 +406,5 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
     super.remove()
   }
 }
-
-Quill.register(FlowChartPlaceholderBlot)
 
 export default FlowChartPlaceholderBlot

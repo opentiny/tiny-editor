@@ -1,9 +1,9 @@
-@mixin flowChartControlBackground {
+@mixin flow-chart-control-background {
   background-color: rgba(255, 255, 255, 0.85);
   border-radius: 8px;
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
 }
-@mixin flowChartControlItem {
+@mixin flow-chart-control-item {
   align-items: center;
   cursor: pointer;
   display: flex;
@@ -29,9 +29,9 @@
   white-space: nowrap;
   pointer-events: auto;
   padding: 5px 5px;
-  @include flowChartControlBackground;
+  @include flow-chart-control-background;
   .ql-flow-chart-control-item {
-    @include flowChartControlItem;
+    @include flow-chart-control-item;
   }
 }
 .ql-flow-chart {
@@ -40,7 +40,7 @@
     top: 15%;
     .ql-flow-chart-control-item {
       height: 35.99px;
-      @include flowChartControlItem;
+      @include flow-chart-control-item;
     }
   }
 }
@@ -80,7 +80,7 @@
   padding: 3px;
   z-index: 1000;
   max-height: 400px;
-  @include flowChartControlBackground;
+  @include flow-chart-control-background;
   .ql-flow-chart-edge-item {
     width: 30px;
     height: 30px;
@@ -116,9 +116,9 @@
   white-space: nowrap;
   pointer-events: auto;
   padding: 5px 5px;
-  @include flowChartControlBackground;
+  @include flow-chart-control-background;
   .ql-flow-chart-control-item {
-    @include flowChartControlItem;
+    @include flow-chart-control-item;
   }
 }
 
