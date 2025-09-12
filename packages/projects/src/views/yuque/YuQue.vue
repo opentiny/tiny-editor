@@ -160,7 +160,7 @@ onMounted(() => {
           // eslint-disable-next-line no-console
           console.log('YuQue collaborative editing disconnected')
         },
-        onSyncChange: (isSynced) => {
+        onSyncChange: (isSynced: boolean) => {
           // eslint-disable-next-line no-console
           console.log('YuQue collaborative editing synced:', isSynced)
           if (isSynced && editor) {
