@@ -19,7 +19,7 @@ const BlockEmbed = Quill.import('blots/embed') as typeof TypeBlockEmbed
 class MindMapPlaceholderBlot extends BlockEmbed {
   static blotName = 'mind-map'
   static tagName = 'div'
-  static className = 'ql-mind-map'
+  static className = 'ql-mind-map-item'
   quill: Quill | null = null
   mindMap: SimpleMindMap | null = null
   data: any
@@ -174,6 +174,7 @@ class MindMapPlaceholderBlot extends BlockEmbed {
     })
 
     this.domNode.addEventListener('mouseleave', () => {
+      this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
       this.hideControlPanel()
     })
   }
