@@ -1,7 +1,7 @@
 # 协作编辑
 
 <p align="center">
-<img src="../../public/Tiny-editor-demo.png" alt="Tiny-editor-demo" width="600">
+<img src="/Tiny-editor-demo.png" alt="Tiny-editor-demo" width="600">
 </p>
 
 <p align="center"><b>TinyEditor 支持多人实时协作编辑，支持多种连接协议（如 WebSocket、WebRTC），可自定义后端持久化，适用于多场景的在线协同编辑需求。
