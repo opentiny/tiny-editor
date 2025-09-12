@@ -23,10 +23,8 @@ test.describe('MindMap.vue', () => {
     const editor = page.locator('.ql-editor')
     await expect(editor).toBeVisible()
 
-    // 等待思维导图渲染完成
     await page.waitForTimeout(1000)
 
-    // 检查是否存在思维导图相关元素
     const mindMapElement = page.locator('.ql-mind-map-item')
     await expect(mindMapElement).toBeVisible()
   })
@@ -35,13 +33,10 @@ test.describe('MindMap.vue', () => {
     const mindMapButton = page.locator('.ql-toolbar .ql-mind-map')
     await expect(mindMapButton).toBeVisible()
 
-    // 点击mind-map按钮
     await mindMapButton.click()
 
-    // 等待可能的弹窗或交互元素出现
     await page.waitForTimeout(500)
 
-    // 验证点击按钮后编辑器仍然可见
     const editor = page.locator('.ql-editor')
     await expect(editor).toBeVisible()
   })
