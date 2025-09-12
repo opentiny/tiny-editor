@@ -21,7 +21,7 @@ const BlockEmbed = Quill.import('blots/embed') as typeof TypeBlockEmbed
 class FlowChartPlaceholderBlot extends BlockEmbed {
   static blotName = 'flow-chart'
   static tagName = 'div'
-  static className = 'ql-flow-chart'
+  static className = 'ql-flow-chart-item'
   quill: Quill | null = null
   flowChart: LogicFlow | null = null
   data: any
@@ -191,6 +191,7 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
     })
 
     this.domNode.addEventListener('mouseleave', () => {
+      this.flowChart?.clearSelectElements()
       this.hideControlPanel()
     })
   }

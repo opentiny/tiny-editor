@@ -8,7 +8,6 @@ const editorRef = ref<HTMLElement>()
 const TOOLBAR_CONFIG = [
   [{ header: [] }],
   ['bold', 'italic', 'underline', 'link'],
-  [{ list: 'ordered' }, { list: 'bullet' }],
   [{ align: [] }, { list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
   ['clean'],
   ['flow-chart'],

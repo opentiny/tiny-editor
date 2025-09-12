@@ -13,7 +13,7 @@
   border-radius: inherit;
   transition: all 0.2s ease;
 }
-.ql-flow-chart {
+.ql-flow-chart-item {
   position: relative;
   width: 100%;
   height: 100%;
@@ -34,7 +34,7 @@
     @include flow-chart-control-item;
   }
 }
-.ql-flow-chart {
+.ql-flow-chart-item {
   .lf-dndpanel {
     display: none;
     top: 15%;
@@ -104,7 +104,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 }
-.ql-flow-chart .lf-text-input {
+.ql-flow-chart-item .lf-text-input {
   display: none !important;
 }
 .ql-flow-chart-right-up-control {

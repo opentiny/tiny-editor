@@ -11,7 +11,6 @@ export class FlowChartModule {
   options: FlowChartOptions
 
   static register() {
-    // Quills.register('formats/flow-chart-placeholder', FlowChartPlaceholderBlot, true)
     Quills.register('formats/flow-chart', FlowChartPlaceholderBlot, true)
   }
 

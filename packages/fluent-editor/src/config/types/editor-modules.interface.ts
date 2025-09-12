@@ -3,8 +3,8 @@ import type { I18NOptions, ICounterOption, MentionOption, ShortCutKeyInputOption
 import type { BlotFormatterOptionsInput } from '../../modules/custom-image/options'
 import type { FileUploaderOptions } from '../../modules/custom-uploader'
 import type { EmojiModuleOptions } from '../../modules/emoji'
-import type { MindMapOptions } from '../../modules/mind-map/options'
 import type { FlowChartOptions } from '../../modules/flow-chart/options'
+import type { MindMapOptions } from '../../modules/mind-map/options'
 
 export type ToolbarOptions = {
   container?: HTMLElement | (Record<string, any>[] | string[] | (string | Record<string, any>)[])[]
@@ -46,11 +46,6 @@ export interface IEditorModules {
   'file'?: boolean
   'mathlive'?: boolean
   'image'?: boolean | Partial<BlotFormatterOptionsInput>
-<<<<<<< HEAD
   'mind-map'?: boolean | Partial<MindMapOptions>
-  'flow-chart'?: boolean
-=======
-  'mind-map'?: boolean
   'flow-chart'?: boolean | Partial<FlowChartOptions>
->>>>>>> 8566211adf142c7a2e05b4567c8a52ed52579bc7
 }
