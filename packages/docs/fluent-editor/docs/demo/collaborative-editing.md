@@ -1,7 +1,7 @@
 # 协作编辑
 
 <p align="center">
-<img src="https://yinlin-img.oss-cn-beijing.aliyuncs.com/img/tiny-editor-demo.png" alt="Tiny-editor-demo" width="600">
+<img src="../../public/Tiny-editor-demo.png" alt="Tiny-editor-demo" width="600">
 </p>
 
 <p align="center"><b>TinyEditor 支持多人实时协作编辑，支持多种连接协议（如 WebSocket、WebRTC），可自定义后端持久化，适用于多场景的在线协同编辑需求。
@@ -50,7 +50,7 @@ const editor = new FluentEditor('#editor', {
 })
 ```
 
-> 在 Vue 项目中集成协作编辑：[YuQue.vue](../../../../../packages/projects/src/views/yuque/YuQue.vue)
+> 在 Vue 项目中集成协作编辑：[YuQue.vue](https://github.com/opentiny/tiny-editor/blob/main/packages/projects/src/views/yuque/YuQue.vue)
 
 ### 后端服务
 
@@ -363,4 +363,4 @@ pnpm i
 
 TinyEditor 基于 WebSocket 提供了自定义的协同编辑后端服务，支持 MongoDB 持久化和 Docker 容器化部署。
 
-详细的自定义持久化服务配置和部署请参考：[collaborative-editing-backend](../../../../collaborative-editing-backend/README.md)
+详细的自定义持久化服务配置和部署请参考：[collaborative-editing-backend](https://github.com/opentiny/tiny-editor/tree/ospp-2025/collaborative-editing/packages/collaborative-editing-backend)

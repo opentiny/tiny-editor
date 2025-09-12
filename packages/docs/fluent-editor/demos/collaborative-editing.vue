@@ -130,9 +130,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <div>
-      <div id="editor" ref="editorRef" />
-    </div>
+    <div id="editor" ref="editorRef" />
   </div>
 </template>
 
