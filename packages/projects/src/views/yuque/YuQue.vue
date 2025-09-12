@@ -74,14 +74,6 @@ const DEFAULT_CONTENT = `
 <p>这是测试文档的底部。</p>
 `
 
-const CURSOR_CLASSES = {
-  SELECTION_CLASS: 'ql-cursor-selections',
-  CARET_CONTAINER_CLASS: 'ql-cursor-caret-container',
-  CARET_CLASS: 'ql-cursor-caret',
-  FLAG_CLASS: 'ql-cursor-flag',
-  NAME_CLASS: 'ql-cursor-name',
-}
-
 const TOOLBAR_CONFIG = [
   ['undo', 'redo', 'format-painter', 'clean'],
   [
@@ -155,27 +147,21 @@ onMounted(() => {
           },
         },
         cursors: {
-          template: `
-                  <span class="${CURSOR_CLASSES.SELECTION_CLASS}"></span>
-                  <span class="${CURSOR_CLASSES.CARET_CONTAINER_CLASS}">
-                    <span class="${CURSOR_CLASSES.CARET_CLASS}"></span>
-                  </span>
-                  <div class="${CURSOR_CLASSES.FLAG_CLASS}">
-                    <small class="${CURSOR_CLASSES.NAME_CLASS}"></small>
-                  </div>
-          `,
           hideDelayMs: 300,
           hideSpeedMs: 300,
           selectionChangeSource: null,
           transformOnTextChange: true,
         },
         onConnect: () => {
+          // eslint-disable-next-line no-console
           console.log('YuQue collaborative editing connected')
         },
         onDisconnect: () => {
+          // eslint-disable-next-line no-console
           console.log('YuQue collaborative editing disconnected')
         },
         onSyncChange: (isSynced) => {
+          // eslint-disable-next-line no-console
           console.log('YuQue collaborative editing synced:', isSynced)
           if (isSynced && editor) {
             const currentContent = editor.getContents()
@@ -216,7 +202,7 @@ onMounted(() => {
 }
 
 .ql-editor {
-  padding: 0 !important;
+  padding-top: 28px !important;
   min-height: calc(100vh - 94px);
   font-family:
     PingFang SC,
