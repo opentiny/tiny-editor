@@ -15,7 +15,7 @@ export class CollaborativeEditor {
   private awareness: Awareness
   private cursors: QuillCursors | null
   private cleanupBindings: (() => void) | null = null
-  private clearIndexedDB: (() => Promise<void>) | null = null
+  private clearIndexedDB: (() => void) | null = null
 
   constructor(
     public quill: FluentEditor,
@@ -109,7 +109,7 @@ export class CollaborativeEditor {
     this.provider?.destroy?.()
     this.cursors?.clearCursors()
     this.awareness?.destroy?.()
-    await this.clearIndexedDB?.()
+    this.clearIndexedDB?.()
     this.ydoc?.destroy?.()
   }
 }
