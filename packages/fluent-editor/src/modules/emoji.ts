@@ -1,4 +1,3 @@
-import type { Delta } from 'quill'
 import type TypeToolbar from 'quill/modules/toolbar'
 import type FluentEditor from '../fluent-editor'
 import data from '@emoji-mart/data'
