@@ -52,6 +52,7 @@ export class FileUploader extends Uploader {
   async upload(range: Range, files: FileList | File[]) {
     const uploads = []
     const fails = []
+
     for (const file of Array.from(files)) {
       if (this.validateFile(file)) {
         uploads.push(file)
@@ -60,6 +61,7 @@ export class FileUploader extends Uploader {
         fails.push(file)
       }
     }
+
     const result = await this.options.handler.call(this, range, uploads)
     const updateDelta = result.reduce((delta, url, i) => {
       if (isString(url)) {
@@ -75,15 +77,18 @@ export class FileUploader extends Uploader {
         }
       }
       else {
-        delta.insert('\n')
+        delta.insert(' ')
       }
       return delta
     }, new Delta().retain(range.index).delete(range.length))
+
     this.quill.updateContents(updateDelta, Quill.sources.USER)
     this.quill.setSelection(range.index + result.length, Quill.sources.SILENT)
+
     for (const file of fails) {
       this.options.fail.call(this, file, range)
     }
+
     for (const [i, res] of result.entries()) {
       if (isString(res)) {
         this.options.success.call(this, files[i], { index: range.index + i, length: 0 })
