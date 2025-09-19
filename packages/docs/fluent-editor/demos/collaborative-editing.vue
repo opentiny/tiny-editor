@@ -118,7 +118,6 @@ onMounted(() => {
               `,
               hideDelayMs: 500,
               hideSpeedMs: 300,
-              selectionChangeSource: null,
               transformOnTextChange: true,
             },
           },

@@ -50,29 +50,36 @@ export function bindAwarenessToCursors(
       })
     }
 
-    const states = awareness.getStates()
-    states.forEach((state, clientId) => {
-      if (clientId === awareness.clientID) return
+    window.setTimeout(() => {
+      const states = awareness.getStates()
+      states.forEach((state, clientId) => {
+        if (clientId === awareness.clientID) return
 
-      if (state.cursor) {
-        cursorsModule.createCursor(
-          clientId.toString(),
-          state.user?.name || `User ${clientId}`,
-          state.user?.color || '#ff6b6b',
-        )
-        cursorsModule.moveCursor(clientId.toString(), state.cursor)
-      }
-      else {
-        cursorsModule.removeCursor(clientId.toString())
-      }
+        if (state.cursor) {
+          cursorsModule.createCursor(
+            clientId.toString(),
+            state.user?.name || `User ${clientId}`,
+            state.user?.color || '#ff6b6b',
+          )
+          cursorsModule.moveCursor(clientId.toString(), state.cursor)
+        }
+        else {
+          cursorsModule.removeCursor(clientId.toString())
+        }
+      })
     })
   }
 
   const selectionChangeHandler = (range) => {
     if (range) {
+      const quillLength = quill.getLength()
+      const maxIndex = quillLength ? quillLength - 1 : 0
+      const safeIndex = Math.max(0, Math.min(range.index, maxIndex))
+      const safeLength = Math.max(0, Math.min(range.length, maxIndex - safeIndex))
+
       awareness.setLocalStateField('cursor', {
-        index: range.index,
-        length: range.length,
+        index: safeIndex,
+        length: safeLength,
       })
     }
     else {
