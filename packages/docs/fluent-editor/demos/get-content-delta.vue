@@ -45,7 +45,6 @@ const TOOLBAR_CONFIG = [
   ['link', 'blockquote', 'code', 'code-block'],
   ['image', 'file'],
   ['emoji', 'video', 'formula', 'screenshot'],
-  ['mind-map'],
 ]
 
 const articleRef = ref<HTMLElement>()
@@ -63,14 +62,11 @@ onMounted(() => {
     editor = new FluentEditor('#editor-get-content-delta', {
       theme: 'snow',
       modules: {
-        'toolbar': TOOLBAR_CONFIG,
-        'syntax': { hljs },
-        'emoji': true,
-        'file': true,
-        'mind-map': {
-          resize: true,
-        },
-        'mention': {
+        toolbar: TOOLBAR_CONFIG,
+        syntax: { hljs },
+        emoji: true,
+        file: true,
+        mention: {
           itemKey: 'cn',
           searchKey,
           search(term) {
