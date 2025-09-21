@@ -1,0 +1,33 @@
+diff --git a/core/editor.js b/core/editor.js
+index 07fd544a5857c0c498abf899c66e34a1b6b6a736..62072586605974e6890a919312c0bbd971870b9e 100644
+--- a/core/editor.js
++++ b/core/editor.js
+@@ -15,7 +15,14 @@ class Editor {
+   applyDelta(delta) {
+     this.scroll.update();
+     let scrollLength = this.scroll.length();
+-    this.scroll.batchStart();
++
++    // Check if a batch already exists (e.g. during composition)
++    const isAlreadyBatching = Boolean(this.scroll.batch);
++
++    if (!isAlreadyBatching) {
++      this.scroll.batchStart();
++    }
++
+     const normalizedDelta = normalizeDelta(delta);
+     const deleteDelta = new Delta();
+     const normalizedOps = splitOpLines(normalizedDelta.ops.slice());
+@@ -93,7 +100,11 @@ class Editor {
+       }
+       return index + Op.length(op);
+     }, 0);
+-    this.scroll.batchEnd();
++
++    if (!isAlreadyBatching) {
++      this.scroll.batchEnd();
++    }
++
+     this.scroll.optimize();
+     return this.update(normalizedDelta);
+   }

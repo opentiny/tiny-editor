@@ -49,6 +49,11 @@
     "pre-commit": "lint-staged",
     "commit-msg": "node verifyCommit.js"
   },
+  "pnpm": {
+    "patchedDependencies": {
+      "quill@2.0.3": "patches/quill@2.0.3.patch"
+    }
+  },
   "lint-staged": {
     "*.ts": [
       "eslint --fix",
