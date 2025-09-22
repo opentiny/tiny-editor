@@ -1,3 +1,4 @@
+import type QuillCursors from 'quill-cursors'
 import type { Awareness } from 'y-protocols/awareness'
 import type FluentEditor from '../../../core/fluent-editor'
 
@@ -30,12 +31,6 @@ export function setupAwareness(options?: AwarenessOptions, defaultAwareness?: Aw
   return awareness
 }
 
-interface QuillCursors {
-  createCursor: (id: string, name: string, color: string) => any
-  moveCursor: (id: string, range: { index: number, length: number }) => void
-  removeCursor: (id: string) => void
-}
-
 export function bindAwarenessToCursors(
   awareness: Awareness,
   cursorsModule: QuillCursors,
@@ -43,14 +38,12 @@ export function bindAwarenessToCursors(
 ): (() => void) | void {
   if (!cursorsModule || !awareness) return
 
-  const awarenessChangeHandler = (changes?: { added: number[], updated: number[], removed: number[] }) => {
-    if (changes?.removed?.length) {
-      changes.removed.forEach((clientId) => {
-        cursorsModule.removeCursor(clientId.toString())
-      })
+  let debounceTimer: NodeJS.Timeout | undefined
+  const awarenessChangeHandler = () => {
+    if (debounceTimer) {
+      clearTimeout(debounceTimer)
     }
-
-    window.setTimeout(() => {
+    debounceTimer = setTimeout(() => {
       const states = awareness.getStates()
       states.forEach((state, clientId) => {
         if (clientId === awareness.clientID) return
@@ -63,23 +56,15 @@ export function bindAwarenessToCursors(
           )
           cursorsModule.moveCursor(clientId.toString(), state.cursor)
         }
-        else {
-          cursorsModule.removeCursor(clientId.toString())
-        }
       })
-    })
+    }, 100)
   }
 
-  const selectionChangeHandler = (range) => {
+  const selectionChangeHandler = (range: { index: number, length: number }) => {
     if (range) {
-      const quillLength = quill.getLength()
-      const maxIndex = quillLength ? quillLength - 1 : 0
-      const safeIndex = Math.max(0, Math.min(range.index, maxIndex))
-      const safeLength = Math.max(0, Math.min(range.length, maxIndex - safeIndex))
-
       awareness.setLocalStateField('cursor', {
-        index: safeIndex,
-        length: safeLength,
+        index: range.index,
+        length: range.length,
       })
     }
     else {
@@ -87,12 +72,19 @@ export function bindAwarenessToCursors(
     }
   }
 
-  awareness.on('change', awarenessChangeHandler)
-  quill.on('selection-change', selectionChangeHandler)
+  const changeHandler = ({ added, updated, removed }: { added: number[], updated: number[], removed: number[] }) => {
+    removed.forEach((clientId) => {
+      cursorsModule.removeCursor(clientId.toString())
+    })
+    awarenessChangeHandler()
+  }
+
+  awareness.on('change', changeHandler)
+  quill.on('selection-change', range => selectionChangeHandler(range))
   awarenessChangeHandler()
 
   return () => {
-    awareness.off('change', awarenessChangeHandler)
+    awareness.off('change', changeHandler)
     quill.off('selection-change', selectionChangeHandler)
   }
 }
