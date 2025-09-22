@@ -1,6 +1,7 @@
 import type QuillCursors from 'quill-cursors'
 import type { Awareness } from 'y-protocols/awareness'
 import type FluentEditor from '../../../core/fluent-editor'
+import * as Y from 'yjs'
 
 export interface AwarenessState {
   name?: string
@@ -35,53 +36,94 @@ export function bindAwarenessToCursors(
   awareness: Awareness,
   cursorsModule: QuillCursors,
   quill: FluentEditor,
+  yText: Y.Text,
 ): (() => void) | void {
   if (!cursorsModule || !awareness) return
 
-  let debounceTimer: NodeJS.Timeout | undefined
-  const awarenessChangeHandler = () => {
-    if (debounceTimer) {
-      clearTimeout(debounceTimer)
-    }
-    debounceTimer = setTimeout(() => {
-      const states = awareness.getStates()
-      states.forEach((state, clientId) => {
-        if (clientId === awareness.clientID) return
+  const doc = yText.doc!
 
-        if (state.cursor) {
-          cursorsModule.createCursor(
-            clientId.toString(),
-            state.user?.name || `User ${clientId}`,
-            state.user?.color || '#ff6b6b',
-          )
-          cursorsModule.moveCursor(clientId.toString(), state.cursor)
+  const updateCursor = (clientId: number, state: any) => {
+    try {
+      if (state?.cursor && clientId !== awareness.clientID) {
+        const user = state.user || {}
+        const color = user.color || '#ff6b6b'
+        const name = user.name || `User ${clientId}`
+
+        cursorsModule.createCursor(clientId.toString(), name, color)
+
+        const anchor
+= Y.createAbsolutePositionFromRelativePosition(
+  Y.createRelativePositionFromJSON(state.cursor.anchor),
+  doc,
+)
+        const head
+  = Y.createAbsolutePositionFromRelativePosition(
+    Y.createRelativePositionFromJSON(state.cursor.head),
+    doc,
+  )
+
+        if (anchor && head && anchor.type === yText) {
+          cursorsModule.moveCursor(clientId.toString(), {
+            index: anchor.index,
+            length: head.index - anchor.index,
+          })
         }
-      })
-    }, 100)
+      }
+      else {
+        cursorsModule.removeCursor(clientId.toString())
+      }
+    }
+    catch (err) {
+      console.error('Cursor update failed:', err)
+    }
   }
 
-  const selectionChangeHandler = (range: { index: number, length: number }) => {
+  const selectionChangeHandler = (range: { index: number, length:
+  number } | null) => {
     if (range) {
-      awareness.setLocalStateField('cursor', {
-        index: range.index,
-        length: range.length,
-      })
+      const anchor = Y.createRelativePositionFromTypeIndex(yText, range.index)
+      const head = Y.createRelativePositionFromTypeIndex(yText, range.index + range.length)
+
+      const currentState = awareness.getLocalState()
+      if (!currentState?.cursor
+        || !Y.compareRelativePositions(anchor, currentState.cursor.anchor)
+        || !Y.compareRelativePositions(head, currentState.cursor.head)) {
+        awareness.setLocalStateField('cursor', { anchor, head })
+      }
     }
     else {
-      awareness.setLocalStateField('cursor', null)
+      if (awareness.getLocalState()?.cursor !== null) {
+        awareness.setLocalStateField('cursor', null)
+      }
     }
   }
 
-  const changeHandler = ({ added, updated, removed }: { added: number[], updated: number[], removed: number[] }) => {
-    removed.forEach((clientId) => {
-      cursorsModule.removeCursor(clientId.toString())
+  const changeHandler = ({ added, updated, removed }: {
+    added: number[]
+    updated: number[]
+    removed: number[]
+  }) => {
+    const states = awareness.getStates()
+
+    added.forEach((id) => {
+      updateCursor(id, states.get(id))
     })
-    awarenessChangeHandler()
+
+    updated.forEach((id) => {
+      updateCursor(id, states.get(id))
+    })
+
+    removed.forEach((id) => {
+      cursorsModule.removeCursor(id.toString())
+    })
   }
 
   awareness.on('change', changeHandler)
-  quill.on('selection-change', range => selectionChangeHandler(range))
-  awarenessChangeHandler()
+  quill.on('selection-change', selectionChangeHandler)
+
+  awareness.getStates().forEach((state, clientId) => {
+    updateCursor(clientId, state)
+  })
 
   return () => {
     awareness.off('change', changeHandler)

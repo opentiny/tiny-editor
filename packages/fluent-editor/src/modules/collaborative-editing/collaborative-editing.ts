@@ -34,7 +34,6 @@ export class CollaborativeEditor {
         throw new Error('Failed to initialize awareness')
       }
       this.awareness = awareness
-      this.cleanupBindings = bindAwarenessToCursors(this.awareness, this.cursors, quill) || null
     }
     else {
       this.awareness = new Awareness(this.ydoc)
@@ -65,6 +64,7 @@ export class CollaborativeEditor {
 
     if (this.provider) {
       const ytext = this.ydoc.getText('tiny-editor')
+      this.cleanupBindings = bindAwarenessToCursors(this.awareness, this.cursors, quill, ytext) || null
       new QuillBinding(
         ytext,
         this.quill,
