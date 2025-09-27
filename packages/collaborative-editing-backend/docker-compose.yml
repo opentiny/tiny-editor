@@ -12,7 +12,7 @@ services:
       - mongodb_data:/data/db
 
   websocket-server:
-    build: .
+    image: yinlin124/collaborative-editor-backend:latest
     container_name: yjs-websocket-server
     restart: always
     ports:

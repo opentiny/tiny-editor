@@ -6,11 +6,57 @@
 
 ### 环境变量配置
 
+### Docker 容器化部署(推荐)
+
+1. 拉取 Docker 镜像，使用 Docker Compose 一键启动：
+
 ```bash
-cp .env.example .env
+docker pull yinlin124/collaborative-editor-backend:latest
 ```
 
-参照下方表格进行配置 `.env` 文件
+2. 创建 `docker-compose.yml` 文件，内容如下：
+
+```yaml
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: yjs-mongodb
+    restart: always
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin!123
+    volumes:
+      - mongodb_data:/data/db
+
+  websocket-server:
+    image: yinlin124/collaborative-editor-backend:latest
+    container_name: yjs-websocket-server
+    restart: always
+    ports:
+      - '${PORT:-1234}:${PORT:-1234}'
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+
+volumes:
+  mongodb_data:
+```
+
+3. 在项目根目录下新建 `.env` 文件：
+
+```env
+HOST=0.0.0.0
+PORT=1234
+MONGODB_URL=mongodb://admin:admin!123@mongodb:27017/?authSource=admin
+MONGODB_DB=tinyeditor
+MONGODB_COLLECTION=documents
+GC=true
+```
+
+可参照下方表格进行配置 `.env` 文件
 | 变量名 | 必需 | 默认值 | 说明 |
 | -------------------- | ---- | ------ | -------------------------------------------------------------- |
 | `HOST` | ✅ | - | 服务器监听地址 |
@@ -20,12 +66,10 @@ cp .env.example .env
 | `MONGODB_COLLECTION` | ✅ | - | MongoDB 集合名称 |
 | `GC` | ❌ | `true` | 是否启用 Yjs 垃圾回收 |
 
-### Docker 容器化部署(推荐)
-
-使用 Docker Compose 一键启动（包含 MongoDB）：
+4. 在项目根目录下运行 `docker-compose` 启动容器：
 
 ```bash
-docker compose up --build
+docker compose up
 ```
 
 ### 本地部署
