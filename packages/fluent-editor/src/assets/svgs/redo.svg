@@ -1,0 +1,8 @@
+<svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14.000000" height="14.000000" fill="none">
+	<rect id="返回右" width="14.000000" height="14.000000" x="0.000000" y="0.000000" transform="matrix(-1,0,0,1,14,0)" />
+	<g id="组合 6">
+		<path id="矩形 3" d="M0 0L8.3125 0C10.4871 0 12.25 1.76288 12.25 3.9375C12.25 6.11212 10.4871 7.875 8.3125 7.875L5.38821 7.875" stroke="rgb(0,0,0)" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="1.20000005" transform="matrix(-1,0,0,1,13.0784,4.515)" />
+		<path id="path6" d="M2.96514 0C1.46983 1.4803 1.4953 1.48483 0 2.96514" stroke="rgb(25,25,25)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.20000005" transform="matrix(-1,0,0,1,13.1133,1.54)" />
+		<path id="path7" d="M2.96514 0C1.46983 1.4803 1.4953 1.48483 0 2.96514" stroke="rgb(25,25,25)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.20000005" transform="matrix(-1,0,0,-1,13.1133,7.47028)" />
+	</g>
+</svg>
