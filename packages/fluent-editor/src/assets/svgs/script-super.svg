@@ -1,0 +1,15 @@
+<svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14.000000" height="14.000000" fill="none">
+	<defs>
+		<linearGradient id="paint_custom_gradient_2">
+			<stop stop-color="rgb(250,100,1)" offset="0.263296664" stop-opacity="1" />
+			<stop stop-color="rgb(249.9,102.687,1)" offset="0.349490285" stop-opacity="1" />
+			<stop stop-color="rgb(247,181,1)" offset="0.494946986" stop-opacity="1" />
+			<stop stop-color="rgb(11,184,178)" offset="0.690560162" stop-opacity="1" />
+			<stop stop-color="rgb(1,145,255)" offset="0.858591199" stop-opacity="1" />
+			<stop stop-color="rgb(182,32,224)" offset="1" stop-opacity="1" />
+		</linearGradient>
+	</defs>
+	<rect id="上标" width="14.000000" height="14.000000" x="0.000000" y="0.000000" fill="rgb(0,0,0)" fill-opacity="0" />
+	<path id="path9" d="M9.61328 2.71829C9.61328 1.6545 10.4185 0.793335 11.4133 0.793335L11.4975 0.793335C12.4449 0.793335 13.2133 1.6151 13.2133 2.62823C13.2133 3.64137 12.3733 4.25833 11.6733 4.64333C10.9733 5.02834 10.7283 5.09833 10.3433 5.44833C9.95828 5.79833 9.61328 6.18333 9.61328 6.38808L9.61328 6.79333L13.2133 6.79333" stroke="rgb(25,25,25)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.20000005" />
+	<path id="矢量 340" d="M0.746704 2.56667L7.27714 12M0.746704 11.9979L7.27714 2.56667" stroke="rgb(25,25,25)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.20000005" />
+</svg>

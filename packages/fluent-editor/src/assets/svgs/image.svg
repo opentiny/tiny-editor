@@ -1,0 +1,17 @@
+<svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14.000000" height="14.000000" fill="none">
+	<rect id="图片上传" width="14.000000" height="14.000000" x="0.000000" y="0.000000" fill="rgb(199,0,11)" fill-opacity="0" />
+	<g id="组合 62">
+		<g id="mask">
+			<g id="mask1271_12946" opacity="0">
+				<path id="path" d="M14 3.05176e-05L0 3.05176e-05L0 14L7.50893 14L7.50893 6.73258L14 6.73258C14 6.73258 14.0705 13.9524 14 14L14 3.05176e-05Z" opacity="0" fill="rgb(196,196,196)" fill-rule="evenodd" />
+			</g>
+			<g id="组合 61">
+				<path id="path3" d="M6.90525 12.705L2.85545 12.705L2.4967 12.705C1.52837 12.705 0.746704 11.9204 0.746704 10.955C0.746704 7.65624 0.746704 5.79541 0.746704 2.49666C0.746704 1.52832 1.52837 0.746658 2.4967 0.746658L10.955 0.746658C11.9205 0.746658 12.705 1.52832 12.705 2.49666L12.705 6.25763" stroke="rgb(25,25,25)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.20000005" />
+			</g>
+			<path id="path3" d="M1.16663 8.19665L4.10068 6.21734C4.56509 5.90405 5.19624 6.03333 5.50007 6.50398L6.20036 7.58877C6.54951 8.12963 7.31131 8.20447 7.75904 7.7419L8.49329 6.98332" stroke="rgb(25,25,25)" stroke-linejoin="round" stroke-width="1.20000005" />
+		</g>
+		<path id="矢量 337" d="M0 0L3.65494 3.65494M3.65494 0L0 3.65494" stroke="rgb(25,25,25)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.20000005" transform="matrix(0.707107,0.707107,-0.707107,0.707107,10.6577,8.07333)" />
+		<circle id="path5" cx="9.53747559" cy="3.89083862" r="0.4375" fill="rgb(25,25,25)" />
+		<circle id="path5" cx="9.53747559" cy="3.89083862" r="0.4375" stroke="rgb(25,25,25)" stroke-linejoin="round" stroke-width="1.20000005" />
+	</g>
+</svg>

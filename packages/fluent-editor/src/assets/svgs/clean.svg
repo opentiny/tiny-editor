@@ -1,0 +1,8 @@
+<svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14.000000" height="14.000000" fill="none">
+	<rect id="橡皮擦" width="14.000000" height="14.000000" x="0.000000" y="0.000000" transform="matrix(-1,0,0,1,14,0)" />
+	<g id="组合 11">
+		<path id="path7" d="M12.4672 3.46243C13.1776 4.17288 13.1776 5.32475 12.4672 6.03521L6.03521 12.4672C5.32475 13.1776 4.17288 13.1776 3.46243 12.4672L1.53284 10.5376C0.822387 9.82712 0.822387 8.67525 1.53284 7.96479L7.96479 1.53284C8.67525 0.822387 9.82712 0.822387 10.5376 1.53284L12.4672 3.46243Z" fill-rule="evenodd" stroke="rgb(25,25,25)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.20000005" />
+		<line id="path8" x1="0" x2="6.36703587" y1="0" y2="0" stroke="rgb(25,25,25)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.20000005" transform="matrix(0.708134,0.706078,0.706078,-0.708134,3.23157,6.28783)" />
+		<path id="path9" d="M0 0C0 0 4.86592 0.00061 7.97692 0.001" stroke="rgb(25,25,25)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.20000005" transform="matrix(1,0,0,-1,4.52661,12.9743)" />
+	</g>
+</svg>
