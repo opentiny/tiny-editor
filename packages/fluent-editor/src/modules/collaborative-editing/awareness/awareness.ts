@@ -51,22 +51,16 @@ export function bindAwarenessToCursors(
 
         cursorsModule.createCursor(clientId.toString(), name, color)
 
-        const anchor
-= Y.createAbsolutePositionFromRelativePosition(
-  Y.createRelativePositionFromJSON(state.cursor.anchor),
-  doc,
-)
-        const head
-  = Y.createAbsolutePositionFromRelativePosition(
-    Y.createRelativePositionFromJSON(state.cursor.head),
-    doc,
-  )
+        const anchor = Y.createAbsolutePositionFromRelativePosition(Y.createRelativePositionFromJSON(state.cursor.anchor), doc)
+        const head = Y.createAbsolutePositionFromRelativePosition(Y.createRelativePositionFromJSON(state.cursor.head), doc)
 
-        if (anchor && head && anchor.type === yText) {
-          cursorsModule.moveCursor(clientId.toString(), {
-            index: anchor.index,
-            length: head.index - anchor.index,
-          })
+        if (anchor && head && anchor.type === yText && clientId) {
+          setTimeout(() => {
+            cursorsModule.moveCursor(clientId.toString(), {
+              index: anchor.index,
+              length: head.index - anchor.index,
+            })
+          }, 0)
         }
       }
       else {
@@ -78,24 +72,25 @@ export function bindAwarenessToCursors(
     }
   }
 
-  const selectionChangeHandler = (range: { index: number, length:
-  number } | null) => {
-    if (range) {
-      const anchor = Y.createRelativePositionFromTypeIndex(yText, range.index)
-      const head = Y.createRelativePositionFromTypeIndex(yText, range.index + range.length)
+  const selectionChangeHandler = (range: { index: number, length: number } | null) => {
+    setTimeout(() => {
+      if (range) {
+        const anchor = Y.createRelativePositionFromTypeIndex(yText, range.index)
+        const head = Y.createRelativePositionFromTypeIndex(yText, range.index + range.length)
 
-      const currentState = awareness.getLocalState()
-      if (!currentState?.cursor
-        || !Y.compareRelativePositions(anchor, currentState.cursor.anchor)
-        || !Y.compareRelativePositions(head, currentState.cursor.head)) {
-        awareness.setLocalStateField('cursor', { anchor, head })
+        const currentState = awareness.getLocalState()
+        if (!currentState?.cursor
+          || !Y.compareRelativePositions(anchor, currentState.cursor.anchor)
+          || !Y.compareRelativePositions(head, currentState.cursor.head)) {
+          awareness.setLocalStateField('cursor', { anchor, head })
+        }
       }
-    }
-    else {
-      if (awareness.getLocalState()?.cursor !== null) {
-        awareness.setLocalStateField('cursor', null)
+      else {
+        if (awareness.getLocalState()?.cursor !== null) {
+          awareness.setLocalStateField('cursor', null)
+        }
       }
-    }
+    }, 0)
   }
 
   const changeHandler = ({ added, updated, removed }: {
@@ -103,6 +98,7 @@ export function bindAwarenessToCursors(
     updated: number[]
     removed: number[]
   }) => {
+    if (quill.composition.isComposing) return
     const states = awareness.getStates()
 
     added.forEach((id) => {
@@ -119,7 +115,20 @@ export function bindAwarenessToCursors(
   }
 
   awareness.on('change', changeHandler)
-  quill.on('selection-change', selectionChangeHandler)
+  quill.on('editor-change', (eventName, ...args) => {
+    if (quill.composition.isComposing) return
+    if (eventName === 'text-change') {
+      if (args[2] === 'user') {
+        const range = quill.getSelection()
+        selectionChangeHandler(range)
+      }
+    }
+    else if (eventName === 'selection-change') {
+      if (args[2] === 'user') {
+        selectionChangeHandler(args[0] as { index: number, length: number } | null)
+      }
+    }
+  })
 
   awareness.getStates().forEach((state, clientId) => {
     updateCursor(clientId, state)
@@ -127,6 +136,6 @@ export function bindAwarenessToCursors(
 
   return () => {
     awareness.off('change', changeHandler)
-    quill.off('selection-change', selectionChangeHandler)
+    quill.off('editor-change', selectionChangeHandler)
   }
 }
