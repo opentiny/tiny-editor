@@ -400,7 +400,7 @@ function handleSetLayoutBtn(blot: MindMapPlaceholderBlot): void {
     else {
       layoutPanel.style.height = '270px'
     }
-    layoutPanel.style.display = 'block'
+    layoutPanel.style.display = 'flex'
   }
 
   const handleOutsideClick = (e: MouseEvent) => {
