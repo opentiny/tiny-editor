@@ -1,13 +1,16 @@
-# 协作编辑
+# 协同编辑
 
 <p align="center">
-<img src="/Tiny-editor-demo.png" alt="Tiny-editor-demo" width="600">
+<img src="/Tiny-editor-demo.png" alt="Tiny-editor-demo">
 </p>
 
-<p align="center"><b>TinyEditor 支持多人实时协作编辑，支持多种连接协议（如 WebSocket、WebRTC），可自定义后端持久化，适用于多场景的在线协同编辑需求。
+<p><b>TinyEditor 支持多人实时协作编辑，支持多种连接协议（如 WebSocket、WebRTC），可自定义后端持久化，适用于多场景的在线协同编辑需求。
 </b></p>
 
 ## 在线协同演示
+整个协同编辑系统由三部分组成：前端 `TinyEditor`、中间层协作引擎 `Yjs` 和后端服务（用于数据同步和持久化）。前端编辑器将操作传递给 `Yjs`，`Yjs` 通过不同的连接协议（如 `WebSocket` 或 `WebRTC`）实现多端同步, 并支持将数据持久化到后端数据库（如 `MongoDB`）。
+<img src="/Collab-arch.png" alt="Tiny-editor-demo">
+
 
 下面是一个完整的协同编辑演示：
 
@@ -16,12 +19,20 @@
 
 ## 快速开始
 
+协同编辑功能需要配置前端和后端服务。
+
 ### 前端配置
 
 安装依赖
 
+> **重要提示：** 由于项目使用了 patch 补丁，必须先在项目根目录运行 `pnpm i` 安装所有依赖，然后再安装协同编辑所需的额外依赖。
+
 ```bash
-npm i quill-cursors y-protocols y-quill yjs y-indexeddb y-websocket
+# 首先在项目根目录安装所有依赖（必须执行）
+pnpm i
+
+# 然后安装协同编辑所需的额外依赖
+pnpm i quill-cursors y-protocols y-quill yjs y-indexeddb y-websocket
 ```
 
 引入协同编辑模块
@@ -50,26 +61,121 @@ const editor = new FluentEditor('#editor', {
 })
 ```
 
-> 在 Vue 项目中集成协作编辑：[YuQue.vue](https://github.com/opentiny/tiny-editor/blob/main/packages/projects/src/views/yuque/YuQue.vue)
+> 在 Vue 项目中集成协作编辑：[YuQue.vue](https://github.com/opentiny/tiny-editor/blob/ospp-2025/collaborative-editing/packages/projects/src/views/yuque/YuQue.vue)
 
 ### 后端服务
+可选择 Docker 容器化启动或本地部署
 
-安装依赖：
+#### Docker 容器化部署(推荐)
+
+1. 拉取 Docker 镜像，使用 Docker Compose 一键启动：
 
 ```bash
-git clone https://github.com/yjs/y-websocket-server.git
-cd y-websocket-server
-pnpm i
+docker pull yinlin124/collaborative-editor-backend:latest
 ```
 
-启动服务：
+2. 创建 `docker-compose.yml` 文件，内容如下：
 
-| OS                 | 启动命令                                                                                |
-| ------------------ | --------------------------------------------------------------------------------------- |
-| Ubuntu/MacOS       | `HOST=localhost PORT=1234 YPERSISTENCE=./dbDir npx y-websocket`                         |
-| Windows PowerShell | `$env:HOST="localhost"; $env:PORT="1234"; $env:YPERSISTENCE="./dbDir"; npx y-websocket` |
+```yaml
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: yjs-mongodb
+    restart: always
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin!123
+    volumes:
+      - mongodb_data:/data/db
 
-后端服务启动成功后，编辑器即可实现多人实时协同编辑
+  websocket-server:
+    image: yinlin124/collaborative-editor-backend:latest
+    container_name: yjs-websocket-server
+    restart: always
+    ports:
+      - '${PORT:-1234}:${PORT:-1234}'
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+
+volumes:
+  mongodb_data:
+```
+
+3. 在项目根目录下新建 `.env` 文件：
+
+```env
+HOST=0.0.0.0
+# 注意这里的 PORT 需与前端配置中的 serverUrl 端口一致
+PORT=1234
+MONGODB_URL=mongodb://admin:admin!123@mongodb:27017/?authSource=admin
+MONGODB_DB=tinyeditor
+MONGODB_COLLECTION=documents
+GC=true
+```
+
+可参照下方表格进行配置 `.env` 文件
+
+| 变量名               | 必需 | 默认值 | 说明                  |
+| -------------------- | ---- | ------ | --------------------- |
+| `HOST`               | ✅   | -      | 服务器监听地址        |
+| `PORT`               | ✅   | -      | WebSocket 服务端口    |
+| `MONGODB_URL`        | ✅   | -      | MongoDB 连接字符串    |
+| `MONGODB_DB`         | ✅   | -      | MongoDB 数据库名称    |
+| `MONGODB_COLLECTION` | ✅   | -      | MongoDB 集合名称      |
+| `GC`                 | ❌   | `true` | 是否启用 Yjs 垃圾回收 |
+
+4. 在项目根目录下运行 `docker-compose` 启动容器：
+
+```bash
+docker compose up
+```
+
+启动后即可使用 `ws://localhost:1234` 作为前端 `serverUrl` 配置
+
+#### 本地部署
+
+1. 启动 MongoDB(如果有其他 MongoDB 服务可跳过此步骤)
+
+```bash
+docker run -d \
+  --name mongodb \
+  -p 27017:27017 \
+  -e MONGO_INITDB_ROOT_USERNAME=admin \
+  -e MONGO_INITDB_ROOT_PASSWORD="admin!123" \
+  -v mongodb_data:/data/db \
+  mongo:latest
+```
+
+2. 进入协同编辑后端子包目录
+
+```bash
+cd packages/collaborative-editing-backend
+```
+
+3. 创建 `.env` 文件
+
+```env
+HOST=0.0.0.0
+PORT=1234
+MONGODB_URL=mongodb://admin:admin!123@localhost:27017/?authSource=admin
+MONGODB_DB=tinyeditor
+MONGODB_COLLECTION=documents
+GC=true
+```
+
+4. 启动本地服务器
+
+```bash
+pnpm install -g pm2
+pnpm install
+pnpm start
+```
+
+启动后即可使用 `ws://localhost:1234` 作为前端 `serverUrl` 配置
 
 ---
 
@@ -77,7 +183,7 @@ pnpm i
 
 ### Provider 配置
 
-Provider 用于管理和同步多个用户之间的数据。它负责将本地的编辑操作与远程的其他用户进行实时同步。
+Provider 用于管理和同步多个用户之间的数据，它负责将本地的编辑操作与远程的其他用户进行实时同步。TinyEditor 支持多种 Provider 类型，常用的有 `WebSocket` 和 `WebRTC`,你也可以根据本文实现自定义的 Provider。
 
 #### WebSocket Provider
 
@@ -97,12 +203,11 @@ Provider 用于管理和同步多个用户之间的数据。它负责将本地�
 provider: {
   type: 'websocket',
   options: {
-    serverUrl: 'ws://localhost:1234',
-    roomName: 'demo-room',
+    serverUrl: 'wss://120.26.92.145:1234',
+    roomName: 'tiny-editor-demo',
     connect: true,
     resyncInterval: 3000,
     maxBackoffTime: 2500,
-    params: { token: 'your-token' },
     protocols: ['json'],
   }
 }
@@ -112,7 +217,7 @@ provider: {
 
 #### WebRTC Provider
 
-> **注意：** 需要额外安装 WebRTC 依赖 `npm i y-webrtc`，并且搭配 WebRTC 后端使用
+> **注意：** 需要额外安装 WebRTC 依赖 `pnpm i y-webrtc`，并且搭配 [WebRTC 后端](#webrtc-服务器)使用
 
 | 参数            | 类型                      | 必填 | 默认值 | 说明                |
 | --------------- | ------------------------- | ---- | ------ | ------------------- |
@@ -123,8 +228,25 @@ provider: {
 | `maxConns`      | `number`                  | 否   | -      | 最大连接数          |
 | `password`      | `string`                  | 否   | -      | 房间密码            |
 | `peerOpts`      | `Record<string, unknown>` | 否   | -      | WebRTC 对等连接选项 |
-
 ---
+#### WebRTC 前端配置示例
+
+```javascript
+const editor = new FluentEditor('#editor', {
+  theme: 'snow',
+  modules: {
+    'collaborative-editing': {
+      provider: {
+        type: 'webrtc',
+        options: {
+          roomName: 'Tiny-Editor-WebRTC',
+          signaling: ['wss://signaling.yjs.dev'],
+        },
+      },
+    },
+  },
+})
+```
 
 #### 自定义 Provider
 
@@ -315,7 +437,7 @@ cursors: {
 
 ## 更多后端服务支持
 
-### WebSocket 服务器
+### y-websocket-server
 
 可以使用 [y-websocket-server](https://github.com/yjs/y-websocket-server/) 快速搭建 WebSocket 服务器。
 
@@ -359,7 +481,7 @@ pnpm i
 
 ---
 
-## 自定义持久化
+## 自定义数据库持久化
 
 TinyEditor 基于 WebSocket 提供了自定义的协同编辑后端服务，支持 MongoDB 持久化和 Docker 容器化部署。
 
