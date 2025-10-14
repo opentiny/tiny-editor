@@ -8,9 +8,9 @@
 </b></p>
 
 ## 在线协同演示
+
 整个协同编辑系统由三部分组成：前端 `TinyEditor`、中间层协作引擎 `Yjs` 和后端服务（用于数据同步和持久化）。前端编辑器将操作传递给 `Yjs`，`Yjs` 通过不同的连接协议（如 `WebSocket` 或 `WebRTC`）实现多端同步, 并支持将数据持久化到后端数据库（如 `MongoDB`）。
 <img src="/Collab-arch.png" alt="Tiny-editor-demo">
-
 
 下面是一个完整的协同编辑演示：
 
@@ -25,13 +25,7 @@
 
 安装依赖
 
-> **重要提示：** 由于项目使用了 patch 补丁，必须先在项目根目录运行 `pnpm i` 安装所有依赖，然后再安装协同编辑所需的额外依赖。
-
 ```bash
-# 首先在项目根目录安装所有依赖（必须执行）
-pnpm i
-
-# 然后安装协同编辑所需的额外依赖
 pnpm i quill-cursors y-protocols y-quill yjs y-indexeddb y-websocket
 ```
 
@@ -64,6 +58,7 @@ const editor = new FluentEditor('#editor', {
 > 在 Vue 项目中集成协作编辑：[YuQue.vue](https://github.com/opentiny/tiny-editor/blob/ospp-2025/collaborative-editing/packages/projects/src/views/yuque/YuQue.vue)
 
 ### 后端服务
+
 可选择 Docker 容器化启动或本地部署
 
 #### Docker 容器化部署(推荐)
@@ -228,7 +223,9 @@ provider: {
 | `maxConns`      | `number`                  | 否   | -      | 最大连接数          |
 | `password`      | `string`                  | 否   | -      | 房间密码            |
 | `peerOpts`      | `Record<string, unknown>` | 否   | -      | WebRTC 对等连接选项 |
+
 ---
+
 #### WebRTC 前端配置示例
 
 ```javascript
