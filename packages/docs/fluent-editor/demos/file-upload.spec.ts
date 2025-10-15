@@ -11,7 +11,7 @@ test('image-upload', async ({ page }) => {
 
   // upload
   await page.getByLabel('image').first().click()
-  await page.locator('.ql-toolbar input').setInputFiles(path.join(baseUrl, 'public', 'logo.png'))
+  await page.locator('.ql-toolbar input.ql-image').setInputFiles(path.join(baseUrl, 'public', 'logo.png'))
   await expect(page.locator('.ql-editor').first().getByRole('img')).toBeVisible()
 
   // overlay
