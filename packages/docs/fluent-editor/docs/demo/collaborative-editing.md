@@ -80,39 +80,32 @@ services:
     ports:
       - '27017:27017'
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin!123
+      MONGO_INITDB_ROOT_USERNAME: admin # 设置 MongoDB 初始用户名
+      MONGO_INITDB_ROOT_PASSWORD: admin!123 # 设置 MongoDB 初始密码
     volumes:
       - mongodb_data:/data/db
 
-  websocket-server:
-    image: yinlin124/collaborative-editor-backend:latest
-    container_name: yjs-websocket-server
-    restart: always
-    ports:
-      - '${PORT:-1234}:${PORT:-1234}'
-    env_file:
-      - .env
-    depends_on:
-      - mongodb
+websocket-server:
+  image: yinlin124/collaborative-editor-backend:latest
+  container_name: yjs-websocket-server
+  restart: always
+  ports:
+    - '${PORT:-1234}:${PORT:-1234}'
+  environment:
+    HOST: ${HOST:-0.0.0.0} # 设置后端监听的网络接口
+    PORT: ${PORT:-1234} # 默认 1234 端口，可以使用环境变量修改
+    MONGODB_URL: ${MONGODB_URL:-mongodb://admin:admin!123@mongodb:27017/?authSource=admin} # 如果你使用自己的 mongodb 服务需要修改此项
+    MONGODB_DB: ${MONGODB_DB:-tinyeditor} # 数据库名称
+    MONGODB_COLLECTION: ${MONGODB_COLLECTION:-documents} # 集合名称
+
+  depends_on:
+    - mongodb
 
 volumes:
   mongodb_data:
 ```
 
-3. 在项目根目录下新建 `.env` 文件：
-
-```env
-HOST=0.0.0.0
-# 注意这里的 PORT 需与前端配置中的 serverUrl 端口一致
-PORT=1234
-MONGODB_URL=mongodb://admin:admin!123@mongodb:27017/?authSource=admin
-MONGODB_DB=tinyeditor
-MONGODB_COLLECTION=documents
-GC=true
-```
-
-可参照下方表格进行配置 `.env` 文件
+如果你需要更换映射端口等，可创建 `.env` 文件按照下面的参数值更改环境变量：
 
 | 变量名               | 必需 | 默认值 | 说明                  |
 | -------------------- | ---- | ------ | --------------------- |
@@ -123,7 +116,7 @@ GC=true
 | `MONGODB_COLLECTION` | ✅   | -      | MongoDB 集合名称      |
 | `GC`                 | ❌   | `true` | 是否启用 Yjs 垃圾回收 |
 
-4. 在项目根目录下运行 `docker-compose` 启动容器：
+3. 在项目根目录下运行 `docker-compose` 启动容器：
 
 ```bash
 docker compose up
@@ -137,12 +130,12 @@ docker compose up
 
 ```bash
 docker run -d \
-  --name mongodb \
+  --name mongo \
   -p 27017:27017 \
   -e MONGO_INITDB_ROOT_USERNAME=admin \
-  -e MONGO_INITDB_ROOT_PASSWORD="admin!123" \
-  -v mongodb_data:/data/db \
-  mongo:latest
+  -e MONGO_INITDB_ROOT_PASSWORD=admin \
+    -v mongodb_data:/data/db \
+    mongo:latest
 ```
 
 2. 进入协同编辑后端子包目录
@@ -156,7 +149,7 @@ cd packages/collaborative-editing-backend
 ```env
 HOST=0.0.0.0
 PORT=1234
-MONGODB_URL=mongodb://admin:admin!123@localhost:27017/?authSource=admin
+MONGODB_URL=mongodb://admin:admin@127.0.0.1:27017/?authSource=admin
 MONGODB_DB=tinyeditor
 MONGODB_COLLECTION=documents
 GC=true
