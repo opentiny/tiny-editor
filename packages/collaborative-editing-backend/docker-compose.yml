@@ -17,8 +17,12 @@ services:
     restart: always
     ports:
       - "${PORT:-1234}:${PORT:-1234}"
-    env_file:
-      - .env
+    environment:
+      HOST: ${HOST:-0.0.0.0} # 设置后端监听的网络接口
+      PORT: ${PORT:-1234} # 默认 1234 端口，可以使用环境变量修改
+      MONGODB_URL: ${MONGODB_URL:-mongodb://admin:admin!123@mongodb:27017/?authSource=admin} # 如果你使用自己的 mongodb 服务需要修改此项
+      MONGODB_DB: ${MONGODB_DB:-tinyeditor} # 数据库名称
+      MONGODB_COLLECTION: ${MONGODB_COLLECTION:-documents} # 集合名称
     depends_on:
       - mongodb
 
