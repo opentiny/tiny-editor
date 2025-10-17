@@ -8,7 +8,7 @@ module.exports = {
   apps: [{
     name: 'collaborative-editor-backend',
     script: './dist/server.js',
-    node_args: '--env-file=.env --no-warnings',
+    node_args: '--no-warnings',
     instances: 1,
     log_file: path.join(logDir, 'app.log'),
     error_file: path.join(logDir, 'error.log'),

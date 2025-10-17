@@ -17,8 +17,12 @@ services:
     restart: always
     ports:
       - "${PORT:-1234}:${PORT:-1234}"
-    env_file:
-      - .env
+    environment:
+      HOST: 0.0.0.0
+      PORT: ${PORT:-1234}
+      MONGODB_URL: mongodb://admin:admin!123@mongodb:27017/?authSource=admin
+      MONGODB_DB: tinyeditor
+      MONGODB_COLLECTION: documents
     depends_on:
       - mongodb
 
