@@ -89,11 +89,11 @@ const DefaultOptions = {
       verticalAlign: 'middle',
     },
     buttons: {
-      ['align-left']: true,
-      ['align-center']: true,
-      ['align-right']: true,
-      ['copy']: true,
-      ['download']: true,
+      'align-left': true,
+      'align-center': true,
+      'align-right': true,
+      'copy': true,
+      'download': true,
     },
   },
   resize: {
