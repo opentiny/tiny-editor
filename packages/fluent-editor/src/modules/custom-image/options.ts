@@ -54,6 +54,7 @@ export interface BlotFormatterOptions {
   overlay: OverlayOptions
   resize: ResizeOptions
   toolbar: ToolbarOptions
+  allowInvalidUrl: boolean
 }
 
 export const LEFT_ALIGN = 'align-left'
@@ -62,6 +63,7 @@ export const RIGHT_ALIGN = 'align-right'
 export const COPY = 'copy'
 export const DOWNLOAD = 'download'
 const DefaultOptions: BlotFormatterOptions = {
+  allowInvalidUrl: false,
   specs: [
     ImageSpec,
   ],

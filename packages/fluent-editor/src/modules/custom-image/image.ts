@@ -18,7 +18,13 @@ export class CustomImage extends Embed {
   static blotName = 'image'
   static tagName = 'IMG'
   static ID_SEED = 0
+  static allowInvalidUrl: boolean = false
   declare domNode: HTMLElement
+
+  static setOptions(allowInvalidUrl: boolean) {
+    this.allowInvalidUrl = allowInvalidUrl
+  }
+
   static create(value: ImageValue) {
     const node = super.create(value) as HTMLElement
     const url = typeof value === 'string' ? value : value.src
@@ -69,7 +75,10 @@ export class CustomImage extends Embed {
   }
 
   static sanitize(url: string) {
-    return sanitize(url, ['http', 'https', 'blob', 'data']) ? url : '//:0'
+    if (sanitize(url, ['http', 'https', 'blob', 'data']) || this.allowInvalidUrl) {
+      return url
+    }
+    return '//:0'
   }
 
   static value(domNode: HTMLElement) {
