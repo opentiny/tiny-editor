@@ -2,7 +2,6 @@
 import type FluentEditor from '@opentiny/fluent-editor'
 import katex from 'katex'
 import { onMounted } from 'vue'
-import 'katex/contrib/mhchem/mhchem'
 import 'katex/dist/katex.min.css'
 
 window.katex = katex
@@ -21,6 +20,8 @@ onMounted(() => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
   import('@opentiny/fluent-editor').then((module) => {
     const FluentEditor = module.default
+
+    import('katex/contrib/mhchem/mhchem')
 
     editor = new FluentEditor('#chemistry-editor', {
       theme: 'snow',
