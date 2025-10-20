@@ -70,6 +70,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "vaebe",
+      "name": "vae",
+      "avatar_url": "https://avatars.githubusercontent.com/u/52314078?v=4",
+      "profile": "https://blog.vaebe.cn/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
