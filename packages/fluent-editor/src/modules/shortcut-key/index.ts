@@ -201,6 +201,22 @@ export class ShortCutKey extends QuillShortcutKey {
         title: this.quill.getLangText('file'),
         onClick: toolbarHandler('file'),
       },
+      {
+        type: 'item' as const,
+        name: 'swdt',
+        alias: ['mind-map'],
+        icon: icons['mind-map'],
+        title: this.quill.getLangText('mind-map'),
+        onClick: toolbarHandler('mind-map'),
+      },
+      {
+        type: 'item' as const,
+        name: 'lct',
+        alias: ['flow-chart'],
+        icon: icons['flow-chart'],
+        title: this.quill.getLangText('flow-chart'),
+        onClick: toolbarHandler('flow-chart'),
+      },
     ]
   }
 }

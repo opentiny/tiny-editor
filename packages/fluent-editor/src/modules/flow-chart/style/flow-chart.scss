@@ -1,0 +1,148 @@
+@mixin flow-chart-control-background {
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+}
+@mixin flow-chart-control-item {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5px 5px;
+  border-radius: inherit;
+  transition: all 0.2s ease;
+}
+.ql-flow-chart-item {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.ql-flow-chart-control {
+  position: absolute;
+  top: 8px;
+  right: 50px;
+  padding: 0 15px;
+  display: none;
+  gap: 6px;
+  white-space: nowrap;
+  pointer-events: auto;
+  padding: 5px 5px;
+  @include flow-chart-control-background;
+  .ql-flow-chart-control-item {
+    @include flow-chart-control-item;
+  }
+}
+.ql-flow-chart-item {
+  .lf-dndpanel {
+    display: none;
+    top: 15%;
+    .ql-flow-chart-control-item {
+      height: 35.99px;
+      @include flow-chart-control-item;
+    }
+  }
+}
+
+.ql-flow-chart-control-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ql-flow-chart-control-item i {
+  background-size: cover;
+  display: inline-block;
+  height: 20px;
+  vertical-align: middle;
+  width: 20px;
+}
+.ql-flow-chart-control-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.ql-flow-chart-control-item:hover {
+  background-color: #efefef;
+}
+.ql-flow-chart .lf-dndpanel .lf-dnd-text {
+  font-size: 12px;
+}
+
+.ql-flow-chart-edge-panel {
+  width: 130px;
+  position: absolute;
+  left: 50px;
+  top: 220px;
+  padding: 3px;
+  z-index: 1000;
+  max-height: 400px;
+  @include flow-chart-control-background;
+  .ql-flow-chart-edge-item {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid #eee;
+    border-radius: inherit;
+    padding: 2px;
+    transition: box-shadow 0.3s ease;
+    .ql-flow-chart-edge-type-icon {
+      width: 20px;
+      height: 20px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+  .ql-flow-chart-edge-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+.ql-flow-chart-item .lf-text-input {
+  display: none !important;
+}
+.ql-flow-chart-right-up-control {
+  position: absolute;
+  top: 8px;
+  right: 6px;
+  display: inline-flex;
+  gap: 6px;
+  white-space: nowrap;
+  pointer-events: auto;
+  padding: 5px 5px;
+  @include flow-chart-control-background;
+  .ql-flow-chart-control-item {
+    @include flow-chart-control-item;
+  }
+}
+
+.ql-flow-chart-control-zoom-out {
+  background-image: url('../icons/zoomOutIcon.png');
+}
+.ql-flow-chart-control-zoom-in {
+  background-image: url('../icons/zoomInIcon.png');
+}
+.ql-flow-chart-control-fit {
+  background-image: url('../icons/fitIcon.png');
+}
+.ql-flow-chart-control-back {
+  background-image: url('../icons/backIcon.png');
+}
+.ql-flow-chart-control-forward {
+  background-image: url('../icons/forwardIcon.png');
+}
+.ql-flow-chart-control-set-edge-type {
+  background-image: url('../icons/lineIcon.png');
+}
+.ql-flow-chart-control-panel-status {
+  background-image: url('../icons/contractIcon.png');
+}
+.ql-flow-chart-control-screen-type {
+  background-image: url('../icons/fullScreenIcon.png');
+}

@@ -1,0 +1,236 @@
+// 定义思维导图控制面板的通用背景样式
+@mixin mind-map-control-background {
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+}
+@mixin mind-map-control-item {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5px 5px;
+  border-radius: inherit;
+  transition: all 0.2s ease;
+  .ql-mind-map-control-text {
+    height: 20px;
+    font-size: 12px;
+  }
+}
+@mixin mind-map-panel {
+  border-radius: inherit;
+  width: 200px;
+  position: absolute;
+  left: 45px;
+  top: 60px;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 1000;
+  max-height: 400px;
+  overflow-y: auto;
+}
+@mixin hover-shadow-effect {
+  transition: box-shadow 0.3s ease;
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.ql-mind-map-item {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.ql-mind-map-control {
+  position: absolute;
+  top: 8px;
+  right: 50px;
+  padding: 0 15px;
+  display: none;
+  gap: 6px;
+  white-space: nowrap;
+  pointer-events: auto;
+  padding: 5px 5px;
+  @include mind-map-control-background;
+  .ql-mind-map-control-item {
+    @include mind-map-control-item;
+  }
+}
+.ql-mind-map-left-up-control {
+  position: absolute;
+  top: 20%;
+  left: 2px;
+  display: none;
+  gap: 6px;
+  white-space: nowrap;
+  pointer-events: auto;
+  flex-direction: column;
+  margin: 5px;
+  padding: 5px 5px;
+  @include mind-map-control-background;
+  .ql-mind-map-control-item {
+    @include mind-map-control-item;
+  }
+}
+.ql-mind-map-right-up-control {
+  position: absolute;
+  top: 8px;
+  right: 6px;
+  display: inline-flex;
+  gap: 6px;
+  white-space: nowrap;
+  pointer-events: auto;
+  padding: 5px 5px;
+  @include mind-map-control-background;
+  .ql-mind-map-control-item {
+    @include mind-map-control-item;
+  }
+}
+.ql-mind-map-icon-panel {
+  @include mind-map-panel;
+  .ql-mind-map-icon-group-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    .ql-mind-map-icon-item {
+      width: 25px;
+      height: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 1px solid #eee;
+      border-radius: inherit;
+      padding: 2px;
+      @include hover-shadow-effect;
+    }
+  }
+}
+
+.ql-mind-map-layout-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  @include mind-map-panel;
+  .ql-mind-map-layout-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    border: 1px solid #eee;
+    border-radius: inherit;
+    padding: 2px;
+    width: 100%;
+    min-width: 100px;
+    @include hover-shadow-effect;
+    .ql-mind-map-layout-icon-container {
+      width: 80px;
+      height: 60px;
+      .ql-mind-map-layout-icon {
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 80px;
+        height: 60px;
+      }
+    }
+    .ql-mind-map-layout-name {
+      font-size: 12px;
+      margin-top: 5px;
+    }
+  }
+}
+
+.ql-mind-map-control-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.ql-mind-map-control-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ql-mind-map-control-item i {
+  background-size: cover;
+  display: inline-block;
+  height: 20px;
+  vertical-align: middle;
+  width: 20px;
+}
+
+.ql-mind-map-control-item:hover {
+  background-color: #efefef;
+}
+
+.ql-mind-map-context-menu {
+  font-size: 14px;
+  color: #333;
+  user-select: none;
+  display: none;
+  position: fixed;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 5px 0;
+  z-index: 1000;
+  visibility: visible;
+  opacity: 1;
+  width: 120px;
+  height: auto;
+  .ql-mind-map-context-menu-item {
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  }
+}
+.smm-node-edit-wrap {
+  display: none !important;
+}
+
+.ql-mind-map-control-zoom-out {
+  background-image: url('../icons/zoomOutIcon.png');
+}
+.ql-mind-map-control-zoom-in {
+  background-image: url('../icons/zoomInIcon.png');
+}
+.ql-mind-map-control-fit {
+  background-image: url('../icons/fitIcon.png');
+}
+.ql-mind-map-control-back {
+  background-image: url('../icons/backIcon.png');
+}
+.ql-mind-map-control-forward {
+  background-image: url('../icons/forwardIcon.png');
+}
+.ql-mind-map-control-insert-child-node {
+  background-image: url('../icons/childNodeIcon.png');
+}
+.ql-mind-map-control-insert-node {
+  background-image: url('../icons/levelNodeIcon.png');
+}
+.ql-mind-map-control-insert-parent-node {
+  background-image: url('../icons/parentNodeIcon.png');
+}
+.ql-mind-map-control-remove-node {
+  background-image: url('../icons/deleteNodeIcon.png');
+}
+.ql-mind-map-control-insert-icon {
+  background-image: url('../icons/insertIcon.png');
+}
+.ql-mind-map-control-set-layout-icon {
+  background-image: url('../icons/setLayoutIcon.png');
+}
+.ql-mind-map-control-panel-status {
+  background-image: url('../icons/contractIcon.png');
+}
+.ql-mind-map-control-screen-type {
+  background-image: url('../icons/fullScreenIcon.png');
+}

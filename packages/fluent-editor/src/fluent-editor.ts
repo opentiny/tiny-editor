@@ -11,10 +11,12 @@ import { FileUploader } from './modules/custom-uploader' // 上传
 import { DividerBlot } from './modules/divider' // 分割线
 import { EmojiModule } from './modules/emoji'
 import { FileModule } from './modules/file' // 文件
+import { FlowChartModule } from './modules/flow-chart' // 流程图
 import I18N from './modules/i18n'
 import { LinkBlot } from './modules/link' // 超链接
 import { MathliveModule } from './modules/mathlive' // latex公式
 import { Mention } from './modules/mention' // @提醒
+import { MindMapModule } from './modules/mind-map' // 思维导图
 import { ShortCutKey } from './modules/shortcut-key'
 import Syntax from './modules/syntax' // 代码块高亮
 import { BetterToolbar } from './modules/toolbar' // 工具栏
@@ -59,6 +61,8 @@ FluentEditor.register(
     'modules/toolbar': BetterToolbar,
     'modules/uploader': FileUploader,
     'modules/shortcut-key': ShortCutKey,
+    'modules/mind-map': MindMapModule,
+    'modules/flow-chart': FlowChartModule,
 
     'themes/snow': SnowTheme,
 
