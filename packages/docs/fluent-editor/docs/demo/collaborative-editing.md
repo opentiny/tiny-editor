@@ -8,9 +8,9 @@
 </b></p>
 
 ## 在线协同演示
+
 整个协同编辑系统由三部分组成：前端 `TinyEditor`、中间层协作引擎 `Yjs` 和后端服务（用于数据同步和持久化）。前端编辑器将操作传递给 `Yjs`，`Yjs` 通过不同的连接协议（如 `WebSocket` 或 `WebRTC`）实现多端同步, 并支持将数据持久化到后端数据库（如 `MongoDB`）。
 <img src="/Collab-arch.png" alt="Tiny-editor-demo">
-
 
 下面是一个完整的协同编辑演示：
 
@@ -25,13 +25,7 @@
 
 安装依赖
 
-> **重要提示：** 由于项目使用了 patch 补丁，必须先在项目根目录运行 `pnpm i` 安装所有依赖，然后再安装协同编辑所需的额外依赖。
-
 ```bash
-# 首先在项目根目录安装所有依赖（必须执行）
-pnpm i
-
-# 然后安装协同编辑所需的额外依赖
 pnpm i quill-cursors y-protocols y-quill yjs y-indexeddb y-websocket
 ```
 
@@ -64,6 +58,7 @@ const editor = new FluentEditor('#editor', {
 > 在 Vue 项目中集成协作编辑：[YuQue.vue](https://github.com/opentiny/tiny-editor/blob/ospp-2025/collaborative-editing/packages/projects/src/views/yuque/YuQue.vue)
 
 ### 后端服务
+
 可选择 Docker 容器化启动或本地部署
 
 #### Docker 容器化部署(推荐)
@@ -85,39 +80,32 @@ services:
     ports:
       - '27017:27017'
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin!123
+      MONGO_INITDB_ROOT_USERNAME: admin # 设置 MongoDB 初始用户名
+      MONGO_INITDB_ROOT_PASSWORD: admin!123 # 设置 MongoDB 初始密码
     volumes:
       - mongodb_data:/data/db
 
-  websocket-server:
-    image: yinlin124/collaborative-editor-backend:latest
-    container_name: yjs-websocket-server
-    restart: always
-    ports:
-      - '${PORT:-1234}:${PORT:-1234}'
-    env_file:
-      - .env
-    depends_on:
-      - mongodb
+websocket-server:
+  image: yinlin124/collaborative-editor-backend:latest
+  container_name: yjs-websocket-server
+  restart: always
+  ports:
+    - '${PORT:-1234}:${PORT:-1234}'
+  environment:
+    HOST: ${HOST:-0.0.0.0} # 设置后端监听的网络接口
+    PORT: ${PORT:-1234} # 默认 1234 端口，可以使用环境变量修改
+    MONGODB_URL: ${MONGODB_URL:-mongodb://admin:admin!123@mongodb:27017/?authSource=admin} # 如果你使用自己的 mongodb 服务需要修改此项
+    MONGODB_DB: ${MONGODB_DB:-tinyeditor} # 数据库名称
+    MONGODB_COLLECTION: ${MONGODB_COLLECTION:-documents} # 集合名称
+
+  depends_on:
+    - mongodb
 
 volumes:
   mongodb_data:
 ```
 
-3. 在项目根目录下新建 `.env` 文件：
-
-```env
-HOST=0.0.0.0
-# 注意这里的 PORT 需与前端配置中的 serverUrl 端口一致
-PORT=1234
-MONGODB_URL=mongodb://admin:admin!123@mongodb:27017/?authSource=admin
-MONGODB_DB=tinyeditor
-MONGODB_COLLECTION=documents
-GC=true
-```
-
-可参照下方表格进行配置 `.env` 文件
+如果你需要更换映射端口等，可创建 `.env` 文件按照下面的参数值更改环境变量：
 
 | 变量名               | 必需 | 默认值 | 说明                  |
 | -------------------- | ---- | ------ | --------------------- |
@@ -128,7 +116,7 @@ GC=true
 | `MONGODB_COLLECTION` | ✅   | -      | MongoDB 集合名称      |
 | `GC`                 | ❌   | `true` | 是否启用 Yjs 垃圾回收 |
 
-4. 在项目根目录下运行 `docker-compose` 启动容器：
+3. 在项目根目录下运行 `docker-compose` 启动容器：
 
 ```bash
 docker compose up
@@ -142,12 +130,12 @@ docker compose up
 
 ```bash
 docker run -d \
-  --name mongodb \
+  --name mongo \
   -p 27017:27017 \
   -e MONGO_INITDB_ROOT_USERNAME=admin \
-  -e MONGO_INITDB_ROOT_PASSWORD="admin!123" \
-  -v mongodb_data:/data/db \
-  mongo:latest
+  -e MONGO_INITDB_ROOT_PASSWORD=admin \
+    -v mongodb_data:/data/db \
+    mongo:latest
 ```
 
 2. 进入协同编辑后端子包目录
@@ -161,7 +149,7 @@ cd packages/collaborative-editing-backend
 ```env
 HOST=0.0.0.0
 PORT=1234
-MONGODB_URL=mongodb://admin:admin!123@localhost:27017/?authSource=admin
+MONGODB_URL=mongodb://admin:admin@127.0.0.1:27017/?authSource=admin
 MONGODB_DB=tinyeditor
 MONGODB_COLLECTION=documents
 GC=true
@@ -228,7 +216,9 @@ provider: {
 | `maxConns`      | `number`                  | 否   | -      | 最大连接数          |
 | `password`      | `string`                  | 否   | -      | 房间密码            |
 | `peerOpts`      | `Record<string, unknown>` | 否   | -      | WebRTC 对等连接选项 |
+
 ---
+
 #### WebRTC 前端配置示例
 
 ```javascript
