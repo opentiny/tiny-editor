@@ -8,7 +8,7 @@
     "build": "vitepress build fluent-editor",
     "build:v3": "node --env-file=fluent-editor/.env.v3 ./node_modules/vitepress/bin/vitepress.js build fluent-editor",
     "preview": "vitepress preview fluent-editor",
-    "install:browser": "pnpm exec playwright install --with-deps chromium",
+    "install:browser": "pnpm exec playwright install --with-deps chromium firefox",
     "test": "pnpm exec playwright test",
     "test:ui": "pnpm exec playwright test --ui",
     "report": "pnpm exec playwright show-report"
