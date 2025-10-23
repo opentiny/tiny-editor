@@ -9,14 +9,3 @@ coverage
 dist
 tmp
 dbDir
-node_modules
-npm-debug.log
-.git
-.gitignore
-README.md
-.nyc_output
-coverage
-.DS_Store
-dist
-tmp
-dbDir
