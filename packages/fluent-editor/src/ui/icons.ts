@@ -1,5 +1,6 @@
 import FluentEditor from '../core/fluent-editor'
 import {
+  AI_ICON,
   ALIGN_CENTER_ICON,
   ALIGN_JUSTIFY_ICON,
   ALIGN_LEFT_ICON,
@@ -36,6 +37,7 @@ const ICONS_CONFIG: { [key: string]: any } = {
   'undo': UNDO_ICON,
   'redo': REDO_ICON,
   'clean': CLEAN_ICON,
+  'ai': AI_ICON,
 
   'bold': BOLD_ICON,
   'italic': ITALIC_ICON,

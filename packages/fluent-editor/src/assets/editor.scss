@@ -1,6 +1,6 @@
 @use './common/config.scss' as *;
-@import './common';
-@import './tasklist';
+@use './common';
+@use './tasklist';
 
 @mixin editor {
   .ql-container.ql-snow {
@@ -222,7 +222,7 @@
     }
 
     // 任务列表
-    @include tasklist;
+    @include tasklist.tasklist;
 
     img {
       max-width: 100%;
@@ -323,7 +323,7 @@
     }
 
     // @提醒
-    @include mentionLink;
+    @include common.mentionLink;
   }
 
   // fix: 解决ol中有内联list-style-type样式，.ql-editor样式（默认是none）会将其覆盖的问题
@@ -348,4 +348,4 @@
 // 编辑器正文
 @include editor;
 // 编辑器外的任务列表
-@include tasklistOutside;
+@include tasklist.tasklistOutside;

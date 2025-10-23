@@ -27,6 +27,10 @@ export class BlotFormatter {
 
   constructor(public quill: FluentEditor, options: Partial<BlotFormatterOptions> = {}) {
     this.options = deepmerge({}, DefaultOptions, options, { arrayMerge: dontMerge })
+    if (options.allowInvalidUrl !== undefined) {
+      this.options.allowInvalidUrl = options.allowInvalidUrl
+    }
+    CustomImage.setOptions(this.options.allowInvalidUrl)
     this.currentSpec = null
     this.actions = []
     this.overlay = document.createElement('div')

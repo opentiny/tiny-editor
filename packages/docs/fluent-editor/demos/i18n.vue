@@ -15,6 +15,12 @@ onMounted(() => {
       theme: 'snow',
       modules: {
         toolbar: [
+          [
+            { header: [] },
+            { font: [] },
+            { size: [] },
+            { 'line-height': [] },
+          ],
           ['bold', 'italic', 'strike', 'underline'],
           ['link', 'image', 'emoji'],
           [{ color: [] }, { background: [] }],

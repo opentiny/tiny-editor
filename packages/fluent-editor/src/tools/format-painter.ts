@@ -2,7 +2,7 @@ import type { Range } from 'quill'
 import type Toolbar from 'quill/modules/toolbar'
 import Quill from 'quill'
 
-interface FormatData {
+export interface FormatData {
   formatPainter: {
     rangeFormat: Record<string, any>
     isFormatterLock: boolean
@@ -22,8 +22,14 @@ export function FormatPainter(this: Toolbar & FormatData) {
   const [, formatterBtn] = this.controls.find(([name]) => name === FormatPainter.toolName)
   const formatRange = (range: Range | null) => {
     if (!range) return
-    this.quill.removeFormat(range.index, range.length)
+    const currentFormats = this.quill.getFormat(range)
+    for (const format in currentFormats) {
+      if (this.quill.options['format-painter']?.ignoreFormat?.includes(format)) continue
+      this.quill.format(format, null, Quill.sources.USER)
+    }
+
     for (const format in this.formatPainter.rangeFormat) {
+      if (this.quill.options['format-painter']?.ignoreFormat?.includes(format)) continue
       this.quill.format(format, this.formatPainter.rangeFormat[format], Quill.sources.USER)
     }
     if (!this.formatPainter.isFormatterLock) {
@@ -54,7 +60,7 @@ export function FormatPainter(this: Toolbar & FormatData) {
   }
   const unbindFormatSelect = () => {
     this.quill.off(Quill.events.SELECTION_CHANGE, formatRange)
-    this.formatPainter.rangeFormat = undefined
+    this.formatPainter.rangeFormat = {}
     btnRemoveActive()
     this.formatPainter.isFormating = false
     this.formatPainter.isFormatterLock = false

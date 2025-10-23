@@ -1,4 +1,3 @@
-import type { Delta } from 'quill'
 import type TypeToolbar from 'quill/modules/toolbar'
 import type FluentEditor from '../fluent-editor'
 import data from '@emoji-mart/data'
@@ -21,7 +20,7 @@ export interface EmojiModuleOptions {
   dynamicWidth?: boolean
 }
 
-const DEFAULT_OPTIONS: Readonly<EmojiModuleOptions> = {
+const DEFAULT_OPTIONS: EmojiModuleOptions = {
   theme: 'light',
   set: 'native',
   skinTonePosition: 'none',
@@ -33,7 +32,7 @@ const DEFAULT_OPTIONS: Readonly<EmojiModuleOptions> = {
   navPosition: 'top',
   noCountryFlags: false,
   dynamicWidth: false,
-} as const
+}
 
 const PICKER_DOM_ID = 'emoji-picker'
 
@@ -178,31 +177,18 @@ class EmojiModule {
     }
 
     try {
-      const emojiDelta = this.quill.insertText(selection.index, emoji.native, 'user')
+    // 记录插入位置
+      const insertIndex = selection.index
+      this.quill.insertText(insertIndex, emoji.native, 'user')
 
       this.closeDialog()
 
-      // 异步设置光标位置，确保插入完成后再设置
-      this.setSelectionAfterEmoji(emojiDelta)
+      // 设置光标到表情符号后面
+      this.quill.setSelection(insertIndex + emoji.native.length)
     }
     catch (error) {
       console.error('Failed to insert emoji:', error)
     }
-  }
-
-  // 设置表情插入后的光标位置
-  private setSelectionAfterEmoji(emojiDelta: Delta) {
-    setTimeout(() => {
-      try {
-        const newSelection = this.quill.getSelection(true)
-        if (newSelection && emojiDelta) {
-          this.quill.setSelection(newSelection.index + emojiDelta.length())
-        }
-      }
-      catch (error) {
-        console.warn('Failed to set selection after emoji insertion:', error)
-      }
-    }, 0)
   }
 
   // 处理外部点击事件

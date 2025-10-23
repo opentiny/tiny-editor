@@ -1,7 +1,7 @@
 {
   "name": "@opentiny/fluent-editor",
   "type": "module",
-  "version": "4.0.0-alpha.2",
+  "version": "4.0.0-alpha.6",
   "description": "A rich text editor based on Quill 2.0, which extends rich modules and formats on the basis of Quill. It's powerful and out-of-the-box.",
   "author": "OpenTiny Team",
   "license": "MIT",
@@ -34,7 +34,7 @@
   "dependencies": {
     "lodash-es": "^4.17.15",
     "quill": "^2.0.0",
-    "quill-easy-color": "^0.0.9",
+    "quill-easy-color": "^0.0.10",
     "quill-shortcut-key": "^0.0.5"
   },
   "devDependencies": {
@@ -50,7 +50,7 @@
     "mathlive": "^0.101.0",
     "parchment": "^3.0.0",
     "quill-cursors": "^4.0.4",
-    "sass": "^1.47.0",
+    "sass": "^1.90.0",
     "shelljs": "^0.8.4",
     "ts-jest": "^26.5.6",
     "ts-node": "^9.1.1",

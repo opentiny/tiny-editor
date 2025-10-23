@@ -5,7 +5,6 @@ import * as Toast from 'vue-toastification'
 import TranslateComponent from '../components/TranslateComponent.vue'
 import { insertBaiduScript } from './insert-baidu-script'
 import { inertDepsVersion } from './insert-deps-version'
-import { insertPeterCatAssistant } from './insert-petercat-assistant'
 import { insertTranslate } from './insert-translate'
 import '@vitepress-code-preview/container/dist/style.css'
 import './style.css'
@@ -24,9 +23,6 @@ export default define<Theme>({
     useComponents(app, DemoPreview)
     insertBaiduScript()
     inertDepsVersion()
-    setTimeout(() => {
-      insertPeterCatAssistant()
-    }, 300)
     setTimeout(() => {
       insertTranslate()
     }, 3000)

@@ -1,9 +1,9 @@
-@import './common.scss';
+@use './common';
 
 :root {
-  @include setCssVar(editor-bg-color, #ffffff);
+  @include common.setCssVar(editor-bg-color, #ffffff);
 }
 
 :root.dark {
-  @include setCssVar(editor-bg-color, #161618);
+  @include common.setCssVar(editor-bg-color, #161618);
 }

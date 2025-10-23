@@ -1,51 +1,29 @@
-import type { Parchment } from 'quill'
 import type Toolbar from 'quill/modules/toolbar'
 import type BaseTheme from 'quill/themes/base'
 import type Picker from 'quill/ui/picker'
 import type { Constructor } from '../../config/types'
 import type FluentEditor from '../../core/fluent-editor'
 import { CHANGE_LANGUAGE_EVENT } from '../../config'
+import { isFunction } from '../../utils/is'
 
 interface QuillTheme extends BaseTheme {
   pickers: QuillThemePicker[]
 }
 type QuillThemePicker = (Picker & { options: HTMLElement })
-interface InternalModule {
-  show: () => void
-  hide: () => void
-  update: () => void
-  destroy: () => void
-}
-export interface InternalTableSelectionModule extends InternalModule {
-  dragging: boolean
-  boundary: {
-    x: number
-    y: number
-    x1: number
-    y1: number
-    width: number
-    height: number
-  } | null
-  selectedTds: Parchment.Blot[]
-  cellSelect: HTMLElement
-  tableMenu?: InternalModule
-  computeSelectedTds: (
-    startPoint: {
-      x: number
-      y: number
-    },
-    endPoint: {
-      x: number
-      y: number
-    }
-  ) => Parchment.Blot[]
-  updateWithSelectedTds: () => void
-}
+
 export function generateTableUp(QuillTableUp: Constructor) {
   return class extends QuillTableUp {
-    tableSelection?: InternalTableSelectionModule
     constructor(public quill: FluentEditor, options: Partial<any>) {
       super(quill, options)
+
+      if (!this.quill.options['format-painter']) this.quill.options['format-painter'] = {}
+      const currentIgnoreFormat = this.quill.options['format-painter'].ignoreFormat || []
+      this.quill.options['format-painter'].ignoreFormat = Array.from(
+        new Set([
+          ...currentIgnoreFormat,
+          'table-up-cell-inner',
+        ]),
+      )
 
       this.quill.emitter.on(CHANGE_LANGUAGE_EVENT, () => {
         this.options.texts = this.resolveTexts(options.texts)
@@ -59,13 +37,14 @@ export function generateTableUp(QuillTableUp: Constructor) {
             }
           }
         }
-        if (this.tableSelection) {
-          this.tableSelection.destroy()
-        }
-        if (this.options.selection) {
-          // eslint-disable-next-line new-cap
-          this.tableSelection = new this.options.selection(this, this.quill, this.options.selectionOptions)
-        }
+
+        Object.keys(this.modules).forEach((key) => {
+          if (isFunction(this.modules[key].destroy)) {
+            this.modules[key].destroy()
+          }
+        })
+        this.modules = {}
+        this.initModules()
       })
     }
 

@@ -54,6 +54,7 @@ export interface BlotFormatterOptions {
   overlay: OverlayOptions
   resize: ResizeOptions
   toolbar: ToolbarOptions
+  allowInvalidUrl: boolean
 }
 
 export const LEFT_ALIGN = 'align-left'
@@ -62,6 +63,10 @@ export const RIGHT_ALIGN = 'align-right'
 export const COPY = 'copy'
 export const DOWNLOAD = 'download'
 const DefaultOptions: BlotFormatterOptions = {
+  // 默认情况下，`file://` 格式的本地文件路径在浏览器环境无法读取，因此会被转换成 `//:0`，但是在一些特殊的场景下（比如：Electron），需要获取到图片的原始路径，进行后续的上传处理
+  // 注意：该选项一旦设置为 true，本地磁盘路径会暴露出去，这可能会带来安全风险，请确保你了解相关的安全隐患
+  allowInvalidUrl: false,
+
   specs: [
     ImageSpec,
   ],

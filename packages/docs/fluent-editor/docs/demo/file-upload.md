@@ -32,3 +32,81 @@
 
 > 上传文件被 `mimetypes` 或 `maxSize` 筛选而上传失败的文件不会出现在 `handler` 回调参数中。
 > 若文件是被`mimetypes` 或 `maxSize` 筛选而上传失败，fail 回调中的 `range` 则为上传初始位置，而不是上传失败的位置。
+
+## 图片(image)模块的 Options
+
+```typescript
+const DefaultOptions = {
+  // 默认情况下，`file://` 格式的本地文件路径在浏览器环境无法读取，因此会被转换成 `//:0`，但是在一些特殊的场景下（比如：Electron），需要获取到图片的原始路径，进行后续的上传处理
+  // 注意：该选项一旦设置为 true，本地磁盘路径会暴露出去，这可能会带来安全风险，请确保你了解相关的安全隐患
+  allowInvalidUrl: false,
+
+  specs: [
+    ImageSpec,
+  ],
+  overlay: {
+    className: 'blot-formatter__overlay',
+    style: {
+      position: 'absolute',
+      boxSizing: 'border-box',
+      border: '1px dashed #444',
+    },
+  },
+  toolbar: {
+    mainClassName: 'blot-formatter__toolbar',
+    mainStyle: {
+      position: 'absolute',
+      top: '-12px',
+      right: '0',
+      left: '0',
+      height: '0',
+      minWidth: '120px',
+      font: '12px/1.0 Arial, Helvetica, sans-serif',
+      textAlign: 'center',
+      color: '#333',
+      boxSizing: 'border-box',
+      cursor: 'default',
+      zIndex: '1',
+    },
+    buttonClassName: 'blot-formatter__toolbar-button',
+    addButtonSelectStyle: true,
+    buttonStyle: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '24px',
+      height: '24px',
+      background: 'white',
+      border: '1px solid #999',
+      verticalAlign: 'middle',
+      cursor: 'pointer',
+    },
+    svgStyle: {
+      display: 'inline-block',
+      width: '16px',
+      height: '16px',
+      background: 'white',
+      verticalAlign: 'middle',
+    },
+    buttons: {
+      'align-left': true,
+      'align-center': true,
+      'align-right': true,
+      'copy': true,
+      'download': true,
+    },
+  },
+  resize: {
+    handleClassName: 'blot-formatter__resize-handle',
+    handleStyle: {
+      position: 'absolute',
+      height: '12px',
+      width: '12px',
+      backgroundColor: 'white',
+      border: '1px solid #777',
+      boxSizing: 'border-box',
+      opacity: '0.80',
+    },
+  },
+}
+```

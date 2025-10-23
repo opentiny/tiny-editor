@@ -43,7 +43,7 @@ export class BetterToolbar extends Toolbar {
           option = select.querySelector('option[selected]')
         }
         else if (!Array.isArray(formats[format])) {
-          let value = format === 'header' ? formats[format].value : formats[format]
+          let value = formats[format]
           if (typeof value === 'string') {
             value = value.replace(/"/g, '\\"')
           }
