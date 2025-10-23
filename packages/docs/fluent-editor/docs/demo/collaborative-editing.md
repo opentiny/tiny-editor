@@ -188,17 +188,24 @@ Provider 用于管理和同步多个用户之间的数据，它负责将本地�
 #### 示例
 
 ```javascript
-provider: {
-  type: 'websocket',
-  options: {
-    serverUrl: 'wss://120.26.92.145:1234',
-    roomName: 'tiny-editor-demo',
-    connect: true,
-    resyncInterval: 3000,
-    maxBackoffTime: 2500,
-    protocols: ['json'],
-  }
-}
+const editor = new FluentEditor('#editor', {
+  theme: 'snow',
+  modules: {
+    'collaborative-editing': {
+      provider: {
+        type: 'websocket',
+        options: {
+          serverUrl: 'wss://120.26.92.145:1234',
+          roomName: 'tiny-editor-demo',
+          connect: true,
+          resyncInterval: 3000,
+          maxBackoffTime: 2500,
+          protocols: ['json'],
+        },
+      },
+    },
+  },
+})
 ```
 
 ---
@@ -361,13 +368,20 @@ Awareness 实现用户在线状态、光标位置等信息的实时同步。每�
 #### 示例
 
 ```javascript
-awareness: {
-  state: {
-    name: `user${Math.random().toString(36).substring(2, 8)}`,
-    color: `#${Math.floor(Math.random() * 16777215).toString(16)}`
+const editor = new FluentEditor('#editor', {
+  theme: 'snow',
+  modules: {
+    'collaborative-editing': {
+      awareness: {
+        state: {
+          name: `user${Math.random().toString(36).substring(2, 8)}`,
+          color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+        },
+        timeout: 30000,
+      },
+    },
   },
-  timeout: 30000,
-}
+})
 ```
 
 ---
@@ -407,20 +421,27 @@ const CURSOR_CLASSES = {
   NAME_CLASS: 'ql-cursor-name',
 }
 
-cursors: {
-  template: `
-    <span class="${CURSOR_CLASSES.SELECTION_CLASS}"></span>
-    <span class="${CURSOR_CLASSES.CARET_CONTAINER_CLASS}">
-      <span class="${CURSOR_CLASSES.CARET_CLASS}"></span>
-    </span>
-    <div class="${CURSOR_CLASSES.FLAG_CLASS}">
-      <small class="${CURSOR_CLASSES.NAME_CLASS}"></small>
-    </div>
-  `,
-  hideDelayMs: 300,
-  hideSpeedMs: 300,
-  transformOnTextChange: true,
-}
+const editor = new FluentEditor('#editor', {
+  theme: 'snow',
+  modules: {
+    'collaborative-editing': {
+      cursors: {
+        template: `
+          <span class="${CURSOR_CLASSES.SELECTION_CLASS}"></span>
+          <span class="${CURSOR_CLASSES.CARET_CONTAINER_CLASS}">
+            <span class="${CURSOR_CLASSES.CARET_CLASS}"></span>
+          </span>
+          <div class="${CURSOR_CLASSES.FLAG_CLASS}">
+            <small class="${CURSOR_CLASSES.NAME_CLASS}"></small>
+          </div>
+        `,
+        hideDelayMs: 300,
+        hideSpeedMs: 300,
+        transformOnTextChange: true,
+      },
+    },
+  },
+})
 ```
 
 ---
