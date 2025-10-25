@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import type FluentEditor from '@opentiny/fluent-editor'
+import SimpleMindMap from 'simple-mind-map'
+import Themes from 'simple-mind-map-plugin-themes'
+import Drag from 'simple-mind-map/src/plugins/Drag.js'
+import Export from 'simple-mind-map/src/plugins/Export.js'
 import { onMounted, ref } from 'vue'
+
+window.SimpleMindMap = SimpleMindMap
+window.Themes = Themes
+window.Drag = Drag
+window.Export = Export
 
 let editor: FluentEditor
 const editorRef = ref<HTMLElement>()
