@@ -4,8 +4,7 @@ import type SimpleMindMap from 'simple-mind-map'
 import type FluentEditor from '../../../core/fluent-editor'
 import Quill from 'quill'
 import { getAllConfigs } from '../config-utils'
-import contractIcon from '../icons/contractIcon.png'
-import expandIcon from '../icons/expandIcon.png'
+import { contractIcon, expandIcon } from '../icons'
 import { initContextMenu } from '../modules/context-menu'
 import { createControlPanel } from '../modules/control-panel'
 import { MindMapResizeAction } from '../modules/custom-resize-action'
@@ -180,7 +179,7 @@ class MindMapPlaceholderBlot extends BlockEmbed {
   getControlElements(): { leftUpControl: HTMLElement | null, control: HTMLElement | null, panelStatusIcon: HTMLElement | null } {
     const leftUpControl = this.domNode.querySelector('.ql-mind-map-left-up-control') as HTMLElement | null
     const control = this.domNode.querySelector('.ql-mind-map-control') as HTMLElement | null
-    const panelStatusIcon = this.domNode.querySelector('.ql-mind-map-control-panel-status') as HTMLElement | null
+    const panelStatusIcon = this.domNode.querySelector('[data-control-type="panel-status"]') as HTMLElement | null
     return { leftUpControl, control, panelStatusIcon }
   }
 
@@ -191,7 +190,8 @@ class MindMapPlaceholderBlot extends BlockEmbed {
     leftUpControl.style.display = 'inline-flex'
     control.style.display = 'flex'
     if (panelStatusIcon) {
-      panelStatusIcon.style.backgroundImage = `url(${expandIcon})`
+      const iconElement = panelStatusIcon.querySelector('i') || panelStatusIcon
+      iconElement.innerHTML = expandIcon
     }
   }
 
@@ -202,7 +202,8 @@ class MindMapPlaceholderBlot extends BlockEmbed {
     leftUpControl.style.display = 'none'
     control.style.display = 'none'
     if (panelStatusIcon) {
-      panelStatusIcon.style.backgroundImage = `url(${contractIcon})`
+      const iconElement = panelStatusIcon.querySelector('i') || panelStatusIcon
+      iconElement.innerHTML = contractIcon
     }
   }
 
