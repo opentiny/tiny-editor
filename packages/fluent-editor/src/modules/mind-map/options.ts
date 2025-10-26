@@ -17,4 +17,12 @@ export interface MindMapOptions {
   resize?: boolean
   line?: boolean | LineConfig
   theme?: string
+  deps?: MindMapDeps
+}
+
+export interface MindMapDeps {
+  SimpleMindMap: any
+  Themes: any
+  Drag: any
+  Export: any
 }

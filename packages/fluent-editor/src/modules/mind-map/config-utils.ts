@@ -99,11 +99,14 @@ export function getAllConfigs(quill: Quill | null): {
   resizeConfig: boolean
   lineConfig: false | object
   themeConfig: string
+  deps?: any
 } {
+  const deps = (quill?.options.modules?.['mind-map'] as any)?.deps
   return {
     backgroundConfig: getBackgroundConfig(quill),
     resizeConfig: getResizeConfig(quill),
     lineConfig: getLineConfig(quill),
     themeConfig: getThemeConfig(quill),
+    deps,
   }
 }

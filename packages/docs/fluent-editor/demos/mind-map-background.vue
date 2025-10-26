@@ -6,11 +6,6 @@ import Drag from 'simple-mind-map/src/plugins/Drag.js'
 import Export from 'simple-mind-map/src/plugins/Export.js'
 import { onMounted, ref } from 'vue'
 
-window.SimpleMindMap = SimpleMindMap
-window.Themes = Themes
-window.Drag = Drag
-window.Export = Export
-
 let editor: FluentEditor
 const editorRef = ref<HTMLElement>()
 
@@ -30,6 +25,12 @@ onMounted(() => {
       modules: {
         'toolbar': TOOLBAR_CONFIG,
         'mind-map': {
+          deps: {
+            SimpleMindMap,
+            Themes,
+            Drag,
+            Export,
+          },
           background: {
             color: '#A4DD00',
             // image: 'url(path/to/image.png)',
@@ -37,7 +38,7 @@ onMounted(() => {
             position: 'center',
             size: 'auto',
           },
-        },
+        } as any,
       },
     })
     const ops = [{ insert: '\n' }, { insert: { 'mind-map': { layout: 'logicalStructure', root: { data: { text: '根节点', expand: true, uid: '36bae545-da0b-4c08-be14-ff05f7f05d0a', isActive: false }, children: [{ data: { text: '二级节点', uid: 'ef0895d2-b5cc-4214-b0ee-e29f8f02420d', expand: true, richText: false, isActive: false }, children: [] }], smmVersion: '0.14.0-fix.1' }, theme: { template: 'default', config: { backgroundColor: '#A4DD00', backgroundRepeat: 'repeat', backgroundPosition: 'center', backgroundSize: 'auto' } }, view: { transform: { scaleX: 1, scaleY: 1, shear: 0, rotate: 0, translateX: 0, translateY: 0, originX: 0, originY: 0, a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 }, state: { scale: 1, x: 0, y: 0, sx: 0, sy: 0 } } } } }, { insert: '\n\n' }]

@@ -1,6 +1,5 @@
 import type { Root } from 'parchment'
 import type { BlockEmbed as TypeBlockEmbed } from 'quill/blots/block'
-import type SimpleMindMap from 'simple-mind-map'
 import type FluentEditor from '../../../core/fluent-editor'
 import Quill from 'quill'
 import { getAllConfigs } from '../config-utils'
@@ -17,7 +16,7 @@ class MindMapPlaceholderBlot extends BlockEmbed {
   static tagName = 'div'
   static className = 'ql-mind-map-item'
   quill: Quill | null = null
-  mindMap: SimpleMindMap | null = null
+  mindMap: any | null = null
   data: any
   zoomCount = 0
   contextMenu: HTMLElement | null = null
@@ -108,8 +107,8 @@ class MindMapPlaceholderBlot extends BlockEmbed {
     }
     this.updateAlignmentStyle()
     this.observeParentAlignment()
-    const { backgroundConfig, resizeConfig, lineConfig, themeConfig } = getAllConfigs(this.quill)
-    const { SimpleMindMap, Themes, Drag, Export } = window as any
+    const { backgroundConfig, resizeConfig, lineConfig, themeConfig, deps } = getAllConfigs(this.quill)
+    const { SimpleMindMap, Themes, Drag, Export } = deps || window as any
     Themes.init(SimpleMindMap)
     SimpleMindMap.usePlugin(Drag).usePlugin(Export)
     this.mindMap = new SimpleMindMap ({
