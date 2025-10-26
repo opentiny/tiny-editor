@@ -259,7 +259,6 @@ function handlePanelStatusBtn(blot: FlowChartPlaceholderBlot): void {
   const panelStatusIcon = blot.domNode.querySelector('.ql-flow-chart-control-panel-status') as HTMLElement | null
   if (!leftUpControl || !control) return
   const isVisible = leftUpControl.style.display !== 'none' && control.style.display !== 'none'
-  console.warn('isVisible', isVisible)
   if (isVisible) {
     leftUpControl.style.display = 'none'
     control.style.display = 'none'
