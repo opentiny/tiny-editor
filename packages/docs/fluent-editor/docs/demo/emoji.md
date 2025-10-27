@@ -10,7 +10,7 @@ npm i @floating-ui/dom @emoji-mart/data emoji-mart
 
 ## 集成示例
 
-工具栏配置增加 `emoji`，modules 增加 `emoji` 为 true, 即可开始使用。
+工具栏配置增加 `emoji`，modules 增加 `emoji` 按照如下代码所示配置进行配置后即可使用
 
 :::demo src=demos/emoji.vue
 :::
@@ -34,3 +34,5 @@ npm i @floating-ui/dom @emoji-mart/data emoji-mart
 | `dynamicWidth`     | `boolean`  | `false`                                                                                            | 是否根据容器宽度动态决定 `perLine` 的值。                                    |
 
 > 💡 以上配置项最终会传递给 [`<EmojiPicker>`](https://github.com/missive/emoji-mart#-emoji-component) 组件，你可以根据项目实际需要进行覆盖。
+>
+> 更多配置可参考 [emoji-mart Options / Props](https://github.com/missive/emoji-mart#options--props)

@@ -1,11 +1,14 @@
+import type { EmojiMartData } from '@emoji-mart/data'
+import type { computePosition } from '@floating-ui/dom'
+import type { Picker } from 'emoji-mart'
 import type TypeToolbar from 'quill/modules/toolbar'
 import type FluentEditor from '../fluent-editor'
-import data from '@emoji-mart/data'
-import { computePosition } from '@floating-ui/dom'
-import { Picker } from 'emoji-mart'
 import { debounce } from 'lodash-es'
 
 export interface EmojiModuleOptions {
+  data: EmojiMartData
+  EmojiPicker: new (props: any) => Picker
+  emojiPickerPosition: typeof computePosition
   theme?: string
   locale?: string
   set?: string
@@ -20,7 +23,7 @@ export interface EmojiModuleOptions {
   dynamicWidth?: boolean
 }
 
-const DEFAULT_OPTIONS: EmojiModuleOptions = {
+const DEFAULT_OPTIONS: Omit<EmojiModuleOptions, 'data' | 'EmojiPicker' | 'emojiPickerPosition'> = {
   theme: 'light',
   set: 'native',
   skinTonePosition: 'none',
@@ -48,7 +51,7 @@ class EmojiModule {
   private isPickerVisible = false
   private cleanupResizeObserver: (() => void) | null = null
 
-  constructor(quill: FluentEditor, options: EmojiModuleOptions = {}) {
+  constructor(quill: FluentEditor, options: EmojiModuleOptions) {
     this.quill = quill
 
     this.options = options
@@ -79,8 +82,10 @@ class EmojiModule {
       return
     }
 
+    const { emojiPickerPosition } = this.options
+
     try {
-      const { x, y } = await computePosition(button, pickerElement)
+      const { x, y } = await emojiPickerPosition(button, pickerElement)
       this.picker.style.top = `${y}px`
       this.picker.style.left = `${x}px`
     }
@@ -114,17 +119,18 @@ class EmojiModule {
 
   // 创建表情选择弹窗
   private createPicker() {
+    const { EmojiPicker, ...options } = this.options
+
     const pickerConfig = {
       ...DEFAULT_OPTIONS,
       // emoji-mart 与 tiny-editor 国际化的的 locale 不一致使用 LOCALE_MAP 转换
       locale: LOCALE_MAP[this.quill.lang] ?? 'en',
-      ...this.options,
-      data,
+      ...options,
       onEmojiSelect: this.handleEmojiSelect.bind(this),
       onClickOutside: this.handleClickOutside.bind(this),
     }
 
-    const picker = new Picker(pickerConfig) as unknown as HTMLElement
+    const picker = new EmojiPicker(pickerConfig) as unknown as HTMLElement
 
     // 设置样式和属性
     picker.id = PICKER_DOM_ID
