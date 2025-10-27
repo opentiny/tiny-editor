@@ -12,17 +12,18 @@ export interface LineConfig {
   dasharray?: string
   style?: 'curve' | 'straight' | 'direct'
 }
-export interface MindMapOptions {
-  background?: boolean | BackgroundConfig
-  resize?: boolean
-  line?: boolean | LineConfig
-  theme?: string
-  deps?: MindMapDeps
-}
 
 export interface MindMapDeps {
   SimpleMindMap: any
   Themes: any
   Drag: any
   Export: any
+}
+
+export interface MindMapOptions {
+  background?: boolean | BackgroundConfig
+  resize?: boolean
+  line?: boolean | LineConfig
+  theme?: string
+  deps?: MindMapDeps
 }

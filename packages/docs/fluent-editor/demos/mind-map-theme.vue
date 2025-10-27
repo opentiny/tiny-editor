@@ -32,7 +32,7 @@ onMounted(() => {
             Export,
           },
           theme: 'minions',
-        } as any,
+        },
       },
     })
 
