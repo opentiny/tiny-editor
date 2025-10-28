@@ -2,8 +2,6 @@ import type Quill from 'quill'
 import type { FlowChartOptions } from './options'
 import Quills from 'quill'
 import FlowChartPlaceholderBlot from './formats/flow-chart-blot'
-import '@logicflow/core/lib/style/index.css'
-import '@logicflow/extension/lib/style/index.css'
 
 export class FlowChartModule {
   quill: Quill

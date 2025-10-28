@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import type FluentEditor from '@opentiny/fluent-editor'
+import LogicFlow from '@logicflow/core'
+import { DndPanel, SelectionSelect, Snapshot } from '@logicflow/extension'
 import { onMounted, ref } from 'vue'
+import '@logicflow/core/lib/style/index.css'
+import '@logicflow/extension/lib/style/index.css'
 
 let editor: FluentEditor
 const editorRef = ref<HTMLElement>()
@@ -28,6 +32,12 @@ onMounted(() => {
             position: 'center',
             size: 'auto',
             opacity: 0.1,
+          },
+          deps: {
+            LogicFlow,
+            DndPanel,
+            SelectionSelect,
+            Snapshot,
           },
         },
       },

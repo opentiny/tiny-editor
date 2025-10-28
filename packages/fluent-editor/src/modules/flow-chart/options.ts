@@ -16,8 +16,16 @@ export interface BackgroundConfig {
   opacity?: number
 }
 
+export interface FlowChartDeps {
+  SimpleMindMap: any
+  Themes: any
+  Drag: any
+  Export: any
+}
+
 export interface FlowChartOptions {
   grid?: boolean | GridOptions
   background?: boolean | BackgroundConfig
   resize?: boolean
+  deps: FlowChartDeps
 }

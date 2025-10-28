@@ -1,8 +1,6 @@
 import type { Root } from 'parchment'
 import type { BlockEmbed as TypeBlockEmbed } from 'quill/blots/block'
 import type FluentEditor from '../../../core/fluent-editor'
-import LogicFlow from '@logicflow/core'
-import { DndPanel, SelectionSelect, Snapshot } from '@logicflow/extension'
 import Quill from 'quill'
 import { getAllConfigs } from '../config-utils'
 import { contractIcon, expandIcon } from '../icons'
@@ -22,7 +20,7 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
   static tagName = 'div'
   static className = 'ql-flow-chart-item'
   quill: Quill | null = null
-  flowChart: LogicFlow | null = null
+  flowChart: any | null = null
   data: any
   contextMenu: HTMLElement | null = null
   currentElement: any = null
@@ -109,7 +107,8 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
     this.domNode.style.height = `${this.height}px`
     this.updateAlignmentStyle()
     this.observeParentAlignment()
-    const { gridConfig, backgroundConfig, resizeConfig } = getAllConfigs(this.quill)
+    const { gridConfig, backgroundConfig, resizeConfig, deps } = getAllConfigs(this.quill)
+    const { LogicFlow, DndPanel, SelectionSelect, Snapshot } = deps || window as any
     this.flowChart = new LogicFlow({
       container: this.domNode,
       stopScrollGraph: true,

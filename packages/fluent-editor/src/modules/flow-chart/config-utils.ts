@@ -97,10 +97,13 @@ export function getAllConfigs(quill: Quill | null): {
   gridConfig: any
   backgroundConfig: false | object
   resizeConfig: boolean
+  deps?: any
 } {
+  const deps = (quill?.options.modules?.['flow-chart'] as any)?.deps
   return {
     gridConfig: getGridConfig(quill),
     backgroundConfig: getBackgroundConfig(quill),
     resizeConfig: getResizeConfig(quill),
+    deps,
   }
 }
