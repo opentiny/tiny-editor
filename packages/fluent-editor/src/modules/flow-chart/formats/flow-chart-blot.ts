@@ -4,11 +4,6 @@ import type FluentEditor from '../../../core/fluent-editor'
 import Quill from 'quill'
 import { getAllConfigs } from '../config-utils'
 import { contractIcon, expandIcon } from '../icons'
-import circleIcon from '../icons/circleIcon.png'
-import diamondIcon from '../icons/diamondIcon.png'
-import ellipseIcon from '../icons/ellipseIcon.png'
-import rectangleIcon from '../icons/rectangleIcon.png'
-import selectRegionIcon from '../icons/selectRegionIcon.png'
 import { initContextMenu } from '../modules/context-menu'
 import { createControlPanel } from '../modules/control-panel'
 import { FlowChartResizeAction } from '../modules/custom-resize-action'
@@ -124,7 +119,7 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
     })
     this.flowChart.setPatternItems([
       {
-        icon: selectRegionIcon,
+        className: 'lf-shape-dashed',
         callback: () => {
           this.flowChart.openSelectionSelect()
           this.flowChart.once('selection:selected', () => {
@@ -135,22 +130,22 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
       {
         type: 'rect',
         text: '矩形',
-        icon: rectangleIcon,
+        className: 'lf-shape-rect',
       },
       {
         type: 'circle',
         text: '圆形',
-        icon: circleIcon,
+        className: 'lf-shape-circle',
       },
       {
         type: 'ellipse',
         text: '椭圆',
-        icon: ellipseIcon,
+        className: 'lf-shape-ellipse',
       },
       {
         type: 'diamond',
         text: '菱形',
-        icon: diamondIcon,
+        className: 'lf-shape-diamond',
       },
     ])
     if (resizeConfig) {

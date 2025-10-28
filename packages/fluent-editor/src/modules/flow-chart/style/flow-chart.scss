@@ -121,3 +121,48 @@
     @include flow-chart-control-item;
   }
 }
+
+.lf-shape-dashed {
+  margin: 10px auto 0px auto;
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border: 1.5px dashed #000;
+  border-radius: 2px;
+}
+
+.lf-shape-rect {
+  margin: 10px auto 0px auto;
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border: 1.5px solid #000;
+  border-radius: 2px;
+}
+
+.lf-shape-circle {
+  margin: 10px auto 0px auto;
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border: 1.5px solid #000;
+  border-radius: 50%;
+}
+
+.lf-shape-ellipse {
+  margin: 10px auto 0px 3px;
+  width: 26px;
+  height: 20px;
+  background-color: transparent;
+  border: 1.5px solid #000;
+  border-radius: 50%;
+}
+
+.lf-shape-diamond {
+  margin: 10px auto 10px auto;
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border: 1.5px solid #000;
+  transform: rotate(45deg);
+}
