@@ -5,11 +5,10 @@ import LogicFlow from '@logicflow/core'
 import { DndPanel, SelectionSelect, Snapshot } from '@logicflow/extension'
 import Quill from 'quill'
 import { getAllConfigs } from '../config-utils'
+import { contractIcon, expandIcon } from '../icons'
 import circleIcon from '../icons/circleIcon.png'
-import contractIcon from '../icons/contractIcon.png'
 import diamondIcon from '../icons/diamondIcon.png'
 import ellipseIcon from '../icons/ellipseIcon.png'
-import expandIcon from '../icons/expandIcon.png'
 import rectangleIcon from '../icons/rectangleIcon.png'
 import selectRegionIcon from '../icons/selectRegionIcon.png'
 import { initContextMenu } from '../modules/context-menu'
@@ -199,7 +198,7 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
   getControlElements(): { leftUpControl: HTMLElement | null, control: HTMLElement | null, panelStatusIcon: HTMLElement | null } {
     const leftUpControl = this.domNode.querySelector('.lf-dndpanel') as HTMLElement | null
     const control = this.domNode.querySelector('.ql-flow-chart-control') as HTMLElement | null
-    const panelStatusIcon = this.domNode.querySelector('.ql-flow-chart-control-panel-status') as HTMLElement | null
+    const panelStatusIcon = this.domNode.querySelector('[data-control-type="panel-status"]') as HTMLElement | null
     return { leftUpControl, control, panelStatusIcon }
   }
 
@@ -210,7 +209,8 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
     leftUpControl.style.display = 'block'
     control.style.display = 'flex'
     if (panelStatusIcon) {
-      panelStatusIcon.style.backgroundImage = `url(${expandIcon})`
+      const iconElement = panelStatusIcon.querySelector('i') || panelStatusIcon
+      iconElement.innerHTML = expandIcon
     }
   }
 
@@ -221,7 +221,8 @@ class FlowChartPlaceholderBlot extends BlockEmbed {
     leftUpControl.style.display = 'none'
     control.style.display = 'none'
     if (panelStatusIcon) {
-      panelStatusIcon.style.backgroundImage = `url(${contractIcon})`
+      const iconElement = panelStatusIcon.querySelector('i') || panelStatusIcon
+      iconElement.innerHTML = contractIcon
     }
   }
 

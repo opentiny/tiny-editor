@@ -3,13 +3,7 @@ import type FlowChartPlaceholderBlot from '../formats/flow-chart-blot'
 import { CHANGE_LANGUAGE_EVENT } from '../../../config'
 import { I18N } from '../../../modules/i18n'
 import { registerFlowChartI18N } from '../i18n'
-import bezierIcon from '../icons/bezierIcon.png'
-import contractIcon from '../icons/contractIcon.png'
-import expandIcon from '../icons/expandIcon.png'
-import fullScreenIcon from '../icons/fullScreenIcon.png'
-import lineIcon from '../icons/lineIcon.png'
-import polyLineIcon from '../icons/polyLineIcon.png'
-import smallScreenIcon from '../icons/smallScreenIcon.png'
+import { backIcon, bezierIcon, contractIcon, fitIcon, forwardIcon, lineIcon, polyLineIcon, screenReduceIcon, screenTypeIcon, zoomInIcon, zoomOutIcon } from '../icons'
 
 class FlowChartControlPanelHandler {
   private texts: Record<string, string>
@@ -87,7 +81,7 @@ export function createControlPanel(blot: FlowChartPlaceholderBlot, quill: Fluent
   const backBtn = createControlItem('back', handler.getText('backTitle'), () => handleUndo(blot))
   const forwardBtn = createControlItem('forward', handler.getText('forwardTitle'), () => handleRedo(blot))
   const setEdgeTypeBtn = createControlItem('set-edge-type', handler.getText('setEdgeTypeTitle'), () => handleSetEdgeType(blot))
-  const panelStatusBtn = createControlItem('panel-status', handler.getText('panelStatusTitle'), () => handlePanelStatusBtn(blot))
+  const panelStatusBtn = createControlItem('panel-status', handler.getText('panelStatusTitle'))
   const screenTypeBtn = createControlItem('screen-type', handler.getText('screenTypeTitle'), () => handleScreenTypeBtn(blot))
 
   const updateButtonState = (historyData: any) => {
@@ -156,15 +150,26 @@ function handleResetZoom(blot: FlowChartPlaceholderBlot): void {
   }
 }
 
-function createControlItem(iconClass: string, title: string, onClick: () => void, disabled = false) {
+function createControlItem(iconClass: string, title: string, onClick?: () => void, disabled = false) {
   const controlItem = document.createElement('div')
   controlItem.className = 'ql-flow-chart-control-item'
   controlItem.title = title
   controlItem.dataset.controlType = iconClass
   controlItem.style.cursor = disabled ? 'not-allowed' : 'pointer'
 
+  const iconMap: Record<string, string> = {
+    'back': backIcon,
+    'forward': forwardIcon,
+    'zoom-out': zoomOutIcon,
+    'zoom-in': zoomInIcon,
+    'fit': fitIcon,
+    'screen-type': screenTypeIcon,
+    'panel-status': contractIcon,
+    'set-edge-type': lineIcon,
+  }
+
   const icon = document.createElement('i')
-  icon.className = `ql-flow-chart-control-${iconClass}`
+  icon.innerHTML = iconMap[iconClass] || ''
   controlItem.appendChild(icon)
 
   if (!disabled) {
@@ -181,10 +186,15 @@ function handleSetEdgeType(blot: FlowChartPlaceholderBlot): void {
   if (!edgeTypePanel) {
     edgeTypePanel = document.createElement('div')
     edgeTypePanel.className = 'ql-flow-chart-edge-panel'
-    controlLeftUpPanel.appendChild(edgeTypePanel)
     edgeTypePanel.style.display = 'flex'
     edgeTypePanel.style.justifyContent = 'space-around'
     edgeTypePanel.style.flexWrap = 'nowrap'
+    edgeTypePanel.style.width = 'auto'
+    edgeTypePanel.style.minWidth = '100%'
+    edgeTypePanel.style.padding = '8px'
+    edgeTypePanel.style.boxSizing = 'border-box'
+    controlLeftUpPanel.appendChild(edgeTypePanel)
+
     const edgeTypes = [
       {
         name: 'line',
@@ -206,10 +216,18 @@ function handleSetEdgeType(blot: FlowChartPlaceholderBlot): void {
     edgeTypes.forEach((edgeType) => {
       const edgeItem = document.createElement('div')
       edgeItem.className = 'ql-flow-chart-edge-item'
+      edgeItem.style.padding = '8px'
+      edgeItem.style.cursor = 'pointer'
+      edgeItem.style.textAlign = 'center'
 
       const edgeIcon = document.createElement('div')
       edgeIcon.className = `ql-flow-chart-edge-type-icon`
-      edgeIcon.style.backgroundImage = `url(${edgeType.icon})`
+      edgeIcon.style.width = '24px'
+      edgeIcon.style.height = '24px'
+      edgeIcon.style.margin = '0 auto'
+      if (edgeType.icon) {
+        edgeIcon.innerHTML = edgeType.icon
+      }
 
       edgeItem.appendChild(edgeIcon)
 
@@ -251,34 +269,18 @@ function handleSetEdgeType(blot: FlowChartPlaceholderBlot): void {
   }
 
   document.removeEventListener('click', handleOutsideClick)
-  document.addEventListener('click', handleOutsideClick)
+  setTimeout(() => {
+    document.addEventListener('click', handleOutsideClick)
+  }, 0)
 }
-function handlePanelStatusBtn(blot: FlowChartPlaceholderBlot): void {
-  const control = blot.domNode.querySelector('.ql-flow-chart-control') as HTMLElement | null
-  const leftUpControl = blot.domNode.querySelector('.lf-dndpanel') as HTMLElement | null
-  const panelStatusIcon = blot.domNode.querySelector('.ql-flow-chart-control-panel-status') as HTMLElement | null
-  if (!leftUpControl || !control) return
-  const isVisible = leftUpControl.style.display !== 'none' && control.style.display !== 'none'
-  if (isVisible) {
-    leftUpControl.style.display = 'none'
-    control.style.display = 'none'
-    if (panelStatusIcon) {
-      panelStatusIcon.style.backgroundImage = `url(${contractIcon})`
-    }
-  }
-  else {
-    leftUpControl.style.display = 'block'
-    control.style.display = 'flex'
-    if (panelStatusIcon) {
-      panelStatusIcon.style.backgroundImage = `url(${expandIcon})`
-    }
-  }
-}
+
 function handleScreenTypeBtn(blot: FlowChartPlaceholderBlot): void {
-  const screenTypeIconElement = blot.domNode.querySelector('.ql-flow-chart-control-screen-type') as HTMLElement | null
+  const screenTypeBtn = blot.domNode.querySelector('[data-control-type="screen-type"]') as HTMLElement | null
+  if (!screenTypeBtn || !blot.domNode) return
+
   const flowChartContainer = blot.domNode
-  if (!screenTypeIconElement || !flowChartContainer) return
   const isFullscreen = flowChartContainer.style.position === 'fixed'
+
   if (isFullscreen) {
     const originalPosition = flowChartContainer.getAttribute('data-original-position')
     const originalWidth = flowChartContainer.getAttribute('data-original-width')
@@ -289,7 +291,10 @@ function handleScreenTypeBtn(blot: FlowChartPlaceholderBlot): void {
       flowChartContainer.style.height = originalHeight
       flowChartContainer.style.zIndex = '0'
     }
-    screenTypeIconElement.style.backgroundImage = `url(${fullScreenIcon})`
+    const iconElement = screenTypeBtn.querySelector('i')
+    if (iconElement) {
+      iconElement.innerHTML = screenTypeIcon
+    }
   }
   else {
     flowChartContainer.setAttribute('data-original-position', flowChartContainer.style.position || '')
@@ -301,7 +306,10 @@ function handleScreenTypeBtn(blot: FlowChartPlaceholderBlot): void {
     flowChartContainer.style.width = '100vw'
     flowChartContainer.style.height = '100vh'
     flowChartContainer.style.zIndex = '100'
-    screenTypeIconElement.style.backgroundImage = `url(${smallScreenIcon})`
+    const iconElement = screenTypeBtn.querySelector('i')
+    if (iconElement) {
+      iconElement.innerHTML = screenReduceIcon
+    }
   }
   blot.flowChart.resize()
   blot.flowChart.translateCenter()
