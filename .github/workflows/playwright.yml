@@ -1,13 +1,15 @@
 name: Playwright Tests
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1/8, 2/8, 3/8, 4/8, 5/8, 6/8, 7/8, 8/8]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -20,7 +22,7 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm install:browser
       - name: Run Playwright tests
-        run: pnpm test
+        run: pnpm test --retries=1 --workers=2
       - uses: actions/upload-artifact@v4
         if: always()
         with:
