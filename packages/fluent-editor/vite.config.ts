@@ -36,7 +36,7 @@ function rollupOutput(target: string, dir: string): any {
       if (assetInfo.name === 'style.css') {
         return 'style.css'
       }
-      return ''
+      return '[name][extname]'
     },
   }
 }
