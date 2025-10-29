@@ -71,7 +71,7 @@ jobs:
 
       # 步骤8: 发布组件到NPM
       - name: Publish components
-        run: pnpm -F @opentiny/fluent-editor pub -- --tag ${{ inputs.tag }}
+        run: pnpm pub -- --tag ${{ inputs.tag }}
         env:
           # 使用NPM令牌进行身份验证
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -58,7 +58,7 @@ jobs:
           fi
 
       - name: Publish @opentiny/fluent-editor
-        run: pnpm -F @opentiny/fluent-editor pub
+        run: pnpm pub
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
