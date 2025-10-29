@@ -7,12 +7,12 @@ test.describe('MindMap.vue', () => {
   })
 
   test('should render the editor', async ({ page }) => {
-    const editor = page.locator('.ql-editor')
+    const editor = page.locator('.ql-editor').first()
     await expect(editor).toBeVisible()
   })
 
   test('should have mind-map button in toolbar', async ({ page }) => {
-    const toolbar = page.locator('.ql-toolbar')
+    const toolbar = page.locator('.ql-toolbar').first()
     await expect(toolbar).toBeVisible()
 
     const mindMapButton = toolbar.locator('.ql-mind-map')
@@ -20,23 +20,20 @@ test.describe('MindMap.vue', () => {
   })
 
   test('should initialize editor with mind map content', async ({ page }) => {
-    const editor = page.locator('.ql-editor')
+    const editor = page.locator('.ql-editor').first()
     await expect(editor).toBeVisible()
 
     await page.waitForTimeout(1000)
 
-    const mindMapElement = page.locator('.ql-mind-map-item')
+    const mindMapElement = page.locator('.ql-mind-map-item').first()
     await expect(mindMapElement).toBeVisible()
   })
 
   test('should activate mind-map when button is clicked', async ({ page }) => {
-    const mindMapButton = page.locator('.ql-toolbar .ql-mind-map')
+    const mindMapButton = page.locator('.ql-toolbar .ql-mind-map').first()
     await expect(mindMapButton).toBeVisible()
-
     await mindMapButton.click()
-
     await page.waitForTimeout(500)
-
     const editor = page.locator('.ql-editor')
     await expect(editor).toBeVisible()
   })
