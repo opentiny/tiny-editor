@@ -42,7 +42,7 @@ export class MindMapResizeAction {
 
   createHandle(position: string, cursor: string): HTMLElement {
     const box = document.createElement('div')
-    box.classList.add('ql-flow-chart-resize-handle')
+    box.classList.add('ql-mind-map-resize-handle')
     box.setAttribute('data-position', position)
     Object.assign(box.style, {
       cursor,
