@@ -193,6 +193,8 @@ function handleSetEdgeType(blot: FlowChartPlaceholderBlot): void {
     edgeTypePanel.style.minWidth = '100%'
     edgeTypePanel.style.padding = '8px'
     edgeTypePanel.style.boxSizing = 'border-box'
+    edgeTypePanel.style.position = 'absolute'
+    edgeTypePanel.style.top = '170px'
     controlLeftUpPanel.appendChild(edgeTypePanel)
 
     const edgeTypes = [
