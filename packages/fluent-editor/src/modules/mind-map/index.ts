@@ -12,7 +12,7 @@ export class MindMapModule {
     Quills.register('formats/mind-map', MindMapPlaceholderBlot, true)
   }
 
-  constructor(quill: Quill, options: any) {
+  constructor(quill: Quill, options: MindMapOptions) {
     (quill.container as any).__quillInstance = quill
     this.quill = quill
     this.options = options
