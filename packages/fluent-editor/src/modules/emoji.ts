@@ -6,9 +6,9 @@ import type FluentEditor from '../fluent-editor'
 import { debounce } from 'lodash-es'
 
 export interface EmojiModuleOptions {
-  data: EmojiMartData
-  EmojiPicker: new (props: any) => Picker
-  emojiPickerPosition: typeof computePosition
+  emojiData?: EmojiMartData
+  EmojiPicker?: new (props: any) => Picker
+  emojiPickerPosition?: typeof computePosition
   theme?: string
   locale?: string
   set?: string
@@ -23,7 +23,13 @@ export interface EmojiModuleOptions {
   dynamicWidth?: boolean
 }
 
-const DEFAULT_OPTIONS: Omit<EmojiModuleOptions, 'data' | 'EmojiPicker' | 'emojiPickerPosition'> = {
+const DEFAULT_OPTIONS: EmojiModuleOptions = {
+  // @ts-ignore
+  emojiData: window.emojiData,
+  // @ts-ignore
+  EmojiPicker: window.EmojiPicker,
+  // @ts-ignore
+  emojiPickerPosition: window.emojiPickerPosition,
   theme: 'light',
   set: 'native',
   skinTonePosition: 'none',
@@ -119,12 +125,13 @@ class EmojiModule {
 
   // 创建表情选择弹窗
   private createPicker() {
-    const { EmojiPicker, ...options } = this.options
+    const { EmojiPicker, emojiData, ...options } = this.options
 
     const pickerConfig = {
       ...DEFAULT_OPTIONS,
       // emoji-mart 与 tiny-editor 国际化的的 locale 不一致使用 LOCALE_MAP 转换
       locale: LOCALE_MAP[this.quill.lang] ?? 'en',
+      data: emojiData,
       ...options,
       onEmojiSelect: this.handleEmojiSelect.bind(this),
       onClickOutside: this.handleClickOutside.bind(this),

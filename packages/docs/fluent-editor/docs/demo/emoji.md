@@ -12,6 +12,8 @@ npm i @floating-ui/dom @emoji-mart/data emoji-mart
 
 工具栏配置增加 `emoji`，modules 增加 `emoji` 按照如下代码所示配置进行配置后即可使用
 
+> `emojiData`、`EmojiPicker`、`emojiPickerPosition` 支持通过 window 传入
+
 :::demo src=demos/emoji.vue
 :::
 

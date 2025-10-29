@@ -28,7 +28,7 @@ onMounted(() => {
       modules: {
         toolbar: TOOLBAR_CONFIG,
         emoji: {
-          data: data as EmojiMartData,
+          emojiData: data as EmojiMartData,
           EmojiPicker: Picker,
           emojiPickerPosition: computePosition,
         },
