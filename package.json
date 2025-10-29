@@ -32,8 +32,8 @@
     "build:v3": "pnpm -F docs build:v3",
     "build:projects": "pnpm -F projects build",
     "build:lib": "pnpm -F @opentiny/fluent-editor build",
-    "lint": "eslint . --cache",
-    "lint:fix": "eslint . --fix",
+    "lint": "eslint . --cache --ignore-path .eslintignore",
+    "lint:fix": "eslint . --fix --ignore-path .eslintignore",
     "install:browser": "pnpm -F docs install:browser",
     "test": "pnpm -F docs test",
     "report": "pnpm -F docs report"
