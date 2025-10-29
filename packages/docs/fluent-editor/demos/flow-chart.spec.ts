@@ -6,38 +6,50 @@ test.describe('FlowChart.vue', () => {
   })
 
   test('should render the editor', async ({ page }) => {
-    const container = page.locator('.ql-container').first()
-    const editor = container.locator('.ql-editor')
+    const editor = page.locator('.ql-editor').first()
     await expect(editor).toBeVisible()
   })
 
   test('should have flow-chart button in toolbar', async ({ page }) => {
-    const container = page.locator('.ql-container').first()
-    const toolbar = container.locator('.ql-toolbar')
+    const toolbar = page.locator('.ql-toolbar')
     await expect(toolbar).toBeVisible()
-    await expect(toolbar.locator('.ql-flow-chart')).toBeVisible()
+
+    const flowChartButton = toolbar.locator('.ql-flow-chart')
+    await expect(flowChartButton).toBeVisible()
   })
 
   test('should initialize editor with flow chart content', async ({ page }) => {
-    const container = page.locator('.ql-container').first()
-    const editor = container.locator('.ql-editor')
+    const editor = page.locator('.ql-editor').first()
     await expect(editor).toBeVisible()
-    await expect(container.locator('.ql-flow-chart-item').first()).toBeVisible()
+
+    await page.waitForTimeout(1000)
+
+    const flowChartElement = editor.locator('.ql-flow-chart-item')
+    await expect(flowChartElement).toBeVisible()
   })
 
   test('should contain initial flow chart nodes and edges', async ({ page }) => {
-    const container = page.locator('.ql-container').first()
-    const flowChart = container.locator('.ql-flow-chart-item').first()
-    await expect(flowChart).toBeVisible()
-    await expect(flowChart.locator('.lf-node')).toHaveCount(2, { timeout: 5000 })
-    await expect(flowChart.locator('.lf-edge')).toHaveCount(1, { timeout: 5000 })
+    await page.waitForTimeout(2000)
+
+    const flowChartContainer = page.locator('.ql-flow-chart-item')
+    await expect(flowChartContainer).toBeVisible()
+
+    const nodes = page.locator('.lf-node')
+    await expect(nodes).toHaveCount(2)
+
+    const edges = page.locator('.lf-edge')
+    await expect(edges).toHaveCount(1)
   })
 
   test('should activate flow-chart when button is clicked', async ({ page }) => {
-    const container = page.locator('.ql-container').first()
-    const flowChartButton = container.locator('.ql-toolbar .ql-flow-chart')
+    const flowChartButton = page.locator('.ql-toolbar .ql-flow-chart')
     await expect(flowChartButton).toBeVisible()
+
     await flowChartButton.click()
-    await expect(container.locator('.ql-editor')).toBeVisible()
+
+    await page.waitForTimeout(500)
+
+    const editor = page.locator('.ql-editor').first()
+    await expect(editor).toBeVisible()
   })
 })
