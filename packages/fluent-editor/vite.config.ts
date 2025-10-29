@@ -7,6 +7,7 @@ interface Manifest {
   version: string
   dependencies?: Record<string, string>
   peerDependencies?: Record<string, string>
+  devDependencies?: Record<string, string>
 }
 
 export function getPackageManifest(pkgPath: string): Manifest {
@@ -14,12 +15,13 @@ export function getPackageManifest(pkgPath: string): Manifest {
 }
 
 export function rollupExternalFromPackage(pkgPath: string) {
-  const { dependencies, peerDependencies } = getPackageManifest(pkgPath)
+  const { dependencies, peerDependencies, devDependencies } = getPackageManifest(pkgPath)
   const dependenciesKeys = Object.keys(dependencies ?? {})
   const peerDependenciesKeys = Object.keys(peerDependencies ?? {})
+  const devDependenciesKeys = Object.keys(devDependencies ?? {})
 
   return (id: string) => {
-    const packages = new Set([...peerDependenciesKeys, ...dependenciesKeys])
+    const packages = new Set([...peerDependenciesKeys, ...dependenciesKeys, ...devDependenciesKeys])
     return Array.from(packages).some(pkg => id === pkg || id.startsWith(`${pkg}/`))
   }
 }
