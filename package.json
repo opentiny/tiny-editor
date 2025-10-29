@@ -32,6 +32,7 @@
     "build:v3": "pnpm -F docs build:v3",
     "build:projects": "pnpm -F projects build",
     "build:lib": "pnpm -F @opentiny/fluent-editor build",
+    "pub": "pnpm -F @opentiny/fluent-editor publish --no-git-checks",
     "lint": "eslint . --cache",
     "lint:fix": "eslint . --fix",
     "install:browser": "pnpm -F docs install:browser",
