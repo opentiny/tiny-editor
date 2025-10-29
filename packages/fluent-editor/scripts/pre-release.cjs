@@ -7,10 +7,17 @@ const targetFile = path.resolve(__dirname, '../dist/package.json')
 const packagejson = require(targetFile)
 const currentVersion = packagejson.version
 const versionArr = currentVersion.split('.')
-const [mainVersion, subVersion, phaseVersion] = versionArr
+let defaultVersion = currentVersion
 
-// 默认版本号
-const defaultVersion = `${mainVersion}.${subVersion}.${+phaseVersion + 1}`
+if (versionArr.length === 3) {
+  // 普通版本号，比如：3.25.0
+  const [mainVersion, subVersion, phaseVersion] = versionArr
+  defaultVersion = `${mainVersion}.${subVersion}.${+phaseVersion + 1}`
+} else {
+  // 带 tag 标记的版本号，比如：4.0.0-alpha.0
+  const [mainVersion, subVersion, tagVersion, phaseVersion] = versionArr
+  defaultVersion = `${mainVersion}.${subVersion}.${tagVersion}.${+phaseVersion + 1}`
+}
 
 let newVersion = defaultVersion
 
