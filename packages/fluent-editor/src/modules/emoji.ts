@@ -57,10 +57,10 @@ class EmojiModule {
   private isPickerVisible = false
   private cleanupResizeObserver: (() => void) | null = null
 
-  constructor(quill: FluentEditor, options: EmojiModuleOptions) {
+  constructor(quill: FluentEditor, options: EmojiModuleOptions = {}) {
     this.quill = quill
 
-    this.options = options
+    this.options = { ...DEFAULT_OPTIONS, ...options }
 
     const toolbar = this.quill.getModule('toolbar') as TypeToolbar
 
@@ -128,7 +128,6 @@ class EmojiModule {
     const { EmojiPicker, emojiData, ...options } = this.options
 
     const pickerConfig = {
-      ...DEFAULT_OPTIONS,
       // emoji-mart 与 tiny-editor 国际化的的 locale 不一致使用 LOCALE_MAP 转换
       locale: LOCALE_MAP[this.quill.lang] ?? 'en',
       data: emojiData,
