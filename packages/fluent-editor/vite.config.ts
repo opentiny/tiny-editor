@@ -52,10 +52,20 @@ export default defineConfig({
         const targets = [
           resolve(__dirname, 'dist/es/style.css'),
           resolve(__dirname, 'dist/lib/style.css'),
+          resolve(__dirname, 'dist/es/modules/mind-map/style/mind-map.css'),
+          resolve(__dirname, 'dist/lib/modules/mind-map/style/mind-map.css'),
+          resolve(__dirname, 'dist/es/modules/flow-chart/style/flow-chart.css'),
+          resolve(__dirname, 'dist/lib/modules/flow-chart/style/flow-chart.css'),
         ]
         for (const source of targets) {
           if (existsSync(source)) {
-            const destination = resolve(__dirname, 'dist/style.css')
+            const fileName = source.split('\\').pop()
+            const destination = fileName?.includes('mind-map.css')
+              ? resolve(__dirname, 'dist/mind-map.css')
+              : fileName?.includes('flow-chart.css')
+                ? resolve(__dirname, 'dist/flow-chart.css')
+                : resolve(__dirname, 'dist/style.css')
+
             renameSync(source, destination)
           }
         }
