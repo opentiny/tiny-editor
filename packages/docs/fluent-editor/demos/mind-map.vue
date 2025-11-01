@@ -20,6 +20,7 @@ onMounted(() => {
     import('simple-mind-map/src/plugins/Drag.js'),
     import('simple-mind-map/src/plugins/Export.js'),
     import('simple-mind-map-plugin-themes'),
+    import('simple-mind-map/src/svg/icons'),
   ]).then(
     ([
       { default: FluentEditor },
@@ -27,6 +28,7 @@ onMounted(() => {
       { default: Drag },
       { default: Export },
       { default: Themes },
+      { default: nodeIconList },
     ]) => {
       if (!editorRef.value) return
       editor = new FluentEditor(editorRef.value, {
@@ -39,6 +41,7 @@ onMounted(() => {
               Themes,
               Drag,
               Export,
+              nodeIconList,
             },
           },
         },
