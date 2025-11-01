@@ -49,11 +49,7 @@ npm install simple-mind-map simple-mind-map-plugin-themes
 
 ## 主题样式
 
-思维导图模块支持配置主题样式，传入主题名称即可。需要安装相关依赖 `simple-mind-map-plugin-themes`。需要注意的是设置了主题后改变的是节点，连线，背景等相关样式，所以设置了主题和背景样式和连线样式后，背景样式和连线样式会覆盖与其相关的主题样式。
-
-```bash
-npm install simple-mind-map-plugin-themes
-```
+思维导图模块支持配置主题样式，传入主题名称即可。需要注意的是设置了主题后改变的是节点，连线，背景等相关样式，所以设置了主题和背景样式和连线样式后，背景样式和连线样式会覆盖与其相关的主题样式。
 
 :::demo src=demos/mind-map-theme.vue
 :::
