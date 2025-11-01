@@ -6,6 +6,12 @@ TinyEditor 的思维导图功能依赖 `SimpleMindMap` ，使用前请先安装 
 npm install simple-mind-map simple-mind-map-plugin-themes
 ```
 
+引入样式：
+
+```css
+@import '@opentiny/fluent-editor/mind-map.css';
+```
+
 ## 功能说明
 
 1. 通过左边控制面板可以快速插入子节点、兄弟节点、父节点，删除节点，插入图标，更改结构功能。通过右上控制面板可以缩小，放大，适应，全屏/恢复大小，撤退，恢复，隐藏控制面板功能。
