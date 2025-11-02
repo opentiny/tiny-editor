@@ -1,26 +1,36 @@
+import type QuillCursors from 'quill-cursors'
+import type { Awareness } from 'y-protocols/awareness'
+import type * as Y from 'yjs'
 import type FluentEditor from '../../fluent-editor'
 import type { UnifiedProvider } from './provider/providerRegistry'
-import type { YjsOptions } from './types'
-import QuillCursors from 'quill-cursors'
-import { Awareness } from 'y-protocols/awareness'
-import { QuillBinding } from 'y-quill'
-import * as Y from 'yjs'
+import type { CollaborativeEditingDeps, YjsOptions } from './types'
 import { bindAwarenessToCursors, setupAwareness } from './awareness'
 import { setupIndexedDB } from './awareness/y-indexeddb'
 import { createProvider } from './provider/providerRegistry'
 
 export class CollaborativeEditor {
-  private ydoc: Y.Doc = new Y.Doc()
+  private ydoc: Y.Doc
   private provider: UnifiedProvider
   private awareness: Awareness
   private cursors: QuillCursors | null
   private cleanupBindings: (() => void) | null = null
   private clearIndexedDB: (() => void) | null = null
+  private deps: CollaborativeEditingDeps
 
   constructor(
     public quill: FluentEditor,
     public options: YjsOptions,
   ) {
+    this.deps = this.options.deps || (window as any)
+    const { Y, Awareness, QuillBinding, QuillCursors } = this.deps
+
+    if (!Y || !Awareness || !QuillBinding || !QuillCursors) {
+      throw new Error(
+        'Missing required dependencies for collaborative editing. '
+        + 'Please provide Y, Awareness, QuillBinding, and QuillCursors in the deps option.',
+      )
+    }
+
     this.ydoc = this.options.ydoc || new Y.Doc()
 
     if (this.options.cursors !== false) {
@@ -51,6 +61,7 @@ export class CollaborativeEditor {
           onDisconnect: this.options.onDisconnect,
           onError: this.options.onError,
           onSyncChange: this.options.onSyncChange,
+          deps: this.deps,
         })
         this.provider = provider
       }
@@ -64,7 +75,7 @@ export class CollaborativeEditor {
 
     if (this.provider) {
       const ytext = this.ydoc.getText('tiny-editor')
-      this.cleanupBindings = bindAwarenessToCursors(this.awareness, this.cursors, quill, ytext) || null
+      this.cleanupBindings = bindAwarenessToCursors(this.awareness, this.cursors, quill, ytext, Y) || null
       new QuillBinding(
         ytext,
         this.quill,
@@ -76,7 +87,7 @@ export class CollaborativeEditor {
     }
 
     if (this.options.offline !== false) {
-      this.clearIndexedDB = setupIndexedDB(this.ydoc)
+      this.clearIndexedDB = setupIndexedDB(this.ydoc, this.deps.IndexeddbPersistence)
     }
   }
 
