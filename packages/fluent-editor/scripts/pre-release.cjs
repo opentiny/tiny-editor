@@ -38,6 +38,10 @@ function preRelease() {
   shelljs.sed('-i', `"module": "src/index.ts"`, `"module": "es/index.es.js"`, targetFile)
   shelljs.sed('-i', `"types": "dist/types/index.d.ts"`, `"types": "types/index.d.ts"`, targetFile)
   shelljs.cp('-rf', '../../README.md', 'dist')
+
+  // 创建 scripts 目录并复制自定义补丁脚本
+  shelljs.mkdir('-p', path.resolve(__dirname, '../dist/scripts'))
+  shelljs.cp('-rf', path.resolve(__dirname, 'apply-patches.cjs'), path.resolve(__dirname, '../dist/scripts/'))
 }
 
 preRelease()

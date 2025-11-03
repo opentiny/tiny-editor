@@ -30,7 +30,8 @@
     "dev": "vite build --watch",
     "build": "vite build && node scripts/pre-release.cjs",
     "test": "jest",
-    "pub": "cd dist && npm publish"
+    "pub": "cd dist && npm publish",
+    "postinstall": "node scripts/apply-patches.cjs"
   },
   "dependencies": {
     "lodash-es": "^4.17.15",
