@@ -140,6 +140,8 @@ function setupPnpmPatch() {
     try {
       execSync('pnpm patch quill@2.0.3', { stdio: 'inherit' })
       console.log('✅ pnpm patch 命令执行成功')
+      execSync('pnpm i', { stdio: 'inherit' })
+      console.log('✅ pnpm patch quill@2.0.3 应用成功！')
     }
     catch (error) {
       console.warn('❌ pnpm patch 命令执行失败，请手动执行 pnpm patch quill@2.0.3 应用 patch')
