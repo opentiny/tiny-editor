@@ -42,6 +42,15 @@ function preRelease() {
   // 创建 scripts 目录并复制自定义补丁脚本
   shelljs.mkdir('-p', path.resolve(__dirname, '../dist/scripts'))
   shelljs.cp('-rf', path.resolve(__dirname, 'apply-patches.cjs'), path.resolve(__dirname, '../dist/scripts/'))
+
+  // 复制 patches 目录到 dist
+  const patchesSourceDir = path.resolve(__dirname, '../../../patches')
+  const patchesTargetDir = path.resolve(__dirname, '../dist/patches')
+  if (shelljs.test('-d', patchesSourceDir)) {
+    shelljs.mkdir('-p', patchesTargetDir)
+    shelljs.cp('-rf', `${patchesSourceDir}/*`, patchesTargetDir)
+    console.log('✅ Patches copied to dist/patches')
+  }
 }
 
 preRelease()

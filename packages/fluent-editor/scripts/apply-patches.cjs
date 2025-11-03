@@ -1,5 +1,5 @@
+const { execSync } = require('node:child_process')
 const fs = require('node:fs')
-const path = require('node:path')
 
 /*
  * Fluent Editor Quill 补丁脚本
@@ -12,16 +12,44 @@ const path = require('node:path')
  *   node node_modules/@opentiny/fluent-editor/scripts/apply-patches.cjs
  *
  * 工作原理：
- *   1. 自动检测 Quill 安装位置
- *   2. 检查是否已打补丁（避免重复）
- *   3. 修改 quill/core/editor.js 的 applyDelta 方法
- *   4. 添加批处理状态检查，避免输入法期间的重复操作
+ *   1. 检测包管理器类型（pnpm/npm/yarn）
+ *   2. 自动检测 Quill 安装位置
+ *   3. 根据包管理器类型应用不同的补丁策略
+ *   4. 支持直接修改或使用 patch-package
  *
  * 注意事项：
  *   - 补丁是幂等的，多次运行无副作用
  *   - 需要 node_modules 写入权限
  *   - 不影响其他包或项目的补丁
  */
+
+function detectPackageManager() {
+  try {
+    // 优先检查 lockfile 文件，这是最可靠的检测方式
+    if (fs.existsSync('pnpm-lock.yaml')) {
+      return 'pnpm'
+    }
+    if (fs.existsSync('yarn.lock')) {
+      return 'yarn'
+    }
+    if (fs.existsSync('package-lock.json')) {
+      return 'npm'
+    }
+
+    // 检查环境变量
+    if (process.env.npm_config_user_agent) {
+      const userAgent = process.env.npm_config_user_agent
+      if (userAgent.includes('pnpm')) return 'pnpm'
+      if (userAgent.includes('yarn')) return 'yarn'
+      if (userAgent.includes('npm')) return 'npm'
+    }
+
+    return 'npm' // 默认使用 npm
+  }
+  catch (error) {
+    return 'npm' // 默认使用 npm
+  }
+}
 
 function showManualInstallTip() {
   console.log('')
@@ -33,48 +61,184 @@ function showManualInstallTip() {
   console.log('')
 }
 
-function applyQuillPatch() {
+function setupPnpmPatch() {
   try {
-    const quillPath = require.resolve('quill')
-    const quillDir = path.dirname(quillPath)
-    const editorJsPath = path.join(quillDir, 'core', 'editor.js')
-
-    if (!fs.existsSync(editorJsPath)) {
-      console.log('⚠️  未找到 Quill editor.js，跳过补丁')
-      showManualInstallTip()
-      return
+    const packageJsonPath = 'package.json'
+    if (!fs.existsSync(packageJsonPath)) {
+      console.log('⚠️  未找到 package.json')
+      return false
     }
 
-    let content = fs.readFileSync(editorJsPath, 'utf8')
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
 
-    // 检查是否已经打过补丁
-    if (content.includes('isAlreadyBatching')) {
-      console.log('✅ Quill 补丁已应用')
-      return
+    // 检查是否已经有 pnpm.patchedDependencies 配置
+    if (packageJson.pnpm?.patchedDependencies?.['quill@2.0.3']) {
+      console.log('✅ pnpm patchedDependencies 已配置')
+      return true
     }
 
-    // 应用补丁 - 修改 applyDelta 方法
-    const originalBatchStart = 'this.scroll.batchStart();'
-    const patchedBatchStart = `// Check if a batch already exists (e.g. during composition)
-    const isAlreadyBatching = Boolean(this.scroll.batch);
+    // 添加 pnpm.patchedDependencies 配置
+    if (!packageJson.pnpm) {
+      packageJson.pnpm = {}
+    }
+    if (!packageJson.pnpm.patchedDependencies) {
+      packageJson.pnpm.patchedDependencies = {}
+    }
 
-    if (!isAlreadyBatching) {
-      this.scroll.batchStart();
-    }`
+    packageJson.pnpm.patchedDependencies['quill@2.0.3'] = 'patches/quill@2.0.3.patch'
 
-    const originalBatchEnd = 'this.scroll.batchEnd();'
-    const patchedBatchEnd = `if (!isAlreadyBatching) {
-      this.scroll.batchEnd();
-    }`
+    fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
+    console.log('✅ 已添加 pnpm patchedDependencies 配置')
 
-    content = content.replace(originalBatchStart, patchedBatchStart)
-    content = content.replace(originalBatchEnd, patchedBatchEnd)
+    // 检查 patches 目录是否存在 patch 文件
+    const patchFilePath = 'patches/quill@2.0.3.patch'
+    if (!fs.existsSync(patchFilePath)) {
+      // 从 fluent-editor 的 dist/patches 复制
+      const fluentEditorPath = 'node_modules/@opentiny/fluent-editor/dist/patches/quill@2.0.3.patch'
+      if (fs.existsSync(fluentEditorPath)) {
+        fs.mkdirSync('patches', { recursive: true })
+        fs.copyFileSync(fluentEditorPath, patchFilePath)
+        console.log('✅ 已复制 patch 文件到 patches/quill@2.0.3.patch')
+      }
+      else {
+        console.log('⚠️  未找到 patch 文件，请手动创建 patches/quill@2.0.3.patch')
+        return false
+      }
+    }
 
-    fs.writeFileSync(editorJsPath, content)
-    console.log('✅ Quill 补丁应用成功')
+    return true
   }
   catch (error) {
-    console.error('❌ Quill 补丁应用失败:', error.message)
+    console.error('❌ pnpm 补丁配置失败:', error.message)
+    return false
+  }
+}
+
+function applyPatchPackage() {
+  try {
+    // 检查包管理器，pnpm 不应该使用 patch-package
+    const packageManager = detectPackageManager()
+    if (packageManager === 'pnpm') {
+      console.log('❌ pnpm 不支持 patch-package，请使用 pnpm 的 patchedDependencies 功能')
+      return false
+    }
+
+    // 检查 patch-package 是否安装
+    let patchPackageInstalled = false
+    try {
+      require.resolve('patch-package')
+      patchPackageInstalled = true
+    }
+    catch (e) {
+      // patch-package 未安装
+    }
+
+    if (!patchPackageInstalled) {
+      console.log('📦 正在安装 patch-package...')
+      try {
+        const installCommand = packageManager === 'yarn'
+          ? 'yarn add --dev patch-package'
+          : 'npm install --save-dev patch-package'
+        execSync(installCommand, { stdio: 'inherit' })
+        console.log('✅ patch-package 安装成功')
+      }
+      catch (error) {
+        console.error('❌ patch-package 安装失败:', error.message)
+        return false
+      }
+    }
+
+    // 复制 patch 文件到项目根目录
+    const patchFilePath = 'patches/quill@2.0.3.patch'
+    if (!fs.existsSync(patchFilePath)) {
+      const fluentEditorPath = 'node_modules/@opentiny/fluent-editor/dist/patches/quill@2.0.3.patch'
+      if (fs.existsSync(fluentEditorPath)) {
+        fs.mkdirSync('patches', { recursive: true })
+        fs.copyFileSync(fluentEditorPath, patchFilePath)
+        console.log('✅ 已复制 patch 文件到 patches/quill@2.0.3.patch')
+      }
+      else {
+        console.log('⚠️  未找到 patch 文件，请手动创建 patches/quill@2.0.3.patch')
+        return false
+      }
+    }
+
+    // 应用补丁
+    console.log('🔄 正在应用 patch...')
+    try {
+      execSync('npx patch-package', { stdio: 'inherit' })
+      console.log('✅ 补丁应用成功')
+    }
+    catch (error) {
+      console.error('❌ 补丁应用失败:', error.message)
+      return false
+    }
+
+    // 添加 postinstall 脚本
+    const packageJsonPath = 'package.json'
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
+
+    if (!packageJson.scripts) {
+      packageJson.scripts = {}
+    }
+
+    if (!packageJson.scripts.postinstall || !packageJson.scripts.postinstall.includes('patch-package')) {
+      const existingPostinstall = packageJson.scripts.postinstall || ''
+      packageJson.scripts.postinstall = existingPostinstall
+        ? `${existingPostinstall} && npx patch-package`
+        : 'npx patch-package'
+
+      fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
+      console.log('✅ 已添加 postinstall 脚本')
+    }
+
+    return true
+  }
+  catch (error) {
+    console.error('❌ patch-package 应用失败:', error.message)
+    return false
+  }
+}
+
+function applyQuillPatch() {
+  const packageManager = detectPackageManager()
+  console.log(`🔍 检测到包管理器: ${packageManager}`)
+
+  let success = false
+
+  switch (packageManager) {
+    case 'pnpm':
+      console.log('📦 使用 pnpm 补丁策略...')
+      success = setupPnpmPatch()
+      if (success) {
+        console.log('✅ pnpm 补丁配置已完成，请运行以下命令应用补丁：')
+        console.log('   pnpm install')
+        console.log('')
+        console.log('💡 pnpm 会自动检测 patchedDependencies 并应用补丁')
+      }
+      break
+    case 'npm':
+    case 'yarn':
+      console.log('📦 使用 patch-package 补丁策略...')
+      success = applyPatchPackage()
+      break
+    default:
+      console.log('❌ 不支持的包管理器')
+      console.log('')
+      console.log('支持的包管理器：')
+      console.log('  • pnpm (推荐) - 使用 patchedDependencies')
+      console.log('  • npm - 使用 patch-package')
+      console.log('  • yarn - 使用 patch-package')
+      console.log('')
+      console.log('请使用支持的包管理器来安装 Fluent Editor')
+      success = false
+  }
+
+  if (success) {
+    console.log('🎉 补丁处理完成')
+  }
+  else {
+    console.log('❌ 补丁处理失败，请尝试手动安装')
     showManualInstallTip()
   }
 }
