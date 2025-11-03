@@ -1,5 +1,6 @@
 const { execSync } = require('node:child_process')
 const fs = require('node:fs')
+const path = require('node:path')
 
 /*
  * Fluent Editor Quill 补丁脚本
@@ -61,23 +62,47 @@ function showManualInstallTip() {
   console.log('')
 }
 
+function getPatchFileName(type) {
+  if (type === 'pnpm') {
+    return 'quill@2.0.3.patch'
+  }
+  else {
+    return 'quill+2.0.3.patch'
+  }
+}
+
 function copyPatchFile() {
-  const patchFilePath = 'patches/quill@2.0.3.patch'
-  if (!fs.existsSync(patchFilePath)) {
-    // 从 fluent-editor 的 dist/patches 复制
-    const fluentEditorPath = 'node_modules/@opentiny/fluent-editor/patches/quill@2.0.3.patch'
-    if (fs.existsSync(fluentEditorPath)) {
-      fs.mkdirSync('patches', { recursive: true })
-      fs.copyFileSync(fluentEditorPath, patchFilePath)
-      console.log('✅ 已复制 patch 文件到 patches/quill@2.0.3.patch')
-      return true
+  const packageManager = detectPackageManager()
+  // 把 patch 文件复制到哪里
+  const dest = `patches/${getPatchFileName(packageManager)}`
+
+  // 文件存在直接返回
+  if (fs.existsSync(dest)) {
+    return true
+  }
+
+  // 复制 patch 文件的路径
+  const src = path.resolve(__dirname, '../patches/quill@2.0.3.patch')
+
+  if (fs.existsSync(src)) {
+    fs.mkdirSync('patches', { recursive: true })
+
+    if (packageManager === 'pnpm') {
+      fs.copyFileSync(src, dest)
     }
     else {
-      console.log('⚠️  未找到 patch 文件，请手动创建 patches/quill@2.0.3.patch')
-      return false
+      let content = fs.readFileSync(src, 'utf-8')
+      content = content.replaceAll('core/editor.js', 'node_modules/quill/core/editor.js')
+      fs.writeFileSync(dest, content)
     }
+
+    console.log(`✅ 已复制 patch 文件到 ${dest}`)
+    return true
   }
-  return true
+  else {
+    console.log(`⚠️  未找到 patch 文件，请手动创建 ${dest}`)
+    return false
+  }
 }
 
 function setupPnpmPatch() {
