@@ -110,6 +110,16 @@ function setupPnpmPatch() {
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
     console.log('✅ 已添加 pnpm patchedDependencies 配置')
 
+    // 执行 pnpm patch quill@2.0.3
+    console.log('🔄 正在执行 pnpm patch quill@2.0.3...')
+    try {
+      execSync('pnpm patch quill@2.0.3', { stdio: 'inherit' })
+      console.log('✅ pnpm patch 命令执行成功')
+    }
+    catch (error) {
+      console.warn('❌ pnpm patch 命令执行失败，请手动执行 pnpm patch quill@2.0.3 应用 patch')
+    }
+
     return true
   }
   catch (error) {
