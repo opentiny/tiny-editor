@@ -218,7 +218,7 @@ function applyQuillPatch() {
       console.log('📦 使用 pnpm 补丁策略...')
       success = setupPnpmPatch()
       if (success) {
-        completionMessage = '✅ pnpm 补丁配置已完成，请运行以下命令应用补丁：\n   pnpm install\n\n💡 pnpm 会自动检测 patchedDependencies 并应用补丁'
+        completionMessage = '✅ quill@2.0.3.patch 补丁配置已完成'
       }
       break
 
