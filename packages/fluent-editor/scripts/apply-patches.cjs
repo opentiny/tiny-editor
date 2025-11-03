@@ -65,7 +65,7 @@ function copyPatchFile() {
   const patchFilePath = 'patches/quill@2.0.3.patch'
   if (!fs.existsSync(patchFilePath)) {
     // 从 fluent-editor 的 dist/patches 复制
-    const fluentEditorPath = 'node_modules/@opentiny/fluent-editor/dist/patches/quill@2.0.3.patch'
+    const fluentEditorPath = 'node_modules/@opentiny/fluent-editor/patches/quill@2.0.3.patch'
     if (fs.existsSync(fluentEditorPath)) {
       fs.mkdirSync('patches', { recursive: true })
       fs.copyFileSync(fluentEditorPath, patchFilePath)

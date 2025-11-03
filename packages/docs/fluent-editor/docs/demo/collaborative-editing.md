@@ -29,6 +29,12 @@
 pnpm i quill-cursors y-protocols y-quill yjs y-indexeddb y-websocket
 ```
 
+手动执行如下代码应用 `quill@2.0.3.patch` 优化中文输入体验
+
+```bash
+node node_modules/@opentiny/fluent-editor/scripts/apply-patches.cjs
+```
+
 引入协同编辑模块
 
 ```javascript
