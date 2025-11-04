@@ -3,11 +3,10 @@ const fs = require('node:fs')
 const path = require('node:path')
 
 /*
- * Fluent Editor Quill 补丁脚本
- *
+ * 应用 Quill 补丁脚本
  * 功能：修复 Quill 编辑器输入法状态下的批处理问题，提升中文输入体验
  *
- * 自动应用：安装包时 postinstall 脚本自动应用，支持所有包管理器
+ * 自动应用：安装包时 postinstall 脚本自动应用，支持所有包管理器-受限于 postinstall 规则暂未实现
  *
  * 手动应用：在项目根目录执行
  *   node node_modules/@opentiny/fluent-editor/scripts/apply-patches.cjs
@@ -16,7 +15,6 @@ const path = require('node:path')
  *   1. 检测包管理器类型（pnpm/npm/yarn）
  *   2. 自动检测 Quill 安装位置
  *   3. 根据包管理器类型应用不同的补丁策略
- *   4. 支持直接修改或使用 patch-package
  *
  * 注意事项：
  *   - 补丁是幂等的，多次运行无副作用
@@ -24,57 +22,36 @@ const path = require('node:path')
  *   - 不影响其他包或项目的补丁
  */
 
+// 获取包管理器
 function detectPackageManager() {
   try {
-    // 优先检查 lockfile 文件，这是最可靠的检测方式
-    if (fs.existsSync('pnpm-lock.yaml')) {
-      return 'pnpm'
-    }
-    if (fs.existsSync('yarn.lock')) {
-      return 'yarn'
-    }
-    if (fs.existsSync('package-lock.json')) {
-      return 'npm'
+    const lockFiles = {
+      'pnpm-lock.yaml': 'pnpm',
+      'yarn.lock': 'yarn',
+      'package-lock.json': 'npm',
     }
 
-    // 检查环境变量
-    if (process.env.npm_config_user_agent) {
-      const userAgent = process.env.npm_config_user_agent
-      if (userAgent.includes('pnpm')) return 'pnpm'
-      if (userAgent.includes('yarn')) return 'yarn'
-      if (userAgent.includes('npm')) return 'npm'
+    for (const [file, manager] of Object.entries(lockFiles)) {
+      if (fs.existsSync(file)) return manager
     }
 
-    return 'npm' // 默认使用 npm
+    const userAgent = process.env.npm_config_user_agent || ''
+    if (userAgent.includes('pnpm')) return 'pnpm'
+    if (userAgent.includes('yarn')) return 'yarn'
+    if (userAgent.includes('npm')) return 'npm'
   }
-  catch (error) {
-    return 'npm' // 默认使用 npm
+  catch {
+    return 'npm'
   }
+
+  return 'npm'
 }
 
-function showManualInstallTip() {
-  console.log('')
-  console.log('🔧 手动安装：')
-  console.log('   在项目根目录执行：')
-  console.log('   node node_modules/@opentiny/fluent-editor/scripts/apply-patches.cjs')
-  console.log('')
-  console.log('⚠️  注意：未应用补丁可能影响中文输入体验')
-  console.log('')
-}
-
-function getPatchFileName(type) {
-  if (type === 'pnpm') {
-    return 'quill@2.0.3.patch'
-  }
-  else {
-    return 'quill+2.0.3.patch'
-  }
-}
-
+// 拷贝 patches 文件
 function copyPatchFile() {
   const packageManager = detectPackageManager()
   // 把 patch 文件复制到哪里
-  const dest = `patches/${getPatchFileName(packageManager)}`
+  const dest = `patches/${packageManager === 'pnpm' ? 'quill@2.0.3.patch' : 'quill+2.0.3.patch'}`
 
   // 文件存在直接返回
   if (fs.existsSync(dest)) {
@@ -105,6 +82,7 @@ function copyPatchFile() {
   }
 }
 
+// pnpm 应用 patch 文件
 function setupPnpmPatch() {
   try {
     const packageJsonPath = 'package.json'
@@ -151,6 +129,7 @@ function setupPnpmPatch() {
   }
 }
 
+// npm、yarn 应用 patch 文件
 function applyPatchPackage() {
   try {
     const packageManager = detectPackageManager()
@@ -168,9 +147,7 @@ function applyPatchPackage() {
     if (!patchPackageInstalled) {
       console.log('📦 正在安装 patch-package...')
       try {
-        const installCommand = packageManager === 'yarn'
-          ? 'yarn add --dev patch-package'
-          : 'npm install --save-dev patch-package'
+        const installCommand = packageManager === 'yarn' ? 'yarn add --dev patch-package' : 'npm install --save-dev patch-package'
         execSync(installCommand, { stdio: 'inherit' })
         console.log('✅ patch-package 安装成功')
       }
@@ -201,12 +178,10 @@ function applyPatchPackage() {
 
     if (!packageJson.scripts.postinstall || !packageJson.scripts.postinstall.includes('patch-package')) {
       const existingPostinstall = packageJson.scripts.postinstall || ''
-      packageJson.scripts.postinstall = existingPostinstall
-        ? `${existingPostinstall} && npx patch-package`
-        : 'npx patch-package'
+      packageJson.scripts.postinstall = existingPostinstall ? `${existingPostinstall} && npx patch-package` : 'npx patch-package'
 
       fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
-      console.log('✅ 已添加 postinstall 脚本')
+      console.log('✅ 已更新 postinstall 脚本')
     }
 
     return true
@@ -218,57 +193,52 @@ function applyPatchPackage() {
 }
 
 function handlePatchFailure() {
-  console.log('❌ 补丁处理失败，请尝试手动安装')
-  showManualInstallTip()
+  console.log(`
+❌ 补丁处理失败，请尝试手动安装
+
+🔧 手动安装：
+   在项目根目录执行：
+   node node_modules/@opentiny/fluent-editor/scripts/apply-patches.cjs
+
+⚠️  注意：未应用补丁可能影响中文输入体验
+`)
 }
 
 function applyQuillPatch() {
   const packageManager = detectPackageManager()
   console.log(`🔍 检测到包管理器: ${packageManager}`)
-
-  // 首先统一复制 patch 文件
   console.log('📋 准备 patch 文件...')
-  if (!copyPatchFile()) {
+
+  if (!copyPatchFile()) return handlePatchFailure()
+
+  let strategy
+  if (packageManager == 'pnpm') {
+    strategy = {
+      label: '📦 使用 pnpm 补丁策略...',
+      handler: setupPnpmPatch,
+      successMsg: '✅ quill@2.0.3.patch 补丁配置已完成',
+    }
+  }
+  else {
+    strategy = {
+      label: '📦 使用 patch-package 补丁策略...',
+      handler: applyPatchPackage,
+      successMsg: '🎉 补丁处理完成',
+    }
+  }
+
+  if (!strategy) {
+    console.log('❌ 不支持的包管理器，仅支持 pnpm、yarn、npm')
     handlePatchFailure()
     return
   }
 
-  let success = false
-  let completionMessage = ''
-
-  switch (packageManager) {
-    case 'pnpm':
-      console.log('📦 使用 pnpm 补丁策略...')
-      success = setupPnpmPatch()
-      if (success) {
-        completionMessage = '✅ quill@2.0.3.patch 补丁配置已完成'
-      }
-      break
-
-    case 'npm':
-    case 'yarn':
-      console.log('📦 使用 patch-package 补丁策略...')
-      success = applyPatchPackage()
-      if (success) {
-        completionMessage = '🎉 补丁处理完成'
-      }
-      break
-
-    default:
-      console.log('❌ 不支持的包管理器')
-      console.log('')
-      console.log('支持的包管理器：')
-      console.log('  • pnpm (推荐) - 使用 patchedDependencies')
-      console.log('  • npm - 使用 patch-package')
-      console.log('  • yarn - 使用 patch-package')
-      console.log('')
-      console.log('请使用支持的包管理器来安装 Fluent Editor')
-      handlePatchFailure()
-      return
-  }
+  console.log(strategy.label)
+  // 调用处理函数
+  const success = strategy.handler()
 
   if (success) {
-    console.log(completionMessage)
+    console.log(strategy.successMsg)
   }
   else {
     handlePatchFailure()
