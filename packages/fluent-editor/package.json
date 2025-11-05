@@ -33,7 +33,6 @@
     "pub": "cd dist && npm publish"
   },
   "dependencies": {
-    "lodash-es": "^4.17.15",
     "quill": "^2.0.0",
     "quill-easy-color": "^0.0.10",
     "quill-shortcut-key": "^0.0.5"
