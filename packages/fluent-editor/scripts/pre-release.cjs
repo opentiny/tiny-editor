@@ -1,3 +1,4 @@
+const fs = require('node:fs')
 const path = require('node:path')
 const program = require('commander')
 const shelljs = require('shelljs')
@@ -5,6 +6,12 @@ const shelljs = require('shelljs')
 shelljs.cp('-rf', 'package.json', 'dist')
 const targetFile = path.resolve(__dirname, '../dist/package.json')
 const packagejson = require(targetFile)
+
+// 删除不需要发布到 npm 的字段
+delete packagejson.scripts
+delete packagejson.devDependencies
+fs.writeFileSync(targetFile, JSON.stringify(packagejson, null, 2) + '\n');
+
 const currentVersion = packagejson.version
 const versionArr = currentVersion.split('.')
 let defaultVersion = currentVersion
