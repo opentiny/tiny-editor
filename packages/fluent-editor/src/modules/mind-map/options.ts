@@ -18,6 +18,7 @@ export interface MindMapDeps {
   Themes: any
   Drag: any
   Export: any
+  nodeIconList: any
 }
 
 export interface MindMapOptions {

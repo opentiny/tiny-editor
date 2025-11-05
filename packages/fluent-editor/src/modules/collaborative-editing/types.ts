@@ -1,3 +1,9 @@
+import type QuillCursors from 'quill-cursors'
+import type { IndexeddbPersistence } from 'y-indexeddb'
+import type { Awareness } from 'y-protocols/awareness'
+import type { QuillBinding } from 'y-quill'
+import type { WebrtcProvider } from 'y-webrtc'
+import type { WebsocketProvider } from 'y-websocket'
 import type * as Y from 'yjs'
 import type { AwarenessOptions } from './awareness'
 import type { WebRTCProviderOptions, WebsocketProviderOptions } from './provider'
@@ -29,16 +35,26 @@ export type CustomProviderConfig = BaseYjsProviderConfig & {
 
 export type CursorsConfig = boolean | object
 
+export interface CollaborativeEditingDeps {
+  Y: typeof Y
+  Awareness: typeof Awareness
+  QuillBinding: typeof QuillBinding
+  QuillCursors: typeof QuillCursors
+  WebsocketProvider?: typeof WebsocketProvider
+  WebrtcProvider?: typeof WebrtcProvider
+  IndexeddbPersistence?: typeof IndexeddbPersistence
+}
+
 export interface YjsOptions {
   ydoc?: Y.Doc
   provider: (WebRTCProviderConfig | WebsocketProviderConfig | CustomProviderConfig)
   awareness?: AwarenessOptions
   offline?: boolean
   cursors?: CursorsConfig
+  deps?: CollaborativeEditingDeps
 
-  // callback
   onConnect?: () => void
   onDisconnect?: () => void
-  onError?: (error) => void
+  onError?: (error: Error) => void
   onSyncChange?: (isSynced: boolean) => void
 }

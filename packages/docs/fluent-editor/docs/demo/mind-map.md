@@ -6,6 +6,12 @@ TinyEditor 的思维导图功能依赖 `SimpleMindMap` ，使用前请先安装 
 npm install simple-mind-map simple-mind-map-plugin-themes
 ```
 
+引入样式：
+
+```css
+@import '@opentiny/fluent-editor/mind-map.css';
+```
+
 ## 功能说明
 
 1. 通过左边控制面板可以快速插入子节点、兄弟节点、父节点，删除节点，插入图标，更改结构功能。通过右上控制面板可以缩小，放大，适应，全屏/恢复大小，撤退，恢复，隐藏控制面板功能。
@@ -43,11 +49,7 @@ npm install simple-mind-map simple-mind-map-plugin-themes
 
 ## 主题样式
 
-思维导图模块支持配置主题样式，传入主题名称即可。需要安装相关依赖 `simple-mind-map-plugin-themes`。需要注意的是设置了主题后改变的是节点，连线，背景等相关样式，所以设置了主题和背景样式和连线样式后，背景样式和连线样式会覆盖与其相关的主题样式。
-
-```bash
-npm install simple-mind-map-plugin-themes
-```
+思维导图模块支持配置主题样式，传入主题名称即可。需要注意的是设置了主题后改变的是节点，连线，背景等相关样式，所以设置了主题和背景样式和连线样式后，背景样式和连线样式会覆盖与其相关的主题样式。
 
 :::demo src=demos/mind-map-theme.vue
 :::

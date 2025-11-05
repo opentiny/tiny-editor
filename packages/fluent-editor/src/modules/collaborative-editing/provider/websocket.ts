@@ -1,14 +1,14 @@
-import type { ProviderEventHandlers } from '../types'
+import type { Awareness } from 'y-protocols/awareness'
+import type { WebsocketProvider } from 'y-websocket'
+import type * as Y from 'yjs'
+import type { CollaborativeEditingDeps, ProviderEventHandlers } from '../types'
 import type { UnifiedProvider } from './providerRegistry'
-import { Awareness } from 'y-protocols/awareness'
-import { WebsocketProvider } from 'y-websocket'
-import * as Y from 'yjs'
 
 export interface WebsocketProviderOptions {
   serverUrl: string
   roomName: string
   connect?: boolean
-  awareness?: any
+  awareness?: Awareness
   params?: Record<string, string>
   protocols?: string[]
   WebSocketPolyfill?: typeof WebSocket
@@ -75,15 +75,23 @@ export class WebsocketProviderWrapper implements UnifiedProvider {
     onDisconnect,
     onError,
     onSyncChange,
+    deps,
   }: {
     options: WebsocketProviderOptions
     awareness?: Awareness
     doc?: Y.Doc
+    deps?: CollaborativeEditingDeps
   } & ProviderEventHandlers) {
     this.onConnect = onConnect
     this.onDisconnect = onDisconnect
     this.onError = onError
     this.onSyncChange = onSyncChange
+
+    const { Y, Awareness, WebsocketProvider } = deps || (window as any)
+
+    if (!WebsocketProvider) {
+      throw new Error('WebsocketProvider dependency not provided')
+    }
 
     this.document = doc || new Y.Doc()
     this.awareness = awareness ?? new Awareness(this.document)

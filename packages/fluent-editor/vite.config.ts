@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, renameSync } from 'node:fs'
-import { resolve } from 'node:path'
+import path, { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 
@@ -52,10 +52,25 @@ export default defineConfig({
         const targets = [
           resolve(__dirname, 'dist/es/style.css'),
           resolve(__dirname, 'dist/lib/style.css'),
+          resolve(__dirname, 'dist/es/modules/mind-map/style/mind-map.css'),
+          resolve(__dirname, 'dist/lib/modules/mind-map/style/mind-map.css'),
+          resolve(__dirname, 'dist/es/modules/flow-chart/style/flow-chart.css'),
+          resolve(__dirname, 'dist/lib/modules/flow-chart/style/flow-chart.css'),
         ]
         for (const source of targets) {
           if (existsSync(source)) {
-            const destination = resolve(__dirname, 'dist/style.css')
+            const fileName = path.basename(source)
+            let destination
+            if (fileName?.includes('mind-map.css')) {
+              destination = resolve(__dirname, 'dist/mind-map.css')
+            }
+            else if (fileName?.includes('flow-chart.css')) {
+              destination = resolve(__dirname, 'dist/flow-chart.css')
+            }
+            else {
+              destination = resolve(__dirname, 'dist/style.css')
+            }
+
             renameSync(source, destination)
           }
         }

@@ -9,7 +9,8 @@
 
 ## 在线协同演示
 
-整个协同编辑系统由三部分组成：前端 `TinyEditor`、中间层协作引擎 `Yjs` 和后端服务（用于数据同步和持久化）。前端编辑器将操作传递给 `Yjs`，`Yjs` 通过不同的连接协议（如 `WebSocket` 或 `WebRTC`）实现多端同步, 并支持将数据持久化到后端数据库（如 `MongoDB`）。
+整个协同编辑系统由三部分组成：前端 `TinyEditor`、中间层协作引擎 `Yjs` 和后端服务（用于数据同步和持久化）。前端编辑器将操作传递给 `Yjs`，`Yjs` 通过不同的连接协议（如 `WebSocket` 或 `WebRTC`）实现多端同步, 并支持将数据持久化到后端数据库（如 `MongoDB`）.
+
 <img src="/Collab-arch.png" alt="Tiny-editor-demo">
 
 下面是一个完整的协同编辑演示：
@@ -35,29 +36,52 @@ pnpm i quill-cursors y-protocols y-quill yjs y-indexeddb y-websocket
 node node_modules/@opentiny/fluent-editor/scripts/apply-patches.cjs
 ```
 
-引入协同编辑模块
+引入协同编辑模块和依赖
 
 ```javascript
-import FluentEditor, { CollaborationModule } from '@opentiny/fluent-editor'
-FluentEditor.register('modules/collaborative-editing', CollaborationModule, true)
-```
+import FluentEditor from '@opentiny/fluent-editor'
 
-编辑器基础配置：
+let editor
+const editorRef = document.querySelector('#editor')
 
-```javascript
-const editor = new FluentEditor('#editor', {
-  theme: 'snow',
-  modules: {
-    'collaborative-editing': {
-      provider: {
-        type: 'websocket',
-        options: {
-          serverUrl: 'ws://localhost:1234',
-          roomName: 'Tiny-Editor-Demo',
+Promise.all([
+  import('@opentiny/fluent-editor'),
+  import('yjs'),
+  import('y-protocols/awareness'),
+  import('y-quill'),
+  import('y-websocket'),
+  import('y-indexeddb'),
+  import('quill-cursors'),
+]).then(
+  ([
+    { default: FluentEditor, CollaborationModule },
+    Y,
+    { Awareness },
+    { QuillBinding },
+    { WebsocketProvider },
+    { IndexeddbPersistence },
+    { default: QuillCursors },
+  ]) => {
+    FluentEditor.register('modules/collaborative-editing', CollaborationModule, true)
+
+    editor = new FluentEditor(editorRef, {
+      theme: 'snow',
+      modules: {
+        'collaborative-editing': {
+          deps: { Y, Awareness, QuillBinding, QuillCursors, WebsocketProvider, IndexeddbPersistence },
+          provider: {
+            type: 'websocket',
+            options: {
+              serverUrl: 'wss://demos.yjs.dev/ws',
+              roomName: 'Tiny-Editor-Demo',
+            },
+          },
         },
       },
-    },
+    })
   },
+).catch((error) => {
+  console.error('Failed to initialize FluentEditor:', error)
 })
 ```
 
@@ -198,6 +222,7 @@ const editor = new FluentEditor('#editor', {
   theme: 'snow',
   modules: {
     'collaborative-editing': {
+      deps: { Y, Awareness, QuillBinding, QuillCursors, WebsocketProvider, IndexeddbPersistence },
       provider: {
         type: 'websocket',
         options: {
@@ -235,19 +260,49 @@ const editor = new FluentEditor('#editor', {
 #### WebRTC 前端配置示例
 
 ```javascript
-const editor = new FluentEditor('#editor', {
-  theme: 'snow',
-  modules: {
-    'collaborative-editing': {
-      provider: {
-        type: 'webrtc',
-        options: {
-          roomName: 'Tiny-Editor-WebRTC',
-          signaling: ['wss://signaling.yjs.dev'],
+import FluentEditor from '@opentiny/fluent-editor'
+
+let editor
+const editorRef = document.querySelector('#editor')
+
+Promise.all([
+  import('@opentiny/fluent-editor'),
+  import('yjs'),
+  import('y-protocols/awareness'),
+  import('y-quill'),
+  import('y-webrtc'),
+  import('y-indexeddb'),
+  import('quill-cursors'),
+]).then(
+  ([
+    { default: FluentEditor, CollaborationModule },
+    Y,
+    { Awareness },
+    { QuillBinding },
+    { WebrtcProvider },
+    { IndexeddbPersistence },
+    { default: QuillCursors },
+  ]) => {
+    FluentEditor.register('modules/collaborative-editing', CollaborationModule, true)
+
+    editor = new FluentEditor(editorRef, {
+      theme: 'snow',
+      modules: {
+        'collaborative-editing': {
+          deps: { Y, Awareness, QuillBinding, QuillCursors, WebrtcProvider, IndexeddbPersistence },
+          provider: {
+            type: 'webrtc',
+            options: {
+              roomName: 'Tiny-Editor-WebRTC',
+              signaling: ['wss://signaling.yjs.dev'],
+            },
+          },
         },
       },
-    },
+    })
   },
+).catch((error) => {
+  console.error('Failed to initialize FluentEditor:', error)
 })
 ```
 
@@ -431,6 +486,7 @@ const editor = new FluentEditor('#editor', {
   theme: 'snow',
   modules: {
     'collaborative-editing': {
+      deps: { Y, Awareness, QuillBinding, QuillCursors, WebsocketProvider, IndexeddbPersistence },
       cursors: {
         template: `
           <span class="${CURSOR_CLASSES.SELECTION_CLASS}"></span>

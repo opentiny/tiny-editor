@@ -6,6 +6,12 @@ TinyEditor 的流程图功能依赖 `LogicFlow` ，使用前请先安装 `LogicF
 npm install @logicflow/core @logicflow/extension
 ```
 
+引入样式：
+
+```css
+@import '@opentiny/fluent-editor/flow-chart.css';
+```
+
 ## 功能说明
 
 1. 通过左边控制面板可以拖拽节点添加到流程图中，也可以改变连线类型。通过右上控制面板可以缩小，放大，适应，全屏/恢复大小，撤销，恢复，隐藏控制面板功能。

@@ -1,8 +1,8 @@
 import type FluentEditor from '../../../core/fluent-editor'
 import type MindMapPlaceholderBlot from '../formats/mind-map-blot'
-import { nodeIconList } from 'simple-mind-map/src/svg/icons'
 import { CHANGE_LANGUAGE_EVENT } from '../../../config'
 import { I18N } from '../../../modules/i18n'
+import { getAllConfigs } from '../config-utils'
 import { registerMindMapI18N } from '../i18n'
 import { backIcon, catalogOrganizationIcon, contractIcon, fishboneIcon, fitIcon, forwardIcon, insertChildNodeIcon, insertIconIcon, insertNodeIcon, insertParentNodeIcon, logicalStructureIcon, mindMapIcon, organizationStructureIcon, removeNodeIcon, screenReduceIcon, screenTypeIcon, setLayoutIcon, timelineIcon, zoomInIcon, zoomOutIcon } from '../icons'
 
@@ -247,7 +247,8 @@ function handleInsertIcon(blot: MindMapPlaceholderBlot, selectedNodes: any[]): v
   const heightStr = blot.domNode.getAttribute('height') || '500px'
   const height = Number.parseInt(heightStr.replace(/[^\d.]/g, ''), 10) || 500
   let iconList = []
-  iconList = nodeIconList
+  const { deps } = getAllConfigs(blot.quill)
+  iconList = deps.nodeIconList.nodeIconList
   const leftUpControl = blot.domNode.querySelector('.ql-mind-map-left-up-control') as HTMLElement
   let iconPanel = leftUpControl.querySelector('.ql-mind-map-icon-panel') as HTMLElement
   if (!iconPanel) {

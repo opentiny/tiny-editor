@@ -51,10 +51,22 @@ onMounted(() => {
   Promise.all([
     import('@opentiny/fluent-editor'),
     import('quill-table-up'),
+    import('yjs'),
+    import('y-protocols/awareness'),
+    import('y-quill'),
+    import('y-websocket'),
+    import('y-indexeddb'),
+    import('quill-cursors'),
   ]).then(
     ([
       { default: FluentEditor, generateTableUp, CollaborationModule },
       { defaultCustomSelect, TableMenuContextmenu, TableSelection, TableUp },
+      Y,
+      { Awareness },
+      { QuillBinding },
+      { WebsocketProvider },
+      { IndexeddbPersistence },
+      { default: QuillCursors },
     ]) => {
       if (!editorRef.value) return
 
@@ -93,6 +105,14 @@ onMounted(() => {
             },
           },
           'collaborative-editing': {
+            deps: {
+              Y,
+              Awareness,
+              QuillBinding,
+              QuillCursors,
+              WebsocketProvider,
+              IndexeddbPersistence,
+            },
             provider: {
               type: 'websocket',
               options: {
