@@ -3,7 +3,7 @@ import type { computePosition } from '@floating-ui/dom'
 import type { Picker } from 'emoji-mart'
 import type TypeToolbar from 'quill/modules/toolbar'
 import type FluentEditor from '../fluent-editor'
-import { debounce } from 'lodash-es'
+import { debounce } from '../utils/debounce'
 
 export interface EmojiModuleOptions {
   emojiData?: EmojiMartData
