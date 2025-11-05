@@ -10,7 +10,7 @@ const packagejson = require(targetFile)
 // 删除不需要发布到 npm 的字段
 delete packagejson.scripts
 delete packagejson.devDependencies
-fs.writeFileSync(targetFile, JSON.stringify(packagejson, null, 2) + '\n');
+fs.writeFileSync(targetFile, `${JSON.stringify(packagejson, null, 2)}\n`)
 
 const currentVersion = packagejson.version
 const versionArr = currentVersion.split('.')
