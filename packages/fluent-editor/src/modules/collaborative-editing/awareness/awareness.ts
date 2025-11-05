@@ -1,7 +1,7 @@
 import type QuillCursors from 'quill-cursors'
 import type { Awareness } from 'y-protocols/awareness'
+import type * as Y from 'yjs'
 import type FluentEditor from '../../../core/fluent-editor'
-import * as Y from 'yjs'
 
 export interface AwarenessState {
   name?: string
@@ -37,6 +37,7 @@ export function bindAwarenessToCursors(
   cursorsModule: QuillCursors,
   quill: FluentEditor,
   yText: Y.Text,
+  Yjs: typeof Y,
 ): (() => void) | void {
   if (!cursorsModule || !awareness) return
 
@@ -51,8 +52,8 @@ export function bindAwarenessToCursors(
 
         cursorsModule.createCursor(clientId.toString(), name, color)
 
-        const anchor = Y.createAbsolutePositionFromRelativePosition(Y.createRelativePositionFromJSON(state.cursor.anchor), doc)
-        const head = Y.createAbsolutePositionFromRelativePosition(Y.createRelativePositionFromJSON(state.cursor.head), doc)
+        const anchor = Yjs.createAbsolutePositionFromRelativePosition(Yjs.createRelativePositionFromJSON(state.cursor.anchor), doc)
+        const head = Yjs.createAbsolutePositionFromRelativePosition(Yjs.createRelativePositionFromJSON(state.cursor.head), doc)
 
         if (anchor && head && anchor.type === yText && clientId) {
           setTimeout(() => {
@@ -75,13 +76,13 @@ export function bindAwarenessToCursors(
   const selectionChangeHandler = (range: { index: number, length: number } | null) => {
     setTimeout(() => {
       if (range) {
-        const anchor = Y.createRelativePositionFromTypeIndex(yText, range.index)
-        const head = Y.createRelativePositionFromTypeIndex(yText, range.index + range.length)
+        const anchor = Yjs.createRelativePositionFromTypeIndex(yText, range.index)
+        const head = Yjs.createRelativePositionFromTypeIndex(yText, range.index + range.length)
 
         const currentState = awareness.getLocalState()
         if (!currentState?.cursor
-          || !Y.compareRelativePositions(anchor, currentState.cursor.anchor)
-          || !Y.compareRelativePositions(head, currentState.cursor.head)) {
+          || !Yjs.compareRelativePositions(anchor, currentState.cursor.anchor)
+          || !Yjs.compareRelativePositions(head, currentState.cursor.head)) {
           awareness.setLocalStateField('cursor', { anchor, head })
         }
       }

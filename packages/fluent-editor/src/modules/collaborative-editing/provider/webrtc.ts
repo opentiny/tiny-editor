@@ -1,8 +1,8 @@
 import type { Awareness } from 'y-protocols/awareness'
-import type { ProviderEventHandlers } from '../types'
+import type { WebrtcProvider } from 'y-webrtc'
+import type * as Y from 'yjs'
+import type { CollaborativeEditingDeps, ProviderEventHandlers } from '../types'
 import type { UnifiedProvider } from './providerRegistry'
-import { WebrtcProvider } from 'y-webrtc'
-import * as Y from 'yjs'
 
 export interface WebRTCProviderOptions {
   roomName: string
@@ -64,20 +64,29 @@ export class WebRTCProviderWrapper implements UnifiedProvider {
     onDisconnect,
     onError,
     onSyncChange,
+    deps,
   }: {
     options: WebRTCProviderOptions
     awareness?: Awareness
     doc?: Y.Doc
+    deps?: CollaborativeEditingDeps
   } & ProviderEventHandlers) {
     this.onConnect = onConnect
     this.onDisconnect = onDisconnect
     this.onError = onError
     this.onSyncChange = onSyncChange
 
+    const { Y, Awareness, WebrtcProvider } = deps || (window as any)
+
+    if (!WebrtcProvider) {
+      throw new Error('WebrtcProvider dependency not provided')
+    }
+
     this.document = doc || new Y.Doc()
+    this.awareness = awareness ?? new Awareness(this.document)
     try {
       this.provider = new WebrtcProvider(options.roomName, this.document, {
-        awareness,
+        awareness: this.awareness,
         ...options,
       })
 

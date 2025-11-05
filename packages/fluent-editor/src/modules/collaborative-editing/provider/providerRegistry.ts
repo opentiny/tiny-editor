@@ -1,6 +1,6 @@
 import type { Awareness } from 'y-protocols/awareness'
 import type * as Y from 'yjs'
-import type { ProviderEventHandlers } from '../types'
+import type { CollaborativeEditingDeps, ProviderEventHandlers } from '../types'
 import { WebRTCProviderWrapper } from './webrtc'
 import { WebsocketProviderWrapper } from './websocket'
 
@@ -14,6 +14,7 @@ export type ProviderConstructorProps<T = any> = {
   options: T
   awareness?: Awareness
   doc?: Y.Doc
+  deps?: CollaborativeEditingDeps
 } & ProviderEventHandlers
 
 export interface UnifiedProvider extends ProviderEventHandlers {

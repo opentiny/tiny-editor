@@ -107,6 +107,9 @@ importers:
       mathlive:
         specifier: ^0.101.0
         version: 0.101.2
+      quill-cursors:
+        specifier: ^4.0.3
+        version: 4.0.4
       quill-header-list:
         specifier: 0.0.2
         version: 0.0.2(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
@@ -131,6 +134,24 @@ importers:
       vue-toastification:
         specifier: 2.0.0-rc.5
         version: 2.0.0-rc.5(vue@3.5.22(typescript@5.9.3))
+      y-indexeddb:
+        specifier: ^9.0.12
+        version: 9.0.12(yjs@13.6.27)
+      y-protocols:
+        specifier: ^1.0.6
+        version: 1.0.6(yjs@13.6.27)
+      y-quill:
+        specifier: ^1.0.0
+        version: 1.0.0(quill-cursors@4.0.4)(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))(yjs@13.6.27)
+      y-webrtc:
+        specifier: ^10.3.0
+        version: 10.3.0(yjs@13.6.27)
+      y-websocket:
+        specifier: ^3.0.0
+        version: 3.0.0(yjs@13.6.27)
+      yjs:
+        specifier: ^13.6.27
+        version: 13.6.27
     devDependencies:
       '@playwright/test':
         specifier: ^1.46.1
