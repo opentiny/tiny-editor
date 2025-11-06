@@ -248,14 +248,13 @@ function handleInsertIcon(blot: MindMapPlaceholderBlot, selectedNodes: any[]): v
   const height = Number.parseInt(heightStr.replace(/[^\d.]/g, ''), 10) || 500
   let iconList = []
   const { deps } = getAllConfigs(blot.quill)
-  iconList = deps.nodeIconList.nodeIconList
+  iconList = deps.nodeIconList.nodeIconList ? deps.nodeIconList.nodeIconList : deps.nodeIconList
   const leftUpControl = blot.domNode.querySelector('.ql-mind-map-left-up-control') as HTMLElement
   let iconPanel = leftUpControl.querySelector('.ql-mind-map-icon-panel') as HTMLElement
   if (!iconPanel) {
     iconPanel = document.createElement('div')
     iconPanel.className = 'ql-mind-map-icon-panel'
-
-    iconList.forEach((group) => {
+    iconList?.forEach((group) => {
       const groupContainer = document.createElement('div')
       groupContainer.className = 'ql-mind-map-icon-group-container'
 
