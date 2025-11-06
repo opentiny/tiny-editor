@@ -9,12 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@logicflow/core": "^2.0.16",
+    "@logicflow/extension": "^2.0.21",
     "@opentiny/fluent-editor": "workspace:^",
     "@tailwindcss/vite": "^4.0.0",
     "quill-cursors": "^4.0.4",
     "quill-header-list": "0.0.2",
     "quill-table-up": "^3.0.1",
     "sass": "^1.90.0",
+    "simple-mind-map": "0.14.0-fix.1",
+    "simple-mind-map-plugin-themes": "^1.0.1",
     "tailwindcss": "^4.0.0",
     "vue": "^3.5.13",
     "vue-router": "4",
