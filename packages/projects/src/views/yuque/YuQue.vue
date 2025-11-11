@@ -1,8 +1,17 @@
 <script setup lang="ts">
+import LogicFlow from '@logicflow/core'
+import { DndPanel, SelectionSelect, Snapshot } from '@logicflow/extension'
 import FluentEditor, { CollaborationModule, generateTableUp, generateTableUpShortKeyMenu } from '@opentiny/fluent-editor'
 import HeaderList from 'quill-header-list'
 import { createSelectBox, defaultCustomSelect, TableMenuContextmenu, TableResizeLine, TableResizeScale, TableSelection, TableUp } from 'quill-table-up'
+import SimpleMindMap from 'simple-mind-map'
+import Themes from 'simple-mind-map-plugin-themes'
+import Drag from 'simple-mind-map/src/plugins/Drag.js'
+import Export from 'simple-mind-map/src/plugins/Export.js'
+import { nodeIconList } from 'simple-mind-map/src/svg/icons'
 import { onMounted, ref } from 'vue'
+import '@logicflow/core/lib/style/index.css'
+import '@logicflow/extension/lib/style/index.css'
 
 FluentEditor.register({ 'modules/header-list': HeaderList }, true)
 FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)
@@ -133,8 +142,23 @@ onMounted(() => {
           return result
         },
       },
-      'mind-map': true,
-      'flow-chart': true,
+      'mind-map': {
+        deps: {
+          SimpleMindMap,
+          Themes,
+          Drag,
+          Export,
+          nodeIconList,
+        },
+      },
+      'flow-chart': {
+        deps: {
+          LogicFlow,
+          DndPanel,
+          SelectionSelect,
+          Snapshot,
+        },
+      },
       'collaborative-editing': {
         provider: {
           type: 'websocket',

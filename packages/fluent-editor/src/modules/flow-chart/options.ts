@@ -17,10 +17,10 @@ export interface BackgroundConfig {
 }
 
 export interface FlowChartDeps {
-  SimpleMindMap: any
-  Themes: any
-  Drag: any
-  Export: any
+  LogicFlow: any
+  DndPanel: any
+  SelectionSelect: any
+  Snapshot: any
 }
 
 export interface FlowChartOptions {
