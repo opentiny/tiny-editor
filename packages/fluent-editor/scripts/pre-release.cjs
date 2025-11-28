@@ -8,15 +8,15 @@ const targetFile = path.resolve(__dirname, '../dist/package.json')
 const packagejson = require(targetFile)
 
 packagejson.exports = {
-  ".": {
-    "import": "./es/index.es.js",
-    "require": "./lib/index.cjs.js",
-    "types": "./types/index.d.ts"
+  '.': {
+    import: './es/index.es.js',
+    require: './lib/index.cjs.js',
+    types: './types/index.d.ts',
   },
-  "./style.css": "./style.css",
-  "./flow-chart.css": "./flow-chart.css",
-  "./mind-map.css": "./mind-map.css",
-  "./package.json": "./package.json"
+  './style.css': './style.css',
+  './flow-chart.css': './flow-chart.css',
+  './mind-map.css': './mind-map.css',
+  './package.json': './package.json',
 }
 
 // 删除不需要发布到 npm 的字段
