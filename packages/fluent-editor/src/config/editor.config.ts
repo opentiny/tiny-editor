@@ -84,3 +84,30 @@ export const FILE_UPLOADER_MIME_TYPES = [
   ...PPT_UPLOADER_MIME_TYPES,
   ...COMPRESSED_UPLOADER_MIME_TYPES,
 ]
+
+export const DEFAULT_TOOLBAR = [
+  [{ header: [] }],
+  ['bold', 'italic', 'underline', 'link'],
+  [{ list: 'ordered' }, { list: 'bullet' }],
+  ['clean'],
+]
+
+export const FULL_TOOLBAR = [
+  ['undo', 'redo', 'clean', 'format-painter'],
+  [
+    { header: [1, 2, 3, 4, 5, 6, false] },
+    { font: [false, '宋体', '微软雅黑', '楷体', '黑体', '隶书', 'andale mono', 'arial', 'arial black', 'comic sans ms', 'impact', 'times new roman'] },
+    { size: [false, '12px', '14px', '16px', '18px', '20px', '24px', '32px', '36px', '48px', '72px'] },
+    { 'line-height': [false, '1.2', '1.5', '1.75', '2', '3', '4', '5'] },
+  ],
+  ['bold', 'italic', 'strike', 'underline', 'divider'],
+  [{ color: [] }, { background: [] }],
+  [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
+  [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
+  [{ script: 'sub' }, { script: 'super' }],
+  [{ indent: '-1' }, { indent: '+1' }],
+  [{ direction: 'rtl' }],
+  ['link', 'blockquote', 'code', 'code-block'],
+  ['image', 'file', { 'table-up': [] }],
+  ['emoji', 'video', 'formula', 'screenshot', 'fullscreen'],
+]

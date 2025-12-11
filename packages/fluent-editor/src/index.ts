@@ -1,7 +1,7 @@
 import FluentEditor from './fluent-editor'
 
 export * from './attributors'
-export * from './config/types'
+export * from './config'
 export * from './formats'
 export * from './modules'
 export { generateTableUpShortKeyMenu } from 'quill-shortcut-key'
