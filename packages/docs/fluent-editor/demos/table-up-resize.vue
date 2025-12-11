@@ -11,67 +11,62 @@ const editorBoxRef = ref<HTMLElement>()
 const editorLineRef = ref<HTMLElement>()
 const editorScaleRef = ref<HTMLElement>()
 
-const TOOLBAR_CONFIG = [
-  [{ header: [] }],
-  ['bold', 'italic', 'underline', 'link'],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  ['clean'],
-  [{ 'table-up': [] }],
-]
-
-onMounted(() => {
+onMounted(async () => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
-  Promise.all([
+  const [
+    { default: FluentEditor, DEFAULT_TOOLBAR, generateTableUp },
+    { defaultCustomSelect, TableResizeBox, TableResizeLine, TableResizeScale, TableUp },
+  ] = await Promise.all([
     import('@opentiny/fluent-editor'),
     import('quill-table-up'),
-  ]).then(([
-    { default: FluentEditor, generateTableUp },
-    { defaultCustomSelect, TableResizeBox, TableResizeLine, TableResizeScale, TableUp },
-  ]) => {
-    FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)
-    if (editorBoxRef.value) {
-      editorbox = new FluentEditor(editorBoxRef.value, {
-        theme: 'snow',
-        modules: {
-          'toolbar': TOOLBAR_CONFIG,
-          'table-up': {
-            customSelect: defaultCustomSelect,
-            modules: [
-              { module: TableResizeBox },
-            ],
-          },
+  ])
+
+  FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)
+  if (editorBoxRef.value) {
+    editorbox = new FluentEditor(editorBoxRef.value, {
+      theme: 'snow',
+      modules: {
+        'toolbar': [
+          ...DEFAULT_TOOLBAR,
+          [{ 'table-up': [] }],
+        ],
+        'table-up': {
+          customSelect: defaultCustomSelect,
+          modules: [
+            { module: TableResizeBox },
+          ],
         },
-      })
-    }
-    if (editorLineRef.value) {
-      editorLine = new FluentEditor(editorLineRef.value, {
-        theme: 'snow',
-        modules: {
-          'toolbar': TOOLBAR_CONFIG,
-          'table-up': {
-            customSelect: defaultCustomSelect,
-            modules: [
-              { module: TableResizeLine },
-            ],
-          },
+      },
+    })
+  }
+  if (editorLineRef.value) {
+    editorLine = new FluentEditor(editorLineRef.value, {
+      theme: 'snow',
+      modules: {
+        'toolbar': TOOLBAR_CONFIG,
+        'table-up': {
+          customSelect: defaultCustomSelect,
+          modules: [
+            { module: TableResizeLine },
+          ],
         },
-      })
-    }
-    if (editorScaleRef.value) {
-      editorScale = new FluentEditor(editorScaleRef.value, {
-        theme: 'snow',
-        modules: {
-          'toolbar': TOOLBAR_CONFIG,
-          'table-up': {
-            customSelect: defaultCustomSelect,
-            modules: [
-              { module: TableResizeScale },
-            ],
-          },
+      },
+    })
+  }
+  if (editorScaleRef.value) {
+    editorScale = new FluentEditor(editorScaleRef.value, {
+      theme: 'snow',
+      modules: {
+        'toolbar': TOOLBAR_CONFIG,
+        'table-up': {
+          customSelect: defaultCustomSelect,
+          modules: [
+            { module: TableResizeScale },
+          ],
         },
-      })
-    }
-  })
+      },
+    })
+  }
 })
 </script>
 

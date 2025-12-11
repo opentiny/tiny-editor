@@ -6,44 +6,40 @@ import { onMounted, ref } from 'vue'
 let editor: FluentEditor
 const editorRef = ref<HTMLElement>()
 
-const TOOLBAR_CONFIG = [
-  [{ header: [] }],
-  ['bold', 'italic', 'underline', 'link'],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  ['clean', 'image'],
-]
-
-onMounted(() => {
+onMounted(async () => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
-  import('@opentiny/fluent-editor').then(({ default: FluentEditor }) => {
-    if (!editorRef.value) return
-    editor = new FluentEditor(editorRef.value, {
-      theme: 'snow',
-      modules: {
-        toolbar: TOOLBAR_CONFIG,
-        image: {
-          toolbar: {
-            buttons: {
-              copy: false,
-              download: false,
-              clean: {
-                name: 'clean',
-                icon: (FluentEditor.import('ui/icons') as Record<string, string>).clean,
-                apply(el: HTMLImageElement, toolbarButtons: ImageToolbarButtons) {
-                  toolbarButtons.clear(el)
-                  el.removeAttribute('width')
-                  el.removeAttribute('height')
-                  this.buttons.forEach((button) => {
-                    button.classList.remove('is-selected')
-                    button.style.removeProperty('filter')
-                  })
-                },
+  const { default: FluentEditor, DEFAULT_TOOLBAR } = await import('@opentiny/fluent-editor')
+
+  if (!editorRef.value) return
+  editor = new FluentEditor(editorRef.value, {
+    theme: 'snow',
+    modules: {
+      toolbar: [
+        ...DEFAULT_TOOLBAR,
+        ['image'],
+      ],
+      image: {
+        toolbar: {
+          buttons: {
+            copy: false,
+            download: false,
+            clean: {
+              name: 'clean',
+              icon: (FluentEditor.import('ui/icons') as Record<string, string>).clean,
+              apply(el: HTMLImageElement, toolbarButtons: ImageToolbarButtons) {
+                toolbarButtons.clear(el)
+                el.removeAttribute('width')
+                el.removeAttribute('height')
+                this.buttons.forEach((button) => {
+                  button.classList.remove('is-selected')
+                  button.style.removeProperty('filter')
+                })
               },
             },
           },
         },
       },
-    })
+    },
   })
 })
 </script>

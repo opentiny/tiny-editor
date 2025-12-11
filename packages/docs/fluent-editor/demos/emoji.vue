@@ -9,27 +9,20 @@ import { onMounted } from 'vue'
 
 let editor: FluentEditor
 
-const TOOLBAR_CONFIG = [
-  [{ header: [] }],
-  ['bold', 'italic', 'underline', 'link'],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  ['clean'],
-  ['emoji'],
-]
-
 onMounted(async () => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
-  const [fluentEditor, emojiMart] = await Promise.all([
+  const [{ default: FluentEditor, DEFAULT_TOOLBAR }, emojiMart] = await Promise.all([
     import('@opentiny/fluent-editor'),
     import('emoji-mart'),
   ])
 
-  const FluentEditor = fluentEditor.default
-
   editor = new FluentEditor('#editor', {
     theme: 'snow',
     modules: {
-      toolbar: TOOLBAR_CONFIG,
+      toolbar: [
+        ...DEFAULT_TOOLBAR,
+        ['emoji'],
+      ],
       emoji: {
         emojiData: data as EmojiMartData,
         EmojiPicker: emojiMart.Picker,

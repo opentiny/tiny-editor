@@ -9,55 +9,53 @@ let editorSelect: FluentEditor
 const editorContextmenuRef = ref<HTMLElement>()
 const editorSelectRef = ref<HTMLElement>()
 
-const TOOLBAR_CONFIG = [
-  [{ header: [] }],
-  ['bold', 'italic', 'underline', 'link'],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  ['clean'],
-  [{ 'table-up': [] }],
-]
-
-onMounted(() => {
+onMounted(async () => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
-  Promise.all([
+  const [
+    { default: FluentEditor, DEFAULT_TOOLBAR, generateTableUp },
+    { defaultCustomSelect, TableMenuContextmenu, TableMenuSelect, TableSelection, TableUp },
+  ] = await Promise.all([
     import('@opentiny/fluent-editor'),
     import('quill-table-up'),
-  ]).then(([
-    { default: FluentEditor, generateTableUp },
-    { defaultCustomSelect, TableMenuContextmenu, TableMenuSelect, TableSelection, TableUp },
-  ]) => {
-    FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)
-    if (editorSelectRef.value) {
-      editorSelect = new FluentEditor(editorSelectRef.value, {
-        theme: 'snow',
-        modules: {
-          'toolbar': TOOLBAR_CONFIG,
-          'table-up': {
-            customSelect: defaultCustomSelect,
-            modules: [
-              { module: TableSelection },
-              { module: TableMenuSelect },
-            ],
-          },
+  ])
+  
+  FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)
+  if (editorSelectRef.value) {
+    editorSelect = new FluentEditor(editorSelectRef.value, {
+      theme: 'snow',
+      modules: {
+        'toolbar': [
+          ...DEFAULT_TOOLBAR,
+          [{ 'table-up': [] }],
+        ],
+        'table-up': {
+          customSelect: defaultCustomSelect,
+          modules: [
+            { module: TableSelection },
+            { module: TableMenuSelect },
+          ],
         },
-      })
-    }
-    if (editorContextmenuRef.value) {
-      editorContextmenu = new FluentEditor(editorContextmenuRef.value, {
-        theme: 'snow',
-        modules: {
-          'toolbar': TOOLBAR_CONFIG,
-          'table-up': {
-            customSelect: defaultCustomSelect,
-            modules: [
-              { module: TableSelection },
-              { module: TableMenuContextmenu },
-            ],
-          },
+      },
+    })
+  }
+  if (editorContextmenuRef.value) {
+    editorContextmenu = new FluentEditor(editorContextmenuRef.value, {
+      theme: 'snow',
+      modules: {
+        'toolbar': [
+          ...DEFAULT_TOOLBAR,
+          [{ 'table-up': [] }],
+        ],
+        'table-up': {
+          customSelect: defaultCustomSelect,
+          modules: [
+            { module: TableSelection },
+            { module: TableMenuContextmenu },
+          ],
         },
-      })
-    }
-  })
+      },
+    })
+  }
 })
 </script>
 

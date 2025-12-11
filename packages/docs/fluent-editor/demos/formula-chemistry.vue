@@ -8,27 +8,20 @@ window.katex = katex
 
 let editor: FluentEditor
 
-const TOOLBAR_CONFIG = [
-  [{ header: [] }],
-  ['bold', 'italic', 'underline', 'link'],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  ['clean'],
-  ['formula'],
-]
-
-onMounted(() => {
+onMounted(async () => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
-  import('@opentiny/fluent-editor').then((module) => {
-    const FluentEditor = module.default
+  const { default: FluentEditor, DEFAULT_TOOLBAR } = await import('@opentiny/fluent-editor')
 
-    import('katex/contrib/mhchem/mhchem')
+  await import('katex/contrib/mhchem/mhchem')
 
-    editor = new FluentEditor('#chemistry-editor', {
-      theme: 'snow',
-      modules: {
-        toolbar: TOOLBAR_CONFIG,
-      },
-    })
+  editor = new FluentEditor('#chemistry-editor', {
+    theme: 'snow',
+    modules: {
+      toolbar: [
+        ...DEFAULT_TOOLBAR,
+        ['formula'],
+      ],
+    },
   })
 })
 </script>
