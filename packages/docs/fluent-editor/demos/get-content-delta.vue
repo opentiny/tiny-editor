@@ -12,6 +12,9 @@ import { onMounted, ref } from 'vue'
 import 'highlight.js/styles/atom-one-dark.css'
 import 'katex/dist/katex.min.css'
 
+import 'quill-table-up/index.css'
+import 'quill-table-up/table-creator.css'
+
 window.hljs = hljs
 window.katex = katex
 window.Html2Canvas = Html2Canvas
@@ -33,20 +36,6 @@ const mentionList = [
   },
 ]
 
-const TOOLBAR_CONFIG = [
-  ['undo', 'redo', 'clean', 'format-painter'],
-  [{ header: [1, 2, 3, 4, 5, 6, false] }, { font: [] }, { size: ['12px', '14px', '16px', '18px', '20px', '24px', '32px', '36px', '48px', '72px'] }],
-  ['bold', 'italic', 'strike', 'underline'],
-  [{ color: [] }, { background: [] }],
-  [{ align: [] }, { list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
-  [{ script: 'sub' }, { script: 'super' }],
-  [{ indent: '-1' }, { indent: '+1' }],
-  [{ direction: 'rtl' }],
-  ['link', 'blockquote', 'code', 'code-block'],
-  ['image', 'file'],
-  ['emoji', 'video', 'formula', 'screenshot'],
-]
-
 const articleRef = ref<HTMLElement>()
 function updateDeltaStr(deltaStr: string) {
   if (articleRef.value) {
@@ -54,35 +43,47 @@ function updateDeltaStr(deltaStr: string) {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
-  import('@opentiny/fluent-editor').then((module) => {
-    const FluentEditor = module.default
+  const [
+    { default: FluentEditor, generateTableUp, FULL_TOOLBAR },
+    { defaultCustomSelect, TableMenuContextmenu, TableSelection, TableUp },
+  ] = await Promise.all([
+    import('@opentiny/fluent-editor'),
+    import('quill-table-up'),
+  ])
 
-    editor = new FluentEditor('#editor-get-content-delta', {
-      theme: 'snow',
-      modules: {
-        toolbar: TOOLBAR_CONFIG,
-        syntax: { hljs },
-        emoji: true,
-        file: true,
-        mention: {
-          itemKey: 'cn',
-          searchKey,
-          search(term) {
-            return mentionList.filter((item) => {
-              return item[searchKey] && String(item[searchKey]).includes(term)
-            })
-          },
+  FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)
+  editor = new FluentEditor('#editor-get-content-delta', {
+    theme: 'snow',
+    modules: {
+      toolbar: FULL_TOOLBAR,
+      syntax: { hljs },
+      emoji: true,
+      file: true,
+      mention: {
+        itemKey: 'cn',
+        searchKey,
+        search(term) {
+          return mentionList.filter((item) => {
+            return item[searchKey] && String(item[searchKey]).includes(term)
+          })
         },
       },
-    })
+      'table-up': {
+        customSelect: defaultCustomSelect,
+        modules: [
+          { module: TableSelection },
+          { module: TableMenuContextmenu },
+        ],
+      },
+    },
+  })
 
+  updateDeltaStr(JSON.stringify(editor.getContents()))
+
+  editor.on('text-change', () => {
     updateDeltaStr(JSON.stringify(editor.getContents()))
-
-    editor.on('text-change', () => {
-      updateDeltaStr(JSON.stringify(editor.getContents()))
-    })
   })
 })
 </script>
