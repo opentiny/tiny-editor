@@ -3,32 +3,27 @@ import type FluentEditor from '@opentiny/fluent-editor'
 import { onMounted } from 'vue'
 
 let editor: FluentEditor
-const TOOLBAR_CONFIG = [
-  ['ai', { header: [] }],
-  ['bold', 'italic', 'underline', 'link'],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  ['clean'],
-]
 
-onMounted(() => {
+onMounted(async () => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
-  import('@opentiny/fluent-editor').then((module) => {
-    const FluentEditor = module.default
+  const { default: FluentEditor, DEFAULT_TOOLBAR } = await import('@opentiny/fluent-editor')
 
-    editor = new FluentEditor('#editor-add-toolbar-item', {
-      theme: 'snow',
-      modules: {
-        toolbar: {
-          container: TOOLBAR_CONFIG,
-        },
-        ai: {
-          host: 'http://localhost:11434/api/generate',
-          model: 'deepseek-r1:8b',
-          apiKey: '',
-          contentMaxLength: 1000,
-        },
+  editor = new FluentEditor('#editor-add-toolbar-item', {
+    theme: 'snow',
+    modules: {
+      toolbar: {
+        container: [
+          ['ai'],
+          ...DEFAULT_TOOLBAR
+        ],
       },
-    })
+      ai: {
+        host: 'http://localhost:11434/api/generate',
+        model: 'deepseek-r1:8b',
+        apiKey: '',
+        contentMaxLength: 1000,
+      },
+    },
   })
 })
 </script>

@@ -4,23 +4,23 @@ import { onMounted } from 'vue'
 
 let editor: FluentEditor
 
-onMounted(() => {
+onMounted(async () => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
-  import('@opentiny/fluent-editor').then((module) => {
-    const FluentEditor = module.default
+  const [
+    { default: FluentEditor },
+    { default: MarkdownShortcuts },
+  ] = await Promise.all([
+    import('@opentiny/fluent-editor'),
+    import('quill-markdown-shortcuts'),
+  ])
 
-    import('quill-markdown-shortcuts').then((markdown) => {
-      const MarkdownShortcuts = markdown.default
+  FluentEditor.register('modules/markdownShortcuts', MarkdownShortcuts)
 
-      FluentEditor.register('modules/markdownShortcuts', MarkdownShortcuts)
-
-      editor = new FluentEditor('#editor', {
-        theme: 'snow',
-        modules: {
-          markdownShortcuts: true,
-        },
-      })
-    })
+  editor = new FluentEditor('#editor', {
+    theme: 'snow',
+    modules: {
+      markdownShortcuts: true,
+    },
   })
 })
 </script>

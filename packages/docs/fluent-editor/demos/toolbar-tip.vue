@@ -20,45 +20,25 @@ window.Html2Canvas = Html2Canvas
 let editor: FluentEditor
 const editorRef = ref<HTMLElement>()
 
-const TOOLBAR_CONFIG = [
-  ['undo', 'redo', 'clean', 'format-painter'],
-  [
-    { header: [] },
-    { font: [] },
-    { size: [] },
-    { 'line-height': [] },
-  ],
-  ['bold', 'italic', 'strike', 'underline', 'divider'],
-  [{ color: [] }, { background: [] }],
-  [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
-  [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
-  [{ script: 'sub' }, { script: 'super' }],
-  [{ indent: '-1' }, { indent: '+1' }],
-  [{ direction: 'rtl' }],
-  ['link', 'blockquote', 'code', 'code-block'],
-  ['image', 'file'],
-  ['emoji', 'video', 'formula', 'screenshot', 'fullscreen'],
-]
-
-onMounted(() => {
+onMounted(async () => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
-  import('@opentiny/fluent-editor').then(({ default: FluentEditor, generateToolbarTip }) => {
-    if (!editorRef.value) return
-    FluentEditor.register({ 'modules/toolbar-tip': generateToolbarTip(QuillToolbarTip) }, true)
-    editor = new FluentEditor(editorRef.value, {
-      theme: 'snow',
-      modules: {
-        'toolbar': TOOLBAR_CONFIG,
-        'file': true,
-        'emoji': true,
-        'syntax': true,
-        'toolbar-tip': {
-          defaultTooltipOptions: {
-            tipHoverable: false,
-          },
+  const { default: FluentEditor, FULL_TOOLBAR, generateToolbarTip } = await import('@opentiny/fluent-editor')
+
+  if (!editorRef.value) return
+  FluentEditor.register({ 'modules/toolbar-tip': generateToolbarTip(QuillToolbarTip) }, true)
+  editor = new FluentEditor(editorRef.value, {
+    theme: 'snow',
+    modules: {
+      'toolbar': FULL_TOOLBAR,
+      'file': true,
+      'emoji': true,
+      'syntax': true,
+      'toolbar-tip': {
+        defaultTooltipOptions: {
+          tipHoverable: false,
         },
       },
-    })
+    },
   })
 })
 </script>

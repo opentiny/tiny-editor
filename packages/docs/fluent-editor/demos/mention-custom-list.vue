@@ -27,37 +27,35 @@ const mentionList = [
   },
 ]
 
-onMounted(() => {
+onMounted(async () => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
-  import('@opentiny/fluent-editor').then((module) => {
-    const FluentEditor = module.default
+  const { default: FluentEditor } = await import('@opentiny/fluent-editor')
 
-    editor = new FluentEditor('#editor-mention-custom-list', {
-      theme: 'snow',
-      modules: {
-        mention: {
-          containerClass: 'ql-mention-list-container__custom-list',
-          itemKey: 'cn',
-          searchKey,
-          search(term) {
-            return mentionList.filter((item) => {
-              return item[searchKey] && String(item[searchKey]).includes(term)
-            })
-          },
-          renderMentionItem(item) {
-            return `
-              <div class="item-avatar">
-                <img src="${item.avatar}">
-              </div>
-              <div class="item-info">
-                <div class="item-name">${item.cn}</div>
-                <div class="item-desc">${item.followers}粉丝</div>
-              </div>
-            `
-          },
+  editor = new FluentEditor('#editor-mention-custom-list', {
+    theme: 'snow',
+    modules: {
+      mention: {
+        containerClass: 'ql-mention-list-container__custom-list',
+        itemKey: 'cn',
+        searchKey,
+        search(term) {
+          return mentionList.filter((item) => {
+            return item[searchKey] && String(item[searchKey]).includes(term)
+          })
+        },
+        renderMentionItem(item) {
+          return `
+            <div class="item-avatar">
+              <img src="${item.avatar}">
+            </div>
+            <div class="item-info">
+              <div class="item-name">${item.cn}</div>
+              <div class="item-desc">${item.followers}粉丝</div>
+            </div>
+          `
         },
       },
-    })
+    },
   })
 })
 </script>

@@ -7,60 +7,60 @@ let editor: FluentEditor
 const editorRef = ref<HTMLElement>()
 const headerListRef = ref<HTMLElement>()
 
-onMounted(() => {
+onMounted(async () => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
-  Promise.all([
+  const [{ default: FluentEditor, DEFAULT_TOOLBAR }, { default: HeaderList }] = await Promise.all([
     import('@opentiny/fluent-editor'),
     import('quill-header-list'),
   ])
-    .then(([{ default: FluentEditor }, { default: HeaderList }]) => {
-      if (!editorRef.value) return
-      FluentEditor.register({ 'modules/header-list': HeaderList }, true)
+  
+  if (!editorRef.value) return
+  FluentEditor.register({ 'modules/header-list': HeaderList }, true)
 
-      editor = new FluentEditor(editorRef.value, {
-        theme: 'snow',
-        modules: {
-          'toolbar': {
-            container: [
-              [{ header: [false, 1, 2, 3, 4, 5, 6] }, 'header-list'],
-            ],
-            handlers: {
-              'header-list': HeaderList.toolbarHandle,
-            },
-          },
-          'header-list': {
-            container: headerListRef.value,
-          },
+  editor = new FluentEditor(editorRef.value, {
+    theme: 'snow',
+    modules: {
+      'toolbar': {
+        container: [
+          ...DEFAULT_TOOLBAR,
+          [{ header: [false, 1, 2, 3, 4, 5, 6] }, 'header-list'],
+        ],
+        handlers: {
+          'header-list': HeaderList.toolbarHandle,
         },
-      })
+      },
+      'header-list': {
+        container: headerListRef.value,
+      },
+    },
+  })
 
-      editor.setContents([
-        { insert: 'header 1' },
-        { attributes: { header: { value: 1 } }, insert: '\n' },
-        { insert: '\n\n\n\n\n\n\n\n\n\nheader 1.1' },
-        { attributes: { header: { value: 2 } }, insert: '\n' },
-        { insert: '\n\n\n\n\n\n\n\n\nheader 1.2' },
-        { attributes: { header: { value: 2 } }, insert: '\n' },
-        { insert: '\n\n\n\nheader 1.3' },
-        { attributes: { header: { value: 2 } }, insert: '\n' },
-        { insert: '\n\n\n\n\n\n\n\n\n\n\nheader 2' },
-        { attributes: { header: { value: 1 } }, insert: '\n' },
-        { insert: '\n\n\n\n\n\n\n\nheader 2.1' },
-        { attributes: { header: { value: 2 } }, insert: '\n' },
-        { insert: '\nheader 2.1.1' },
-        { attributes: { header: { value: 3 } }, insert: '\n' },
-        { insert: '\n\n\n\n\n\n\n\n\n\nheader 2.1.2' },
-        { attributes: { header: { value: 3 } }, insert: '\n' },
-        { insert: '\n\n\n\n\n\n\n\n\n\nheader 44444444' },
-        { attributes: { header: { value: 4 } }, insert: '\n' },
-        { insert: '\n\n\n\n\n\n\n\n\n\nheader 44444444' },
-        { attributes: { header: { value: 4 } }, insert: '\n' },
-        { insert: '\n\n\n\n\n\n\n\n\n\nheader 5' },
-        { attributes: { header: { value: 5 } }, insert: '\n' },
-        { insert: '\n\n\n\n\n\n\n\n\n\nheader 6' },
-        { attributes: { header: { value: 6 } }, insert: '\n' },
-      ])
-    })
+  editor.setContents([
+    { insert: 'header 1' },
+    { attributes: { header: { value: 1 } }, insert: '\n' },
+    { insert: '\n\n\n\n\n\n\n\n\n\nheader 1.1' },
+    { attributes: { header: { value: 2 } }, insert: '\n' },
+    { insert: '\n\n\n\n\n\n\n\n\nheader 1.2' },
+    { attributes: { header: { value: 2 } }, insert: '\n' },
+    { insert: '\n\n\n\nheader 1.3' },
+    { attributes: { header: { value: 2 } }, insert: '\n' },
+    { insert: '\n\n\n\n\n\n\n\n\n\n\nheader 2' },
+    { attributes: { header: { value: 1 } }, insert: '\n' },
+    { insert: '\n\n\n\n\n\n\n\nheader 2.1' },
+    { attributes: { header: { value: 2 } }, insert: '\n' },
+    { insert: '\nheader 2.1.1' },
+    { attributes: { header: { value: 3 } }, insert: '\n' },
+    { insert: '\n\n\n\n\n\n\n\n\n\nheader 2.1.2' },
+    { attributes: { header: { value: 3 } }, insert: '\n' },
+    { insert: '\n\n\n\n\n\n\n\n\n\nheader 44444444' },
+    { attributes: { header: { value: 4 } }, insert: '\n' },
+    { insert: '\n\n\n\n\n\n\n\n\n\nheader 44444444' },
+    { attributes: { header: { value: 4 } }, insert: '\n' },
+    { insert: '\n\n\n\n\n\n\n\n\n\nheader 5' },
+    { attributes: { header: { value: 5 } }, insert: '\n' },
+    { insert: '\n\n\n\n\n\n\n\n\n\nheader 6' },
+    { attributes: { header: { value: 6 } }, insert: '\n' },
+  ])
 })
 </script>
 

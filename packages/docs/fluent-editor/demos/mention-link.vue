@@ -26,26 +26,25 @@ const mentionList = [
   },
 ]
 
-onMounted(() => {
+onMounted(async () => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
-  import('@opentiny/fluent-editor').then((module) => {
-    if (!editorRef.value) return
-    const FluentEditor = module.default
+  const { default: FluentEditor } = await import('@opentiny/fluent-editor')
 
-    editor = new FluentEditor(editorRef.value, {
-      theme: 'snow',
-      modules: {
-        mention: {
-          itemKey: 'cn',
-          searchKey,
-          search(term) {
-            return mentionList.filter((item) => {
-              return item[searchKey] && String(item[searchKey]).includes(term)
-            })
-          },
+  if (!editorRef.value) return
+
+  editor = new FluentEditor(editorRef.value, {
+    theme: 'snow',
+    modules: {
+      mention: {
+        itemKey: 'cn',
+        searchKey,
+        search(term) {
+          return mentionList.filter((item) => {
+            return item[searchKey] && String(item[searchKey]).includes(term)
+          })
         },
       },
-    })
+    },
   })
 })
 function toggleEditable() {

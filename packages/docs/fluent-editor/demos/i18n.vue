@@ -44,7 +44,7 @@ const TOOLBAR_CONFIG = [
 onMounted(async () => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
   const [
-    { default: FluentEditor, generateToolbarTip, generateTableUp },
+    { default: FluentEditor, FULL_TOOLBAR, generateToolbarTip, generateTableUp },
     { defaultCustomSelect, TableMenuContextmenu, TableSelection, TableUp },
     emojiMart,
   ] = await Promise.all([
@@ -59,7 +59,7 @@ onMounted(async () => {
   editor = new FluentEditor(editorRef.value, {
     theme: 'snow',
     modules: {
-      'toolbar': TOOLBAR_CONFIG,
+      'toolbar': FULL_TOOLBAR,
       'counter': true,
       'emoji': {
         emojiData: data as EmojiMartData,

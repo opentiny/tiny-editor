@@ -8,26 +8,20 @@ window.Html2Canvas = Html2Canvas
 let editor: FluentEditor
 const editorRef = ref<HTMLElement>()
 
-const TOOLBAR_CONFIG = [
-  [{ header: [] }],
-  ['bold', 'italic', 'underline', 'link'],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  ['clean'],
-  ['screenshot'],
-]
-
-onMounted(() => {
+onMounted(async () => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
-  import('@opentiny/fluent-editor').then((module) => {
-    const FluentEditor = module.default
-    if (!editorRef.value) return
-    editor = new FluentEditor(editorRef.value, {
-      theme: 'snow',
-      modules: {
-        toolbar: TOOLBAR_CONFIG,
-      },
-      screenshot: {},
-    })
+  const { default: FluentEditor, DEFAULT_TOOLBAR } = await import('@opentiny/fluent-editor')
+
+  if (!editorRef.value) return
+  editor = new FluentEditor(editorRef.value, {
+    theme: 'snow',
+    modules: {
+      toolbar: [
+        ...DEFAULT_TOOLBAR,
+        ['screenshot'], 
+      ],
+    },
+    screenshot: {},
   })
 })
 </script>
