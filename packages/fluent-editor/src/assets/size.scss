@@ -5,7 +5,7 @@
   .ql-picker-label[data-value],
   .ql-picker-item[data-value] {
     &::before {
-      content: attr(data-value);
+      content: attr(data-value) !important;
     }
   }
 }
