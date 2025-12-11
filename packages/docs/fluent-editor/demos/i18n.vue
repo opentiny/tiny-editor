@@ -1,19 +1,19 @@
 <script setup lang="ts">
+import type { EmojiMartData } from '@emoji-mart/data'
 import type FluentEditor from '@opentiny/fluent-editor'
 import type { I18N } from '@opentiny/fluent-editor'
-import { onMounted, ref } from 'vue'
 
-import QuillToolbarTip from 'quill-toolbar-tip'
-import 'quill-toolbar-tip/dist/index.css'
-
-import 'quill-table-up/index.css'
-import 'quill-table-up/table-creator.css'
-
-import type { EmojiMartData } from '@emoji-mart/data'
 // 这里实际导入的是一个 json 文件，包含了 emoji-mart 所需的所有表情数据，类型是 EmojiMartData
 import data from '@emoji-mart/data'
 // computePosition 函数用于计算 emoji picker显示的位置
 import { computePosition } from '@floating-ui/dom'
+
+import QuillToolbarTip from 'quill-toolbar-tip'
+import { onMounted, ref } from 'vue'
+
+import 'quill-toolbar-tip/dist/index.css'
+import 'quill-table-up/index.css'
+import 'quill-table-up/table-creator.css'
 
 let editor: FluentEditor
 const editorRef = ref<HTMLElement>()
@@ -59,14 +59,14 @@ onMounted(async () => {
   editor = new FluentEditor(editorRef.value, {
     theme: 'snow',
     modules: {
-      toolbar: TOOLBAR_CONFIG,
-      counter: true,
-      emoji: {
+      'toolbar': TOOLBAR_CONFIG,
+      'counter': true,
+      'emoji': {
         emojiData: data as EmojiMartData,
         EmojiPicker: emojiMart.Picker,
         emojiPickerPosition: computePosition,
       },
-      i18n: {
+      'i18n': {
         lang: lang.value,
       },
       'toolbar-tip': {
@@ -78,7 +78,7 @@ onMounted(async () => {
         customSelect: defaultCustomSelect,
         modules: [
           { module: TableSelection },
-            { module: TableMenuContextmenu },
+          { module: TableMenuContextmenu },
         ],
       },
     },
