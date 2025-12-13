@@ -30,6 +30,7 @@ export function sidebar() {
         { text: '思维导图', link: '/docs/demo/mind-map' },
         { text: '流程图', link: '/docs/demo/flow-chart' },
         { text: '协同编辑', link: '/docs/demo/collaborative-editing' },
+        { text: '所有功能', link: '/docs/demo/full' },
       ],
     },
     {
