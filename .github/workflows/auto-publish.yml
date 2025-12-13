@@ -74,7 +74,7 @@ jobs:
           fi
       - name: Show version and tag
         run: |
-          VERSION="$(node -p "require('./packages/fluent-editor/package.json').version")"
+          VERSION="$(node -p "require('./packages/fluent-editor/dist/package.json').version")"
           echo "publish version: $VERSION"
           echo "publish tag: ${{ steps.parse_tag.outputs.dist_tag }}"
       - name: Publish @opentiny/fluent-editor
