@@ -1,5 +1,13 @@
 # 快速开始
 
+## 通过代码演练场方式使用
+
+你可以通过以下链接，亲自修改代码体验下 TinyEditor 的各项功能，里面包含了 TinyEditor 相对比较全面的功能。
+
+[https://stackblitz.com/edit/vitejs-vite-cakzv5](https://stackblitz.com/edit/vitejs-vite-cakzv5)
+
+## 通过 NPM 包方式使用
+
 安装 TinyEditor：
 
 ```shell
