@@ -7,6 +7,10 @@ run-name: Dispatch Publish
 on:
   workflow_dispatch:
     inputs:
+      version:
+        description: 输入您将要发布的版本号（默认使用 packages/fluent-editor/package.json 中的版本号），例如：`0.1.0`。
+        required: false
+        type: string
       tag:
         description: "选择发布/部署版本tag (alpha/beta/rc/latest)"
         required: true
@@ -27,6 +31,8 @@ jobs:
   build:
     # 指定运行环境为最新版本的ubuntu
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.ver.outputs.value }}
     steps:
       # 步骤1: 检出代码
       - name: CheckOut Code
@@ -64,14 +70,52 @@ jobs:
       # 步骤6: 安装项目依赖
       - name: Install dependencies
         run: pnpm i --no-frozen-lockfile
+      - name: Get version
+        id: ver
+        run: |
+          # 优先用手动输入的版本号
+          if [ -n "${{ inputs.version }}" ]; then
+            VERSION="${{ inputs.version }}"
+          else
+            VERSION="$(node -p "require('./packages/fluent-editor/package.json').version")"
+          fi
+          echo "version: $VERSION"
+          echo "value=$VERSION" >> $GITHUB_OUTPUT
 
-      # 步骤7: 构建组件
-      - name: Run Build Components
-        run: pnpm build:lib
+      - name: Build lib
+        run: |
+          pnpm build:lib
+          cd packages/fluent-editor
+          echo "version: ${{ steps.ver.outputs.value }}"
+          pnpm pre-release -v ${{ steps.ver.outputs.value }}
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-artifact
+          path: packages/fluent-editor/dist/
+  # Publish job
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-artifact
+          path: packages/fluent-editor/dist/
+      - name: Show version and tag
+        run: |
+          echo "publish version: ${{ needs.build.outputs.version }}"
+          echo "publish tag: ${{ inputs.tag }}"
 
       # 步骤8: 发布组件到NPM
-      - name: Publish components
-        run: pnpm pub --tag ${{ inputs.tag }}
+      - name: Publish @opentiny/fluent-editor
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+          echo "ls"
+          ls
+          cd packages/fluent-editor/dist
+          ls
+          npm publish --tag ${{ inputs.tag }}
         env:
-          # 使用NPM令牌进行身份验证
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
