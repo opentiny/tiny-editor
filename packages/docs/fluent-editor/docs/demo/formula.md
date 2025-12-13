@@ -46,5 +46,9 @@ import 'mathlive/fonts.css'
 }
 ```
 
+::: warning
+`0.104.0` 及以上版本的 `mathlive` 存在公式编辑面板闪退问题，请使用 `0.103.0` 及以下版本。
+:::
+
 :::demo src=demos/formula-mathlive.vue
 :::
