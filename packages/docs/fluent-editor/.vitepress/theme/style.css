@@ -97,3 +97,7 @@
 #translate {
   display: none;
 }
+
+.link {
+  flex-grow: initial !important;
+}

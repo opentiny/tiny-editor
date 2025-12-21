@@ -14,8 +14,6 @@ packagejson.exports = {
     types: './types/index.d.ts',
   },
   './style.css': './style.css',
-  './flow-chart.css': './flow-chart.css',
-  './mind-map.css': './mind-map.css',
   './package.json': './package.json',
 }
 

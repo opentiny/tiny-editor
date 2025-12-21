@@ -24,12 +24,9 @@ export function sidebar() {
         { text: '标题列表', link: '/docs/demo/header-list' },
         { text: '工具栏提示', link: '/docs/demo/toolbar-tip' },
         { text: '只读模式', link: '/docs/demo/readonly' },
-        { text: '模拟语雀文档', link: 'https://opentiny.github.io/tiny-editor/projects' },
         { text: '图片工具栏', link: '/docs/demo/image-tool' },
-        { text: 'AI', link: '/docs/demo/ai' },
-        { text: '思维导图', link: '/docs/demo/mind-map' },
-        { text: '流程图', link: '/docs/demo/flow-chart' },
         { text: '协同编辑', link: '/docs/demo/collaborative-editing' },
+        { text: '模拟语雀文档', link: 'https://opentiny.github.io/tiny-editor/projects' },
       ],
     },
     {

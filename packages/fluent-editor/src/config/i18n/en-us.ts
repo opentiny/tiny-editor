@@ -72,8 +72,6 @@ export const EN_US = {
   'strike': 'Strikethrough',
   'image': 'Image',
   'file': 'File',
-  'mind-map': 'Mind Map',
-  'flow-chart': 'Flow Chart',
   'link': 'Hyperlink',
   'code': 'Inline Code',
   'table': 'Table',
