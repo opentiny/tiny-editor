@@ -3,7 +3,7 @@ import packageJson from '@opentiny/fluent-editor/package.json' with { type: 'jso
 import { demoPreviewPlugin } from '@vitepress-code-preview/plugin'
 import { defineConfig, loadEnv } from 'vitepress'
 import llmstxt from 'vitepress-plugin-llms'
-import { sidebar } from './sidebar'
+import { sidebarDocs, sidebarExamples, sidebarApi, sidebarModules } from './sidebar'
 
 const env = loadEnv(process.env.VITE_BASE_URL!, fileURLToPath(new URL('../', import.meta.url)))
 const currentVersion = packageJson.version
@@ -22,9 +22,13 @@ export default defineConfig({
     logo: '/logo.svg',
     nav: [
       { text: '文档', link: '/docs/quick-start', activeMatch: '/docs/' },
+      { text: '示例', link: '/examples', activeMatch: '/examples/' },
+      { text: 'API', link: '/api', activeMatch: '/api/' },
+      { text: '演练场', link: '/playground', activeMatch: '/playground/' },
       {
         text: '生态',
         items: [
+          { text: 'Quill 模块', link: '/modules' },
           { text: 'TinyVue', link: 'https://opentiny.design/tiny-vue/' },
         ],
       },
@@ -42,7 +46,10 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/opentiny/tiny-editor/' },
     ],
     sidebar: {
-      '/docs/': sidebar(),
+      '/docs/': sidebarDocs(),
+      '/examples/': sidebarExamples(),
+      '/api/': sidebarApi(),
+      '/modules/': sidebarModules(),
     },
     footer: {
       message: 'Made with ❤ by',
