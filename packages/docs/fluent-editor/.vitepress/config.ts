@@ -22,13 +22,13 @@ export default defineConfig({
     logo: '/logo.svg',
     nav: [
       { text: '文档', link: '/docs/quick-start', activeMatch: '/docs/' },
-      { text: '示例', link: '/examples', activeMatch: '/examples/' },
-      { text: 'API', link: '/api', activeMatch: '/api/' },
-      { text: '演练场', link: '/playground', activeMatch: '/playground/' },
+      { text: '示例', link: '/examples/basic-usage', activeMatch: '/examples/' },
+      { text: 'API', link: '/api/options', activeMatch: '/api/' },
+      { text: '演练场', link: 'https://stackblitz.com/edit/vitejs-vite-cakzv5' },
       {
         text: '生态',
         items: [
-          { text: 'Quill 模块', link: '/modules' },
+          { text: 'Quill 模块', link: '/modules/toolbar-tip' },
           { text: 'TinyVue', link: 'https://opentiny.design/tiny-vue/' },
         ],
       },
