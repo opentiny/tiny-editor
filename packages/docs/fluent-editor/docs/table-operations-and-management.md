@@ -6,7 +6,7 @@ FluentEditor 通过 table-up 模块提供全面的表格功能，扩展了 Quill
 
 表格操作系统基于模块化架构构建，集成了多个专业组件以处理不同方面的表格功能：
 
-![]()
+![](../public/images/表格架构.png)
 
 `table-up` 模块作为 `quill-table-up` 库的增强封装器，添加了 FluentEditor 特有功能，如国际化支持、格式刷集成和无缝主题兼容性。
 
@@ -246,9 +246,9 @@ const editor = new FluentEditor('#editor', {
 
 要全面了解 FluentEditor 的功能，请探索这些相关主题：
 
-- 模块注册和配置 - 了解模块系统架构
-- 格式注册和 Blot 系统 - 了解表格格式如何与 Quill 的 blot 系统集成
-- 事件系统和钩子 - 发现如何使用自定义事件扩展表格功能
-- 协作编辑后端集成 - 实现实时协作表格编辑
+- [模块注册和配置](./module-registration-and-configuration.md) - 了解模块系统架构
+- [格式注册和 Blot 系统](./format-registration-and-blot-system.md) - 了解表格格式如何与 Quill 的 blot 系统集成
+- [事件系统和钩子](../api/event-system-and-hooks.md) - 发现如何使用自定义事件扩展表格功能
+- [协作编辑后端集成](./collaborative-editing-backend-integration.md) - 实现实时协作表格编辑
 
 表格操作系统代表了 FluentEditor 致力于提供专业级文档编辑功能，同时保持开发者对现代富文本编辑器所期望的简单性和可扩展性。

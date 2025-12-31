@@ -6,8 +6,7 @@
 
 FluentEditor 的主题系统基于 Quill 的主题架构构建，并进行了重要扩展以增强功能。核心主题实现位于 SnowTheme 类中，该类扩展了 Quill 的原始 Snow 主题。
 
-![]()
-
+![](../public/images/自定义主题开发-主题架构.png)
 
 ## 核心主题实现
 
@@ -279,8 +278,8 @@ const editor = new FluentEditor('#editor', {
 
 要全面开发主题，请探索这些相关主题：
 
-- 理解 FluentEditor 类结构 - 了解核心编辑器架构
-- 模块注册和配置 - 了解如何集成自定义模块
-- 多语言支持实现 - 在主题中实现国际化
+- [理解 FluentEditor 类结构](./understanding-tiny-editor-class-structure.md) - 了解核心编辑器架构
+- [模块注册和配置](./module-registration-and-configuration.md) - 了解如何集成自定义模块
+- [多语言支持实现](./multi-language-support-implementation.md) - 在主题中实现国际化
 
 主题系统为创建自定义编辑器体验提供了坚实的基础，同时保持与 FluentEditor 生态系统的一致性。

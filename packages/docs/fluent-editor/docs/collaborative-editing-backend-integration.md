@@ -4,7 +4,7 @@
 
 ## 架构概览
 
-![]()
+![](../public/images/协同编辑后端架构.png)
 
 后端架构遵循清晰的关注点分离原则，包含三个主要组件：
 
@@ -142,7 +142,7 @@ npm install @opentiny/tiny-editor-collaborative-editing-backend
 后端使用环境变量进行配置 (env.ts)：
 
 | 变量 | 默认值 | 描述 |
-| -- | -- | -- | -- |
+| -- | -- | -- |
 | HOST | 0.0.0.0 | 服务器监听接口 |
 | PORT | 1234 | WebSocket 服务器端口 |
 | MONGODB_URL | - | MongoDB 连接字符串 |
@@ -221,8 +221,8 @@ export class CustomPersistence implements Persistence {
 
 设置协同后端后，探索以下相关主题：
 
-- 模块注册和配置 用于集成协同功能
-- 事件系统和钩子 用于处理协同事件
-- 创建自定义模块 用于扩展协同功能
+- [模块注册和配置](./module-registration-and-configuration.md) 用于集成协同功能
+- [事件系统和钩子](../api/event-system-and-hooks.md) 用于处理协同事件
+- [创建自定义模块](./creating-custom-modules.md) 用于扩展协同功能
 
 协同编辑后端为使用 TinyEditor 构建实时协同应用提供了坚实基础，既提供快速部署的简便性，又具备自定义实现的灵活性。

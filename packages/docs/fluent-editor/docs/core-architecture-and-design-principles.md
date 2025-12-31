@@ -167,6 +167,6 @@ TinyEditor 包含**多层测试策略**：
 
 要了解如何实际使用此架构，请继续阅读：
 
-- 理解 TinyEditor 类结构 以获取详细的 API 探索
-- 模块注册和配置 以获取实现指导
-- 创建自定义模块 以获取扩展开发指南
+- [理解 TinyEditor 类结构](./understanding-tiny-editor-class-structure.md) 以获取详细的 API 探索
+- [模块注册和配置](./module-registration-and-configuration.md) 以获取实现指导
+- [创建自定义模块](./creating-custom-modules.md) 以获取扩展开发指南

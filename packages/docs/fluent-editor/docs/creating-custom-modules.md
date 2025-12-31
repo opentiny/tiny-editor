@@ -6,19 +6,7 @@
 
 FluentEditor 扩展了 Quill 的模块系统，采用精密的架构实现自定义功能的无缝集成。核心 FluentEditor 类继承自 Quill，为模块开发提供了基础。
 
-![]()
-
-
-
-
-
-
-
-
-
-
-
-
+![](../public/images/创建自定义模块-模块架构.png)
 
 ## 模块结构模式
 
@@ -382,8 +370,8 @@ export class SimpleCounterModule {
 
 创建自定义模块后，你可能想探索：
 
-- 自定义格式开发 以扩展内容格式
-- 事件系统和钩子 以实现更深度的集成
-- 模块配置选项 以了解高级配置模式
+- [自定义格式开发](./custom-format-development.md) 以扩展内容格式
+- [事件系统和钩子](../api/event-system-and-hooks.md) 以实现更深度的集成
+- [模块配置选项](../api/options.md) 以了解高级配置模式
 
 FluentEditor 的模块化架构为扩展编辑器功能提供了坚实的基础，同时保持代码质量和性能标准。

@@ -6,7 +6,7 @@ FluentEditor 通过模块化架构提供全面的图像和媒体处理功能，�
 
 图像和媒体处理系统由多个相互连接的模块组成：
 
-![]()
+![](../public/images/图片与媒体处理-架构概述.png)
 
 ## 自定义图像模块
 
@@ -82,7 +82,7 @@ FileUploader 类 custom-uploader.ts 提供全面的文件处理：
 
 ### 上传工作流
 
-![]()
+![](../public/images/图片与媒体处理-文件上传系统.png)
 
 ### 文件类型检测
 
@@ -153,7 +153,7 @@ export interface FileValue {
 
 要充分利用媒体处理功能，请探索这些相关主题：
 
-- 模块注册和配置 用于设置媒体模块
-- 剪贴板和粘贴处理 用于媒体粘贴处理
-- 自定义格式开发 用于创建自定义媒体格式
-- FluentEditor API 方法 用于编程媒体操作
+- [模块注册和配置](./module-registration-and-configuration.md) 用于设置媒体模块
+- [剪贴板和粘贴处理](./clipboard-and-paste-processing.md) 用于媒体粘贴处理
+- [自定义格式开发](./custom-format-development.md) 用于创建自定义媒体格式
+- [FluentEditor API 方法](../api/fluent-editor-instance.md) 用于编程媒体操作

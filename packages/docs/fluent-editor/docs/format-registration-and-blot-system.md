@@ -6,18 +6,7 @@ FluentEditor 中的格式注册和 Blot 系统通过 Quill 的 Parchment 框架�
 
 FluentEditor 构建于 Quill 的 blot 系统之上，该系统将所有内容表示为具有关联行为的 DOM 节点。注册过程在编辑器初始化期间进行，并遵循分层模式：
 
-![]()
-
-
-
-
-
-
-
-
-
-
-
+![](../public/images/格式注册核心架构.png)
 
 注册系统集中在主 FluentEditor 类中，所有格式、属性器和模块都通过 true 参数注册，以覆盖默认的 Quill 实现。
 
@@ -120,4 +109,4 @@ FluentEditor.register({
 
 4. 注册两个路径以实现最大兼容性。
 
-格式注册和 Blot 系统为扩展 FluentEditor 功能提供了坚实的基础，同时保持与 Quill 架构的一致性。有关实际实现示例，请参阅自定义格式开发并探索 formats 目录 中的内置格式实现。
+格式注册和 Blot 系统为扩展 FluentEditor 功能提供了坚实的基础，同时保持与 Quill 架构的一致性。有关实际实现示例，请参阅[自定义格式开发](./custom-format-development.md)并探索 formats 目录 中的内置格式实现。

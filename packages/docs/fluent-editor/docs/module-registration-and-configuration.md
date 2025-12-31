@@ -6,14 +6,7 @@ FluentEditor 提供了一个精密的模块系统，在保持与核心架构完�
 
 FluentEditor 的模块系统基于 Quill 的模块注册机制构建，但引入了增强的配置选项和针对富文本编辑场景的专用模块。FluentEditor 类扩展了 Quill 并继承了其模块注册能力。
 
-![]()
-
-
-
-
-
-
-
+![](../public/images/模块注册与配置-模块架构概述.png)
 
 ## 模块注册流程
 
@@ -236,8 +229,8 @@ public destroy() {
 
 理解模块注册和配置后，你可以探索：
 
-- 创建自定义模块 - 学习如何构建自己的模块
-- 模块配置选项 - 所有配置选项的详细参考
-- 理解 FluentEditor 类结构 - 深入了解核心架构
+- [创建自定义模块](./creating-custom-modules.md) - 学习如何构建自己的模块
+- [模块配置选项](../api/options.md) - 所有配置选项的详细参考
+- [理解 FluentEditor 类结构](./understanding-tiny-editor-class-structure.md) - 深入了解核心架构
 
 模块系统为扩展 FluentEditor 的功能提供了灵活的基础，同时保持所有模块之间清晰的关注点分离和一致的 API 模式。

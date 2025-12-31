@@ -44,6 +44,7 @@ TinyEditor 采用多包 monorepo 结构：
 ## 包结构
 
 | 包 | 用途 |
+| -- | -- |
 | fluent-editor	| 核心编辑器库 |
 | docs | 文档和示例 |
 | projects | 演示应用 |
@@ -183,9 +184,9 @@ TinyEditor 通过附加模块扩展 Quill：
 
 完成安装和设置后：
 
-1. 探索 快速入门 了解基本用法示例
-2. 查看 基本用法示例 了解实际实现
-3. 设置你的 开发环境 进行自定义开发
-4. 理解 核心架构 进行高级定制
+1. 探索 [快速入门](./quick-start.md) 了解基本用法示例
+2. 查看 [基本用法示例](./basic-usage-examples.md) 了解实际实现
+3. 设置你的 [开发环境](./development-environment-setup.md) 进行自定义开发
+4. 理解 [核心架构](./core-architecture-and-design-principles.md) 进行高级定制
 
 ![TinyEditor 界面](../public/Tiny-editor-demo.png)

@@ -163,8 +163,8 @@ FluentEditor 通过 `formats/` 目录中定义的自定义 blot 扩展了 Quill 
 
 要继续了解 FluentEditor 的架构，请探索：
 
-- 模块注册和配置 - 了解模块如何配置和初始化
-- 创建自定义模块 - 构建自己的编辑器模块
-- 内置格式扩展 - 详细了解格式系统
+- [模块注册和配置](./module-registration-and-configuration.md) - 了解模块如何配置和初始化
+- [创建自定义模块](./creating-custom-modules.md) - 构建自己的编辑器模块
+- [内置格式扩展](./built-in-format-extensions.md) - 详细了解格式系统
 
 类结构为构建具有广泛自定义功能的富文本编辑体验提供了坚实的基础，同时保持了关注点分离和模块化架构。

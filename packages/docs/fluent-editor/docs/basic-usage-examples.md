@@ -310,9 +310,9 @@ function EditorComponent() {
 
 掌握这些基本使用示例后，你可以探索更多高级功能：
 
-- 核心架构和设计原则 - 了解内部架构
-- 理解 TinyEditor 类结构 - 深入研究核心类
-- 模块注册与配置 - 了解自定义模块
-- TinyEditor API 方法 - 完整 API 参考
+- [核心架构和设计原则](./core-architecture-and-design-principles.md) - 了解内部架构
+- [理解 TinyEditor 类结构](./understanding-tiny-editor-class-structure.md) - 深入研究核心类
+- [模块注册与配置](./module-registration-and-configuration.md) - 了解自定义模块
+- [TinyEditor API 方法](../api/fluent-editor-instance.md) - 完整 API 参考
 
 这些示例为使用 TinyEditor 构建复杂的富文本应用程序提供了基础。从基本设置开始，根据需要逐步添加更复杂的功能。

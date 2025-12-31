@@ -1,6 +1,6 @@
 # 标题列表
 
-在线演示：[标题列表](/docs/demo/header-list)。
+在线演示：[标题列表](/examples/header-list)。
 
 ## 安装
 

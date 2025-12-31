@@ -135,4 +135,4 @@ this.quill.emitter.on(CUSTOM_EVENT, this.handleCustomAction);
 
 协作编辑模块扩展了事件系统以处理实时同步，使用自定义事件进行感知更新和冲突解决。这展示了事件系统在复杂多用户场景中的可扩展性。
 
-有关全面的 API 详细信息和特定事件签名，请参阅 [TinyEditor API 方法](./fluent-editor-instance.md) 文档。要了解模块如何与事件系统集成，请参阅 [模块注册和配置](./options.md)。
+有关全面的 API 详细信息和特定事件签名，请参阅 [TinyEditor API 方法](./fluent-editor-instance.md) 文档。要了解模块如何与事件系统集成，请参阅 [模块注册和配置](../docs/module-registration-and-configuration.md)。

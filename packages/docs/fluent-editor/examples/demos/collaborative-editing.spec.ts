@@ -1,6 +1,6 @@
 import { type Browser, chromium, expect, firefox, type Page, test } from '@playwright/test'
 
-const DEMO_URL = 'http://localhost:5173/tiny-editor/docs/demo/collaborative-editing'
+const DEMO_URL = 'http://localhost:5173/tiny-editor/examples/collaborative-editing'
 
 test.describe.configure({ mode: 'serial' })
 

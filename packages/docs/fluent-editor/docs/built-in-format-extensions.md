@@ -88,4 +88,4 @@ TextIndentStyle attributor 管理段落缩进 text-indent.ts：
 
 这些内置格式扩展在 FluentEditor 初始化时自动注册，无需额外配置即可立即访问增强的格式功能。每个格式设计时都保持与 Quill 标准格式的向后兼容性，同时添加 FluentEditor 特有的功能和样式。
 
-对于希望超越这些内置格式的开发者，下一步是探索 Custom Format Development，其中详细介绍了如何按照这些内置扩展建立的相同架构模式创建自定义 blot formats 和 attributors。
+对于希望超越这些内置格式的开发者，下一步是探索 [Custom Format Development](./custom-format-development.md)，其中详细介绍了如何按照这些内置扩展建立的相同架构模式创建自定义 blot formats 和 attributors。

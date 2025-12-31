@@ -6,7 +6,7 @@ FluentEditor 通过其 CustomClipboard 模块提供了全面的剪贴板和粘�
 
 剪贴板系统围绕 CustomClipboard 类构建，该类继承自 Quill 的基础剪贴板模块，并为各种粘贴场景添加了专门的处理：
 
-![]()
+![](../public/images/剪贴板架构.png)
 
 ## 核心剪贴板操作
 
@@ -181,4 +181,4 @@ const editor = new FluentEditor('#editor', {
 - I18N：提供本地化错误消息和加载指示器
 - 表格操作：粘贴操作期间对表格内容的特殊处理
 
-有关相关功能的更多信息，请参见 图像和媒体处理 和 协作编辑后端集成。
+有关相关功能的更多信息，请参见 [图像和媒体处理](./image-and-media-handling.md) 和 [协作编辑后端集成](./collaborative-editing-backend-integration.md)。

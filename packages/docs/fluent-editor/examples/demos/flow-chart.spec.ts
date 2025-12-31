@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 
 test.describe('FlowChart.vue', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/tiny-editor/docs/demo/flow-chart')
+    await page.goto('http://localhost:5173/tiny-editor/examples/flow-chart')
   })
 
   test('should render the editor', async ({ page }) => {

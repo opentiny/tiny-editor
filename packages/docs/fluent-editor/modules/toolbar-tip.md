@@ -1,6 +1,6 @@
 # 工具栏提示
 
-在线演示：[工具栏提示](/docs/demo/toolbar-tip)。
+在线演示：[工具栏提示](/examples/toolbar-tip)。
 
 ## 安装
 

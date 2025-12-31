@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test'
 test.describe('MindMap.vue', () => {
   test.beforeEach(async ({ page }) => {
     // 根据实际的路由调整这个URL
-    await page.goto('http://localhost:5173/tiny-editor/docs/demo/mind-map')
+    await page.goto('http://localhost:5173/tiny-editor/examples/mind-map')
   })
 
   test('should render the editor', async ({ page }) => {

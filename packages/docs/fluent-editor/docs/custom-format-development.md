@@ -6,40 +6,7 @@ FluentEditor 中的自定义格式开发使开发者能够通过创建自定义�
 
 FluentEditor 基于 Quill 的 blot 系统，其中格式被实现为继承自特定 blot 类型的类。格式系统遵循分层结构，每个格式映射到 HTML 元素并定义内容表示的行为。
 
-![]()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+![](../public/images/格式架构概述.png)
 
 ## 格式类型与用例
 
@@ -260,8 +227,8 @@ static sanitize(value) {
 
 开发完自定义格式后，你需要了解更广泛的注册系统：
 
-- 格式注册与 Blot 系统：深入了解注册过程和 blot 架构
-- 模块注册与配置：了解格式如何与模块系统集成
-- 创建自定义模块：为自定义格式开发支持模块
+- [格式注册与 Blot 系统](./format-registration-and-blot-system.md)：深入了解注册过程和 blot 架构
+- [模块注册与配置](./module-registration-and-configuration.md)：了解格式如何与模块系统集成
+- [创建自定义模块](./creating-custom-modules.md)：为自定义格式开发支持模块
 
 自定义格式系统为扩展 FluentEditor 的功能提供了强大的基础，同时保持与现有架构的一致性。

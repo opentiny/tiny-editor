@@ -36,7 +36,7 @@ const toolbar = quill.getModule('toolbar')
 const i18n = quill.getModule('i18n')
 ```
 
-- 参考[国际化](/docs/demo/i18n)
+- 参考[国际化](/examples/i18n)
 
 ## getContents
 
@@ -60,7 +60,7 @@ index 和 length 分别是内容的索引和长度，表示想要获取哪段内
 const delta = editor.getContents()
 ```
 
-- 参考[获取内容](/docs/demo/get-content)
+- 参考[获取内容](/examples/get-content)
 
 ## setContents
 
@@ -88,6 +88,6 @@ editor.setContents([
 ])
 ```
 
-- 参考[内容初始化](/docs/demo/set-content)
+- 参考[内容初始化](/examples/set-content)
 
 更多实例方法请参考 Quill 官方文档：[https://quilljs.com/docs/api](https://quilljs.com/docs/api)。

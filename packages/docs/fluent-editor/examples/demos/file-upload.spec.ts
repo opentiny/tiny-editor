@@ -7,7 +7,7 @@ const currentDirectory = path.dirname(__filename)
 const baseUrl = path.dirname(currentDirectory)
 
 test('image-upload', async ({ page }) => {
-  await page.goto('http://localhost:5173/tiny-editor/docs/demo/file-upload')
+  await page.goto('http://localhost:5173/tiny-editor/examples/file-upload')
 
   // upload
   await page.getByLabel('image').first().click()
