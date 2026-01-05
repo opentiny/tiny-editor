@@ -24,7 +24,7 @@ delete packagejson.scripts
 delete packagejson.devDependencies
 fs.writeFileSync(targetFile, `${JSON.stringify(packagejson, null, 2)}\n`)
 
-let defaultVersion = packagejson.version
+const defaultVersion = packagejson.version
 let newVersion = defaultVersion
 
 // 从命令行参数中取版本号

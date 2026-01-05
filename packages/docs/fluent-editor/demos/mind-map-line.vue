@@ -7,13 +7,13 @@ const editorRef = ref<HTMLElement>()
 
 onMounted(async () => {
   const [
-      { default: FluentEditor, DEFAULT_TOOLBAR },
-      { default: SimpleMindMap },
-      { default: Drag },
-      { default: Export },
-      { default: Themes },
-      { default: nodeIconList },
-    ]  = await Promise.all([
+    { default: FluentEditor, DEFAULT_TOOLBAR },
+    { default: SimpleMindMap },
+    { default: Drag },
+    { default: Export },
+    { default: Themes },
+    { default: nodeIconList },
+  ] = await Promise.all([
     import('@opentiny/fluent-editor'),
     import('simple-mind-map'),
     import('simple-mind-map/src/plugins/Drag.js'),
@@ -21,7 +21,7 @@ onMounted(async () => {
     import('simple-mind-map-plugin-themes'),
     import('simple-mind-map/src/svg/icons'),
   ])
-  
+
   if (!editorRef.value) return
   editor = new FluentEditor(editorRef.value, {
     theme: 'snow',

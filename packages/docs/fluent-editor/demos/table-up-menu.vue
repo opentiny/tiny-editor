@@ -18,7 +18,7 @@ onMounted(async () => {
     import('@opentiny/fluent-editor'),
     import('quill-table-up'),
   ])
-  
+
   FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)
   if (editorSelectRef.value) {
     editorSelect = new FluentEditor(editorSelectRef.value, {

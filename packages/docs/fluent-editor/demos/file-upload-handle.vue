@@ -11,9 +11,9 @@ const editorRef = ref<HTMLElement>()
 onMounted(async () => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
   const [
-      { default: FluentEditor, generateTableUp, DEFAULT_TOOLBAR },
-      { defaultCustomSelect, TableMenuContextmenu, TableSelection, TableUp },
-    ] = await Promise.all([
+    { default: FluentEditor, generateTableUp, DEFAULT_TOOLBAR },
+    { defaultCustomSelect, TableMenuContextmenu, TableSelection, TableUp },
+  ] = await Promise.all([
     import('@opentiny/fluent-editor'),
     import('quill-table-up'),
   ])

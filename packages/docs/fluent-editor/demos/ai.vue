@@ -14,7 +14,7 @@ onMounted(async () => {
       toolbar: {
         container: [
           ['ai'],
-          ...DEFAULT_TOOLBAR
+          ...DEFAULT_TOOLBAR,
         ],
       },
       ai: {
