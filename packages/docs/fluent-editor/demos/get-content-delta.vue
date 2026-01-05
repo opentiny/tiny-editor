@@ -57,11 +57,11 @@ onMounted(async () => {
   editor = new FluentEditor('#editor-get-content-delta', {
     theme: 'snow',
     modules: {
-      toolbar: FULL_TOOLBAR,
-      syntax: { hljs },
-      emoji: true,
-      file: true,
-      mention: {
+      'toolbar': FULL_TOOLBAR,
+      'syntax': { hljs },
+      'emoji': true,
+      'file': true,
+      'mention': {
         itemKey: 'cn',
         searchKey,
         search(term) {

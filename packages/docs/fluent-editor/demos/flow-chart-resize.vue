@@ -9,15 +9,15 @@ const editorRef = ref<HTMLElement>()
 
 onMounted(async () => {
   const [
-      { default: FluentEditor, DEFAULT_TOOLBAR },
-      { default: LogicFlow },
-      { DndPanel, SelectionSelect, Snapshot },
-    ] = await Promise.all([
+    { default: FluentEditor, DEFAULT_TOOLBAR },
+    { default: LogicFlow },
+    { DndPanel, SelectionSelect, Snapshot },
+  ] = await Promise.all([
     import('@opentiny/fluent-editor'),
     import('@logicflow/core'),
     import('@logicflow/extension'),
   ])
-  
+
   if (!editorRef.value) return
   editor = new FluentEditor(editorRef.value, {
     theme: 'snow',

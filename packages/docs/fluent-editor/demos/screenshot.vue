@@ -18,7 +18,7 @@ onMounted(async () => {
     modules: {
       toolbar: [
         ...DEFAULT_TOOLBAR,
-        ['screenshot'], 
+        ['screenshot'],
       ],
     },
     screenshot: {},
