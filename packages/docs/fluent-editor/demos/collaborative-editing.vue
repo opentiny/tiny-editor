@@ -26,15 +26,15 @@ const CURSOR_CLASSES = {
 
 onMounted(async () => {
   const [
-      { default: FluentEditor, generateTableUp, CollaborationModule, FULL_TOOLBAR },
-      { defaultCustomSelect, TableMenuContextmenu, TableSelection, TableUp },
-      Y,
-      { Awareness },
-      { QuillBinding },
-      { WebsocketProvider },
-      { IndexeddbPersistence },
-      { default: QuillCursors },
-    ] = await Promise.all([
+    { default: FluentEditor, generateTableUp, CollaborationModule, FULL_TOOLBAR },
+    { defaultCustomSelect, TableMenuContextmenu, TableSelection, TableUp },
+    Y,
+    { Awareness },
+    { QuillBinding },
+    { WebsocketProvider },
+    { IndexeddbPersistence },
+    { default: QuillCursors },
+  ] = await Promise.all([
     import('@opentiny/fluent-editor'),
     import('quill-table-up'),
     import('yjs'),
@@ -93,7 +93,7 @@ onMounted(async () => {
         provider: {
           type: 'websocket',
           options: {
-            serverUrl: 'wss://120.26.92.145:1234',
+            serverUrl: 'wss://ai.opentiny.design/tiny-editor/',
             roomName: ROOM_NAME,
           },
         },

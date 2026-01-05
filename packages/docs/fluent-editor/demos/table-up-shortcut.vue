@@ -20,7 +20,7 @@ onMounted(async () => {
     import('@opentiny/fluent-editor'),
     import('quill-table-up'),
   ])
-  
+
   FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)
   const { tableUpConfig, tableUpKeyboardControl } = generateTableUpShortKeyMenu(createSelectBox)
   tableUpConfig.title = '_i18n"table"'

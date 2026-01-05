@@ -13,7 +13,7 @@ onMounted(async () => {
     import('@opentiny/fluent-editor'),
     import('quill-header-list'),
   ])
-  
+
   if (!editorRef.value) return
   FluentEditor.register({ 'modules/header-list': HeaderList }, true)
 

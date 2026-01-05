@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, renameSync } from 'node:fs'
-import path, { resolve } from 'node:path'
+import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 
@@ -55,7 +55,7 @@ export default defineConfig({
         ]
         for (const source of targets) {
           if (existsSync(source)) {
-            let destination = resolve(__dirname, 'dist/style.css')
+            const destination = resolve(__dirname, 'dist/style.css')
             renameSync(source, destination)
           }
         }
