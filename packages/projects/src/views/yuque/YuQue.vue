@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import FluentEditor, { CollaborationModule, generateTableUp, generateTableUpShortKeyMenu } from '@opentiny/fluent-editor'
+import QuillCursors from 'quill-cursors'
 import HeaderList from 'quill-header-list'
 import { createSelectBox, defaultCustomSelect, TableMenuContextmenu, TableResizeLine, TableResizeScale, TableSelection, TableUp } from 'quill-table-up'
-import { onMounted, ref } from 'vue'
 
-// 协同编辑
-import * as Y from 'yjs'
+import { onMounted, ref } from 'vue'
 import { IndexeddbPersistence } from 'y-indexeddb'
 import { Awareness } from 'y-protocols/awareness'
 import { QuillBinding } from 'y-quill'
 import { WebsocketProvider } from 'y-websocket'
-import QuillCursors from 'quill-cursors'
+// 协同编辑
+import * as Y from 'yjs'
 
 FluentEditor.register({ 'modules/header-list': HeaderList }, true)
 FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)
