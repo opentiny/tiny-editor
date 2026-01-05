@@ -9,6 +9,15 @@ import Themes from 'simple-mind-map-plugin-themes'
 import Drag from 'simple-mind-map/src/plugins/Drag.js'
 import Export from 'simple-mind-map/src/plugins/Export.js'
 import { nodeIconList } from 'simple-mind-map/src/svg/icons'
+
+// 协同编辑
+import * as Y from 'yjs'
+import { Awareness } from 'y-protocols/awareness'
+import { QuillBinding } from 'y-quill'
+import { WebsocketProvider } from 'y-websocket'
+import { IndexeddbPersistence } from 'y-indexeddb'
+import QuillCursors from 'quill-cursors'
+
 import { onMounted, ref } from 'vue'
 import '@logicflow/core/lib/style/index.css'
 import '@logicflow/extension/lib/style/index.css'
@@ -160,10 +169,18 @@ onMounted(() => {
         },
       },
       'collaborative-editing': {
+        deps: {
+          Y,
+          Awareness,
+          QuillBinding,
+          QuillCursors,
+          WebsocketProvider,
+          IndexeddbPersistence,
+        },
         provider: {
           type: 'websocket',
           options: {
-            serverUrl: 'wss://120.26.92.145:1234',
+            serverUrl: 'wss://ai.opentiny.design/tiny-editor/',
             roomName: ROOM_NAME,
           },
         },

@@ -93,7 +93,7 @@ onMounted(async () => {
         provider: {
           type: 'websocket',
           options: {
-            serverUrl: 'wss://120.26.92.145:1234',
+            serverUrl: 'wss://ai.opentiny.design/tiny-editor/',
             roomName: ROOM_NAME,
           },
         },
