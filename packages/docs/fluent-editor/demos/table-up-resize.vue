@@ -43,7 +43,10 @@ onMounted(async () => {
     editorLine = new FluentEditor(editorLineRef.value, {
       theme: 'snow',
       modules: {
-        'toolbar': TOOLBAR_CONFIG,
+        'toolbar': [
+          ...DEFAULT_TOOLBAR,
+          [{ 'table-up': [] }],
+        ],
         'table-up': {
           customSelect: defaultCustomSelect,
           modules: [
@@ -57,7 +60,10 @@ onMounted(async () => {
     editorScale = new FluentEditor(editorScaleRef.value, {
       theme: 'snow',
       modules: {
-        'toolbar': TOOLBAR_CONFIG,
+        'toolbar': [
+          ...DEFAULT_TOOLBAR,
+          [{ 'table-up': [] }],
+        ],
         'table-up': {
           customSelect: defaultCustomSelect,
           modules: [

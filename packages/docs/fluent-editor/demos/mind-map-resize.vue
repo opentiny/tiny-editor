@@ -5,14 +5,6 @@ import { onMounted, ref } from 'vue'
 let editor: FluentEditor
 const editorRef = ref<HTMLElement>()
 
-const TOOLBAR_CONFIG = [
-  [{ header: [] }],
-  ['bold', 'italic', 'underline', 'link'],
-  [{ align: [] }, { list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
-  ['clean'],
-  ['mind-map'],
-]
-
 onMounted(async () => {
   const [
     { default: FluentEditor, DEFAULT_TOOLBAR },
