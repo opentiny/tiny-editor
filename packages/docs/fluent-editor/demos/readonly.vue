@@ -22,5 +22,7 @@ onMounted(() => {
 <template>
   <div id="editor-readonly">
     <p>Hello <strong>TinyEditor</strong>!</p>
+    <p>官网: <a href="https://opentiny.github.io/tiny-editor" target="_blank">https://opentiny.github.io/tiny-editor</a></p>
+    <p>GitHub: <a href="https://github.com/opentiny/tiny-editor" target="_blank">https://github.com/opentiny/tiny-editor</a></p>
   </div>
 </template>
