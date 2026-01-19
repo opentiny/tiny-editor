@@ -19,7 +19,7 @@ export class FileModule {
     const target = event.target as HTMLElement
     const fileDom = target.closest('a.ql-file-item')
     const fileBar = target.closest('.ql-file-bar')
-    
+
     if (fileDom) {
       event.preventDefault()
       if (this.fileBar) {
