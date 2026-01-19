@@ -19,16 +19,19 @@ class FileModule extends Module {
   }
 
   clickEvent(event) {
-    event.preventDefault()
     const target = event.target
     const fileDom = target.closest('a.ql-file-item')
+    const fileBar = target.closest('.ql-file-bar')
+
     if (fileDom) {
+      event.preventDefault()
       if (this.fileBar) {
         this.fileBar.destroy()
       }
       this.fileBar = new FileBar(this.quill, fileDom)
     }
-    else if (this.fileBar && !target.closest('.ql-file-bar')) {
+    else if (this.fileBar && !fileBar) {
+      event.preventDefault()
       this.fileBar.destroy()
       this.fileBar = null
     }
