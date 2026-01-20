@@ -1,7 +1,13 @@
 export function sidebar() {
   return [
-    { text: '快速开始', link: '/docs/quick-start' },
-    { text: '在前端框架中使用', link: '/docs/used-in-framework' },
+    {
+      text: '基础',
+      items: [
+        { text: '快速开始', link: '/docs/quick-start' },
+        { text: '在前端框架中使用', link: '/docs/used-in-framework' },
+        { text: '封装成组件', link: '/docs/componentize' },
+      ],
+    },
     {
       text: '使用示例',
       items: [
