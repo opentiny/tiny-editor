@@ -41,7 +41,18 @@ export class FileUploader extends Uploader {
   }
 
   validateFile(file: File) {
-    return this.options.mimetypes.some(type => (file.type || 'text/plain').match(type.replaceAll('*', '.*'))) && file.size < this.options.maxSize
+    const mimeOk = this.options.mimetypes.some((type) => {
+      // 简单区分：带 '/' 的按 MIME，其他按后缀
+      if (type.includes('/')) {
+        return (file.type || 'text/plain').match(type.replaceAll('*', '.*'))
+      }
+      else {
+        // 按文件名后缀匹配，例如 'png' / '.png'
+        const ext = type.startsWith('.') ? type.toLowerCase() : `.${type.toLowerCase()}`
+        return file.name.toLowerCase().endsWith(ext)
+      }
+    })
+    return mimeOk && file.size < this.options.maxSize
   }
 
   async getFileUrls(files: File[], range: Range) {

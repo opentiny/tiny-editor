@@ -22,13 +22,13 @@
 
 ## Options
 
-| 名称      | 类型                                                                                           | 说明                                      | 默认值     |
-| --------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------- | ---------- |
-| mimetypes | `string[]`                                                                                     | 允许上传文件的 mimetype                   | `['*']`    |
-| maxSize   | `number`                                                                                       | 文件最大字节限制                          | `Infinity` |
-| handler   | `(this: { quill: FluentEditor }, range: Range, files: File[]) => Promise<(string \| false)[]>` | 文件上传触发回调，返回值为文件路径        | -          |
-| success   | `(this: { quill: FluentEditor }, file: File, range: Range) => void`                            | 针对 handler 单个返回结果成功后执行的回调 | -          |
-| fail      | `(this: { quill: FluentEditor }, file: File, range: Range) => void`                            | 针对 handler 单个返回结果失败后执行的回调 | -          |
+| 名称      | 类型                                                                                           | 说明                                                                        | 默认值     |
+| --------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ---------- |
+| mimetypes | `string[]`                                                                                     | 允许上传文件的 mimetype，支持单个 MIME type、模糊匹配子类型和后缀名三种格式 | `['*']`    |
+| maxSize   | `number`                                                                                       | 文件最大字节(byte)限制                                                      | `Infinity` |
+| handler   | `(this: { quill: FluentEditor }, range: Range, files: File[]) => Promise<(string \| false)[]>` | 文件上传触发回调，返回值为文件路径                                          | -          |
+| success   | `(this: { quill: FluentEditor }, file: File, range: Range) => void`                            | 针对 handler 单个返回结果成功后执行的回调                                   | -          |
+| fail      | `(this: { quill: FluentEditor }, file: File, range: Range) => void`                            | 针对 handler 单个返回结果失败后执行的回调                                   | -          |
 
 > 上传文件被 `mimetypes` 或 `maxSize` 筛选而上传失败的文件不会出现在 `handler` 回调参数中。
 > 若文件是被`mimetypes` 或 `maxSize` 筛选而上传失败，fail 回调中的 `range` 则为上传初始位置，而不是上传失败的位置。
