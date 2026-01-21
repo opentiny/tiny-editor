@@ -17,7 +17,7 @@ export function inputFile(type: 'image' | 'video' | 'file', accept: string[]) {
     fileInput.setAttribute('multiple', '')
     fileInput.addEventListener('change', () => {
       const range = this.quill.getSelection(true)
-      this.quill.uploader.upload(range, fileInput.files)
+      this.quill.uploader.upload(range, fileInput.files, type)
       fileInput.value = ''
     })
     this.container.appendChild(fileInput)

@@ -7,12 +7,20 @@ import { isString } from '../utils/is'
 const Uploader = Quill.import('modules/uploader') as typeof TypeUploader
 const Delta = Quill.import('delta')
 
+export type UploadKind = 'image' | 'video' | 'file'
+export type MimeTypesConfig = string[] | Partial<Record<UploadKind, string[]>>
+
 interface UploaderOptions {
   mimetypes: string[]
   handler: (this: { quill: Quill }, range: Range, files: File[]) => void
 }
 export interface FileUploaderOptions {
-  mimetypes: string[]
+  /**
+   * 支持单个 MIME type、模糊匹配子类型和后缀名三种格式
+   * - 全局配置：`string[]`
+   * - 根据文件/图片/视频单独配置：`{ file?: string[]; image?: string[]; video?: string[] }`
+   */
+  mimetypes: MimeTypesConfig
   maxSize: number
   handler: (this: { quill: FluentEditor }, range: Range, files: File[]) => Promise<(string | false)[]> | (string | false)[]
   success: (this: { quill: FluentEditor }, file: File, range: Range) => void
@@ -40,8 +48,38 @@ export class FileUploader extends Uploader {
     }, options)
   }
 
-  validateFile(file: File) {
-    const mimeOk = this.options.mimetypes.some((type) => {
+  private inferKind(file: File): UploadKind {
+    const type = file.type || ''
+    if (type.startsWith('image/')) return 'image'
+    if (type.startsWith('video/')) return 'video'
+    return 'file'
+  }
+
+  private filterFromArray(types: string[], kind: UploadKind): string[] {
+    if (kind === 'file') return types
+    const prefix = `${kind}/`
+    return types.filter((type) => {
+      if (type === '*') return true
+      if (type.includes('/')) return type.startsWith(prefix)
+      return true
+    })
+  }
+
+  getAccept(kind: UploadKind): string[] {
+    const mimetypes = this.options.mimetypes
+    if (Array.isArray(mimetypes)) {
+      return this.filterFromArray(mimetypes, kind)
+    }
+    const map = mimetypes || {}
+    const fromKind = map[kind]
+    if (fromKind?.length) return fromKind
+    if (map.file?.length && kind !== 'file') return map.file
+    return []
+  }
+
+  validateFile(file: File, kind?: UploadKind) {
+    const accept = this.getAccept(kind ?? this.inferKind(file))
+    const mimeOk = accept.some((type) => {
       // 简单区分：带 '/' 的按 MIME，其他按后缀
       if (type.includes('/')) {
         return (file.type || 'text/plain').match(type.replaceAll('*', '.*'))
@@ -55,17 +93,17 @@ export class FileUploader extends Uploader {
     return mimeOk && file.size < this.options.maxSize
   }
 
-  async getFileUrls(files: File[], range: Range) {
-    const uploads = files.filter(file => this.validateFile(file))
+  async getFileUrls(files: File[], range: Range, kind?: UploadKind) {
+    const uploads = files.filter(file => this.validateFile(file, kind))
     return this.options.handler.call(this, range, uploads)
   }
 
-  async upload(range: Range, files: FileList | File[]) {
+  async upload(range: Range, files: FileList | File[], kind?: UploadKind) {
     const uploads = []
     const fails = []
 
     for (const file of Array.from(files)) {
-      if (this.validateFile(file)) {
+      if (this.validateFile(file, kind)) {
         uploads.push(file)
       }
       else {
