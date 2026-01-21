@@ -29,6 +29,7 @@ onMounted(async () => {
 
   editor = new FluentEditor(editorRef.value, {
     theme: 'snow',
+    placeholder: '请输入内容...',
     modules: {
       toolbar,
       file: true,

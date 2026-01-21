@@ -27,8 +27,9 @@ export class ShortCutKey extends QuillShortcutKey {
 
   resolveOptions(options: Partial<ShortCutKeyInputOptions>) {
     const defaultMenuItems = this.defaultMenuList()
+    const placeholder = this.quill.options.placeholder ? this.quill.options.placeholder : this.quill.getLangText('input-recall-menu-placeholder')
     const value: ShortCutKeyOptions = Object.assign({
-      placeholder: this.quill.getLangText('input-recall-menu-placeholder'),
+      placeholder,
       menuItems: defaultMenuItems,
       isMenuItemsAdd: false,
       menuKeyboardControls: () => false,
