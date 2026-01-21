@@ -17,6 +17,16 @@ onMounted(async () => {
         ...DEFAULT_TOOLBAR,
         ['file', 'image', 'video'],
       ],
+      uploader: {
+        // 支持单个 MIME type、模糊匹配子类型和后缀名三种格式
+        mimetypes: [
+          'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          'image/*',
+          '.txt',
+          '.zip',
+        ],
+      },
     },
   })
 })
