@@ -42,21 +42,15 @@ OriginSnowTheme.DEFAULTS = {
           this.quill.history.redo()
         },
         'file': function () {
-          const accept = this.quill.uploader.options.mimetypes
+          const accept = (this.quill as FluentEditor).uploader.getAccept('file')
           inputFile.call(this, 'file', accept)
         },
         'image': function () {
-          const accept = (this.quill as FluentEditor).uploader.options.mimetypes.filter((type) => {
-            if (type === '*') return 'image/*'
-            return type.startsWith('image/')
-          })
+          const accept = (this.quill as FluentEditor).uploader.getAccept('image')
           inputFile.call(this, 'image', accept)
         },
         'video': function () {
-          const accept = (this.quill as FluentEditor).uploader.options.mimetypes.filter((type) => {
-            if (type === '*') return 'video/*'
-            return type.startsWith('video/')
-          })
+          const accept = (this.quill as FluentEditor).uploader.getAccept('video')
           inputFile.call(this, 'video', accept)
         },
         'ai': function () {},

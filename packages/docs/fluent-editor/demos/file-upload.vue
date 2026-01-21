@@ -18,14 +18,18 @@ onMounted(async () => {
         ['file', 'image', 'video'],
       ],
       uploader: {
+        // 按工具按钮区分 file / image / video
         // 支持单个 MIME type、模糊匹配子类型和后缀名三种格式
-        mimetypes: [
-          'application/msword',
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-          'image/*',
-          '.txt',
-          '.zip',
-        ],
+        mimetypes: {
+          file: [
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            '.txt',
+            '.zip',
+          ],
+          image: ['image/*', '.png', '.jpg', '.jpeg', '.gif', '.webp'],
+          video: ['video/*', '.mp4', '.webm'],
+        },
       },
     },
   })
