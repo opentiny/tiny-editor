@@ -77,7 +77,7 @@ OriginSnowTheme.DEFAULTS = {
         },
       },
     },
-    'shortcut-key': true,
+    'shortcut-key': false,
     'file': true,
   },
 }

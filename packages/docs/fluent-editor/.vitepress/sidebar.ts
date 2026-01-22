@@ -20,6 +20,7 @@ export function sidebar() {
         { text: '代码块高亮', link: '/docs/demo/code-block-highlight' },
         { text: '表格', link: '/docs/demo/table-up' },
         { text: '@提醒', link: '/docs/demo/mention' },
+        { text: '快捷菜单', link: '/docs/demo/shortcut-key' },
         { text: '插入表情', link: '/docs/demo/emoji' },
         { text: '格式刷', link: '/docs/demo/format-painter' },
         { text: '公式', link: '/docs/demo/formula' },
