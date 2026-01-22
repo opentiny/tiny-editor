@@ -1,5 +1,5 @@
 @mixin linkTooltip {
-  #editor {
+  .ql-snow {
     .ql-tooltip {
       position: absolute;
       transform: translateY(10px);
@@ -9,6 +9,7 @@
       color: #252b3a;
       padding: 5px 3px;
       white-space: nowrap;
+      z-index: 1;
 
       &[data-mode='link']::before {
         content: none;
@@ -25,7 +26,7 @@
 
         a.ql-remove,
         a.ql-preview {
-          display: inline-block;
+          display: inline-block !important;
 
           &::before {
             content: none;
@@ -49,7 +50,7 @@
         width: 1px;
         height: 16px;
         line-height: 16px;
-        margin: 6px 4px;
+        margin: 6px 4px 6px 12px;
         border-left: 1px solid #adb0b8;
         display: inline-block;
         vertical-align: bottom;
