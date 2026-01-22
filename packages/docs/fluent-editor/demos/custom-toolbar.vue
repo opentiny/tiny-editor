@@ -10,7 +10,6 @@ import { onMounted, ref } from 'vue'
 import 'highlight.js/styles/atom-one-dark.css'
 import 'katex/dist/katex.min.css'
 
-window.hljs = hljs
 window.katex = katex
 window.Html2Canvas = Html2Canvas
 
@@ -34,7 +33,9 @@ onMounted(async () => {
       toolbar,
       file: true,
       emoji: true,
-      syntax: true,
+      syntax: {
+        hljs,
+      },
     },
   })
 })
