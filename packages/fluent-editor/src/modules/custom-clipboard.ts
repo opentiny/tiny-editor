@@ -161,8 +161,10 @@ export class CustomClipboard extends Clipboard {
 
       setTimeout(() => {
         this.quill.updateContents(delta, Quill.sources.USER)
+        // 光标位置应该在粘贴内容之后：原光标位置 + 粘贴内容长度
+        const newSelectionIndex = linePos.index + (pastedContent.length ? pastedContent.length() : 0)
         this.quill.setSelection(
-          delta.length() - linePos.length - linePos.fix,
+          newSelectionIndex,
           Quill.sources.SILENT,
         )
         this.quill.scrollSelectionIntoView()
@@ -390,6 +392,10 @@ export class CustomClipboard extends Clipboard {
       }
       if (typeof op.insert === 'string') {
         length += op.insert.length
+      }
+      else if (typeof op.insert === 'object') {
+        // 对于图片、提及等对象类型的 insert，长度为 1
+        length += 1
       }
       return true
     })
