@@ -22,8 +22,8 @@ onMounted(async () => {
         // 支持单个 MIME type、模糊匹配子类型和后缀名三种格式
         mimetypes: {
           file: [
-            'application/msword',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/msword', // .doc
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
             '.txt',
             '.zip',
           ],
@@ -34,6 +34,11 @@ onMounted(async () => {
           file: 5 * 1024 * 1024, // 5 MB
           image: 100 * 1024, // 100 KB
           video: 10 * 1024 * 1024, // 10 MB
+        },
+        multiple: {
+          file: false,
+          image: true,
+          video: false,
         },
       },
     },
