@@ -14,7 +14,10 @@ export function inputFile(type: 'image' | 'video' | 'file', accept: string[]) {
     fileInput.classList.add(`ql-${type}`)
     fileInput.setAttribute('type', 'file')
     fileInput.setAttribute('accept', accept.map(mime => mime === '*' ? `${type}/*` : mime).join(','))
-    fileInput.setAttribute('multiple', '')
+    const multiple = this.quill.uploader.getMultiple(type)
+    if (multiple) {
+      fileInput.setAttribute('multiple', '')
+    }
     fileInput.addEventListener('change', () => {
       const range = this.quill.getSelection(true)
       this.quill.uploader.upload(range, fileInput.files, type)

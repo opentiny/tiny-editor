@@ -10,6 +10,7 @@ const Delta = Quill.import('delta')
 export type UploadKind = 'image' | 'video' | 'file'
 export type MimeTypesConfig = string[] | Partial<Record<UploadKind, string[]>>
 export type MaxSizeConfig = number | Partial<Record<UploadKind, number>>
+export type MultipleConfig = boolean | Partial<Record<UploadKind, boolean>>
 
 interface UploaderOptions {
   mimetypes: string[]
@@ -28,6 +29,12 @@ export interface FileUploaderOptions {
    * - 根据文件/图片/视频单独配置：`{ file?: number; image?: number; video?: number }`
    */
   maxSize: MaxSizeConfig
+  /**
+   * 是否允许多选文件
+   * - 全局配置：`boolean`
+   * - 根据文件/图片/视频单独配置：`{ file?: boolean; image?: boolean; video?: boolean }`
+   */
+  multiple: MultipleConfig
   handler: (this: { quill: FluentEditor }, range: Range, files: File[]) => Promise<(string | false)[]> | (string | false)[]
   success: (this: { quill: FluentEditor }, file: File, range: Range) => void
   fail: (this: { quill: FluentEditor }, file: File, range: Range) => void
@@ -46,6 +53,7 @@ export class FileUploader extends Uploader {
     return Object.assign({
       mimetypes: ['*'],
       maxSize: Number.POSITIVE_INFINITY,
+      multiple: true,
       handler(range: Range, files: File[]) {
         return files.map(file => URL.createObjectURL(file))
       },
@@ -93,6 +101,18 @@ export class FileUploader extends Uploader {
     if (typeof fromKind === 'number') return fromKind
     if (typeof map.file === 'number' && kind !== 'file') return map.file
     return Number.POSITIVE_INFINITY
+  }
+
+  getMultiple(kind: UploadKind): boolean {
+    const multiple = this.options.multiple
+    if (typeof multiple === 'boolean') {
+      return multiple
+    }
+    const map = multiple || {}
+    const fromKind = map[kind]
+    if (typeof fromKind === 'boolean') return fromKind
+    if (typeof map.file === 'boolean' && kind !== 'file') return map.file
+    return true
   }
 
   validateFile(file: File, kind?: UploadKind) {
