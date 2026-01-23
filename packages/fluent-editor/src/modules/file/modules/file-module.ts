@@ -22,6 +22,10 @@ export class FileModule {
 
     if (fileDom) {
       event.preventDefault()
+      // 在只读模式下不显示 file-bar
+      if (!this.quill.isEnabled()) {
+        return
+      }
       if (this.fileBar) {
         this.fileBar.destroy()
       }
