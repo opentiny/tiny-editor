@@ -9,6 +9,7 @@ const Delta = Quill.import('delta')
 
 export type UploadKind = 'image' | 'video' | 'file'
 export type MimeTypesConfig = string[] | Partial<Record<UploadKind, string[]>>
+export type MaxSizeConfig = number | Partial<Record<UploadKind, number>>
 
 interface UploaderOptions {
   mimetypes: string[]
@@ -21,7 +22,12 @@ export interface FileUploaderOptions {
    * - 根据文件/图片/视频单独配置：`{ file?: string[]; image?: string[]; video?: string[] }`
    */
   mimetypes: MimeTypesConfig
-  maxSize: number
+  /**
+   * 最大文件大小限制（字节）
+   * - 全局配置：`number`
+   * - 根据文件/图片/视频单独配置：`{ file?: number; image?: number; video?: number }`
+   */
+  maxSize: MaxSizeConfig
   handler: (this: { quill: FluentEditor }, range: Range, files: File[]) => Promise<(string | false)[]> | (string | false)[]
   success: (this: { quill: FluentEditor }, file: File, range: Range) => void
   fail: (this: { quill: FluentEditor }, file: File, range: Range) => void
@@ -77,8 +83,22 @@ export class FileUploader extends Uploader {
     return []
   }
 
+  getMaxSize(kind: UploadKind): number {
+    const maxSize = this.options.maxSize
+    if (typeof maxSize === 'number') {
+      return maxSize
+    }
+    const map = maxSize || {}
+    const fromKind = map[kind]
+    if (typeof fromKind === 'number') return fromKind
+    if (typeof map.file === 'number' && kind !== 'file') return map.file
+    return Number.POSITIVE_INFINITY
+  }
+
   validateFile(file: File, kind?: UploadKind) {
-    const accept = this.getAccept(kind ?? this.inferKind(file))
+    const inferredKind = kind ?? this.inferKind(file)
+    const accept = this.getAccept(inferredKind)
+    const maxSize = this.getMaxSize(inferredKind)
     const mimeOk = accept.some((type) => {
       // 简单区分：带 '/' 的按 MIME，其他按后缀
       if (type.includes('/')) {
@@ -90,7 +110,7 @@ export class FileUploader extends Uploader {
         return file.name.toLowerCase().endsWith(ext)
       }
     })
-    return mimeOk && file.size < this.options.maxSize
+    return mimeOk && file.size < maxSize
   }
 
   async getFileUrls(files: File[], range: Range, kind?: UploadKind) {
