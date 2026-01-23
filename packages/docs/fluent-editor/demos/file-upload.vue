@@ -30,6 +30,11 @@ onMounted(async () => {
           image: ['image/*', '.png', '.jpg', '.jpeg', '.gif', '.webp'],
           video: ['video/*', '.mp4', '.webm'],
         },
+        maxSize: {
+          file: 5 * 1024 * 1024, // 5 MB
+          image: 100 * 1024, // 100 KB
+          video: 10 * 1024 * 1024, // 10 MB
+        },
       },
     },
   })
@@ -38,4 +43,5 @@ onMounted(async () => {
 
 <template>
   <div ref="editorRef" />
+  <br>
 </template>
