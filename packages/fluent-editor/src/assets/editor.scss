@@ -3,6 +3,18 @@
 @use './tasklist';
 
 @mixin editor {
+  .ql-container {
+    font-family:
+      PingFang SC,
+      Hiragino Sans GB,
+      Microsoft YaHei,
+      Helvetica Neue,
+      Helvetica,
+      Arial,
+      sans-serif,
+      Segoe UI !important;
+  }
+
   .ql-container.ql-snow {
     background-color: getCssVar(editor-bg-color);
   }
@@ -12,7 +24,9 @@
     font-size: $defaultFontSize;
 
     &.ql-blank::before {
+      top: 16px;
       color: #8a8e99;
+      content: attr(data-placeholder) !important;
     }
 
     h1,
