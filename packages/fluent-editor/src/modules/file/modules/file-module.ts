@@ -22,8 +22,9 @@ export class FileModule {
 
     if (fileDom) {
       event.preventDefault()
-      // 在只读模式下不显示 file-bar
+      // 在只读模式下直接下载文件
       if (!this.quill.isEnabled()) {
+        this.downloadFile(fileDom)
         return
       }
       if (this.fileBar) {
@@ -35,6 +36,22 @@ export class FileModule {
       event.preventDefault()
       this.fileBar.destroy()
       this.fileBar = null
+    }
+  }
+
+  downloadFile(fileDom: HTMLElement) {
+    const fileName = fileDom.dataset.title || ''
+    const fileDownloadUrl = fileDom.getAttribute('href') || ''
+    if (fileDownloadUrl) {
+      const a = document.createElement('a')
+      a.href = fileDownloadUrl
+      a.target = '_blank'
+      a.id = 'exppub'
+      a.download = fileName
+      document.body.appendChild(a)
+      const alink = document.getElementById('exppub')
+      alink?.click()
+      alink?.parentNode?.removeChild(a)
     }
   }
 }
