@@ -1,0 +1,71 @@
+/**
+ * 图片预览样式
+ */
+
+/* 预览遮罩层 */
+.image-preview-overlay {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* 预览模态框 */
+.image-preview-modal {
+  animation: zoomIn 0.3s ease-in-out;
+}
+
+/* 预览图片 */
+.image-preview-img {
+  animation: imageShow 0.3s ease-in-out;
+}
+
+/* 关闭按钮悬停效果 */
+.image-preview-close:hover {
+  transform: scale(1.2);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* 淡入动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 放大动画 */
+@keyframes zoomIn {
+  from {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+/* 图片显示动画 */
+@keyframes imageShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .image-preview-modal {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+
+  .image-preview-close {
+    width: 36px;
+    height: 36px;
+    font-size: 28px;
+    top: -36px;
+  }
+}
