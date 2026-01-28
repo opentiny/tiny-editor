@@ -7,10 +7,12 @@ export class ImagePreviewModal {
   private modal: HTMLElement | null = null
   private overlay: HTMLElement | null = null
   private previewImage: HTMLImageElement | null = null
+  private scaleTooltip: HTMLElement | null = null
   private currentScale: number = 1
   private minScale: number = 0.5
   private maxScale: number = 3
   private scaleStep: number = 0.1
+  private tooltipHideTimer: number | null = null
 
   constructor() {
     this.initModal()
@@ -85,6 +87,27 @@ export class ImagePreviewModal {
     this.modal.appendChild(this.previewImage)
     this.modal.appendChild(closeBtn)
 
+    // 创建缩放提示窗口
+    this.scaleTooltip = document.createElement('div')
+    this.scaleTooltip.className = 'image-preview-scale-tooltip'
+    this.scaleTooltip.style.cssText = `
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      z-index: 10002;
+      display: none;
+      pointer-events: none;
+      white-space: nowrap;
+      font-weight: 500;
+    `
+    document.body.appendChild(this.scaleTooltip)
+
     // 绑定事件
     this.overlay.addEventListener('click', () => this.hide())
     document.addEventListener('keydown', (e) => {
@@ -119,6 +142,9 @@ export class ImagePreviewModal {
     // 根据滚轮方向调整缩放比例
     const delta = event.deltaY > 0 ? -this.scaleStep : this.scaleStep
     this.setScale(this.currentScale + delta)
+
+    // 显示缩放提示
+    this.showScaleTooltip()
   }
 
   /**
@@ -134,6 +160,46 @@ export class ImagePreviewModal {
   }
 
   /**
+   * 显示缩放百分比提示
+   */
+  private showScaleTooltip() {
+    if (!this.scaleTooltip) {
+      return
+    }
+
+    // 清除之前的隐藏计时器
+    if (this.tooltipHideTimer !== null) {
+      clearTimeout(this.tooltipHideTimer)
+    }
+
+    // 更新提示文本
+    const percentage = Math.round(this.currentScale * 100)
+    this.scaleTooltip.textContent = `${percentage}%`
+    this.scaleTooltip.style.display = 'block'
+
+    // 1.5秒后隐藏提示
+    this.tooltipHideTimer = window.setTimeout(() => {
+      if (this.scaleTooltip) {
+        this.scaleTooltip.style.display = 'none'
+      }
+      this.tooltipHideTimer = null
+    }, 1500)
+  }
+
+  /**
+   * 隐藏缩放提示
+   */
+  private hideScaleTooltip() {
+    if (this.tooltipHideTimer !== null) {
+      clearTimeout(this.tooltipHideTimer)
+      this.tooltipHideTimer = null
+    }
+    if (this.scaleTooltip) {
+      this.scaleTooltip.style.display = 'none'
+    }
+  }
+
+  /**
    * 重置缩放比例
    */
   private resetScale() {
@@ -141,6 +207,7 @@ export class ImagePreviewModal {
     if (this.previewImage) {
       this.previewImage.style.transform = 'scale(1)'
     }
+    this.hideScaleTooltip()
   }
 
   /**
@@ -179,15 +246,20 @@ export class ImagePreviewModal {
    * 销毁预览模态框
    */
   destroy() {
+    this.hideScaleTooltip()
     if (this.overlay && this.overlay.parentNode) {
       this.overlay.parentNode.removeChild(this.overlay)
     }
     if (this.modal && this.modal.parentNode) {
       this.modal.parentNode.removeChild(this.modal)
     }
+    if (this.scaleTooltip && this.scaleTooltip.parentNode) {
+      this.scaleTooltip.parentNode.removeChild(this.scaleTooltip)
+    }
     this.modal = null
     this.overlay = null
     this.previewImage = null
+    this.scaleTooltip = null
   }
 }
 
