@@ -7,6 +7,10 @@ export class ImagePreviewModal {
   private modal: HTMLElement | null = null
   private overlay: HTMLElement | null = null
   private previewImage: HTMLImageElement | null = null
+  private currentScale: number = 1
+  private minScale: number = 0.5
+  private maxScale: number = 3
+  private scaleStep: number = 0.1
 
   constructor() {
     this.initModal()
@@ -53,6 +57,8 @@ export class ImagePreviewModal {
       object-fit: contain;
       border-radius: 4px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      transition: transform 0.2s ease-out;
+      cursor: grab;
     `
 
     // 创建关闭按钮
@@ -87,6 +93,9 @@ export class ImagePreviewModal {
       }
     })
 
+    // 绑定滚轮缩放事件
+    document.addEventListener('wheel', (e) => this.onMouseWheel(e), { passive: false })
+
     // 阻止模态框内的点击事件冒泡到遮罩层
     this.modal.addEventListener('click', (e) => {
       e.stopPropagation()
@@ -94,6 +103,44 @@ export class ImagePreviewModal {
 
     document.body.appendChild(this.overlay)
     document.body.appendChild(this.modal)
+  }
+
+  /**
+   * 处理鼠标滚轮事件 - 缩放图片
+   */
+  private onMouseWheel = (event: WheelEvent) => {
+    // 只在预览打开时处理
+    if (!this.modal || this.modal.style.display === 'none') {
+      return
+    }
+
+    event.preventDefault()
+
+    // 根据滚轮方向调整缩放比例
+    const delta = event.deltaY > 0 ? -this.scaleStep : this.scaleStep
+    this.setScale(this.currentScale + delta)
+  }
+
+  /**
+   * 设置缩放比例
+   */
+  private setScale(scale: number) {
+    // 限制缩放范围
+    this.currentScale = Math.max(this.minScale, Math.min(scale, this.maxScale))
+
+    if (this.previewImage) {
+      this.previewImage.style.transform = `scale(${this.currentScale})`
+    }
+  }
+
+  /**
+   * 重置缩放比例
+   */
+  private resetScale() {
+    this.currentScale = 1
+    if (this.previewImage) {
+      this.previewImage.style.transform = 'scale(1)'
+    }
   }
 
   /**
@@ -105,6 +152,7 @@ export class ImagePreviewModal {
       return
     }
 
+    this.resetScale()
     this.previewImage.src = imageUrl
     this.modal.style.display = 'flex'
     this.modal.style.alignItems = 'center'
@@ -123,6 +171,7 @@ export class ImagePreviewModal {
       this.modal.style.display = 'none'
       this.overlay.style.display = 'none'
       document.body.style.overflow = ''
+      this.resetScale()
     }
   }
 
