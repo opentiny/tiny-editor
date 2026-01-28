@@ -1,5 +1,6 @@
 import type { BlotFormatter } from '../blot-formatter'
 import { isInside } from '../../../config/editor.utils'
+import { getImagePreviewModal } from '../preview'
 import { ImageSpec } from './image-spec'
 
 export class CustomImageSpec extends ImageSpec {
@@ -24,6 +25,7 @@ export class CustomImageSpec extends ImageSpec {
   init(): void {
     this.editorElem.addEventListener('mouseover', this.imageMouseOver.bind(this))
     this.editorElem.addEventListener('mouseout', this.imageMouseout)
+    this.editorElem.addEventListener('dblclick', this.onImageDoubleClick.bind(this))
 
     super.init()
   }
@@ -126,6 +128,19 @@ export class CustomImageSpec extends ImageSpec {
       const index = quill.getIndex(imgBlot)
       const len = imgBlot.length()
       quill.setSelection(index, len)
+    }
+  }
+
+  /**
+   * 处理图片双击事件 - 显示预览
+   */
+  onImageDoubleClick = (event: MouseEvent) => {
+    const target = event.target
+    const imageSrc = target.getAttribute('src') || target.getAttribute('data-image')
+
+    if (imageSrc) {
+      const modal = getImagePreviewModal()
+      modal.show(imageSrc)
     }
   }
 }

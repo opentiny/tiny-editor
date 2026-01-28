@@ -47,6 +47,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div ref="editorRef" />
+  <div ref="editorRef">
+    <img src="https://res-static.opentiny.design/tiny-vue-web-doc/3.27.0/static/images/mountain.png" />
+  </div>
   <br>
 </template>
