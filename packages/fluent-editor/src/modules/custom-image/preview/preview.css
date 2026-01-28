@@ -24,6 +24,13 @@
   cursor: grabbing;
 }
 
+/* 缩放提示窗口 */
+.image-preview-scale-tooltip {
+  animation: tooltipFadeIn 0.2s ease-in-out;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
 /* 关闭按钮悬停效果 */
 .image-preview-close:hover {
   transform: scale(1.2);
@@ -62,6 +69,18 @@
   }
 }
 
+/* 提示窗口淡入动画 */
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .image-preview-modal {
@@ -75,5 +94,11 @@
     font-size: 28px;
     top: -36px;
   }
+
+  .image-preview-scale-tooltip {
+    font-size: 12px;
+    padding: 10px 16px;
+  }
 }
+
 
