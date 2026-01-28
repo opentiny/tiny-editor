@@ -1,6 +1,7 @@
 import type { ToolbarButtonOptions, ToolButtonOption } from '../options'
 import { isBoolean, isObject } from '../../../utils/is'
-import { CENTER_ALIGN, COPY, DOWNLOAD, LEFT_ALIGN, RIGHT_ALIGN } from '../options'
+import { CENTER_ALIGN, COPY, DOWNLOAD, LEFT_ALIGN, PREVIEW, RIGHT_ALIGN } from '../options'
+import { getImagePreviewModal } from '../preview'
 
 export const ALIGN_ATTR = 'data-align'
 
@@ -106,6 +107,17 @@ const defaultButtons: Record<string, ToolButtonOption> = {
     icon: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path class="ql-fill" d="M28 10v18H10V10zm0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2"/><path class="ql-fill" d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4Z"/></svg>`,
     apply: (el: HTMLImageElement, toolbarButtons: ImageToolbarButtons) => {
       alignmentHandler.copy(el, toolbarButtons)
+    },
+  },
+  [PREVIEW]: {
+    name: PREVIEW,
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path class="ql-fill" d="M16 7c-4.96 0-9.23 3.13-11 7.5 1.77 4.37 6.04 7.5 11 7.5s9.23-3.13 11-7.5c-1.77-4.37-6.04-7.5-11-7.5zm0 12c-2.49 0-4.5-2.01-4.5-4.5S13.51 10 16 10s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5zm0-7c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5z"/></svg>`,
+    apply: (el: HTMLImageElement, toolbarButtons: ImageToolbarButtons) => {
+      const imageSrc = el.getAttribute('src') || el.getAttribute('data-src')
+      if (imageSrc) {
+        const modal = getImagePreviewModal()
+        modal.show(imageSrc)
+      }
     },
   },
 }
