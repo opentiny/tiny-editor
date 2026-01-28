@@ -10,11 +10,18 @@
 /* 预览模态框 */
 .image-preview-modal {
   animation: zoomIn 0.3s ease-in-out;
+  overflow: auto;
 }
 
 /* 预览图片 */
 .image-preview-img {
   animation: imageShow 0.3s ease-in-out;
+  user-select: none;
+}
+
+/* 图片缩放时显示 grab 光标 */
+.image-preview-img:active {
+  cursor: grabbing;
 }
 
 /* 关闭按钮悬停效果 */
@@ -69,3 +76,4 @@
     top: -36px;
   }
 }
+
