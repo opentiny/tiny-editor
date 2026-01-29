@@ -65,12 +65,12 @@ export class ImagePreviewModal {
 
     // 创建关闭按钮
     const closeBtn = document.createElement('button')
-    closeBtn.className = 'image-preview-close'
+    closeBtn.className = 'tiny-editor-image-preview-close'
     closeBtn.innerHTML = '×'
     closeBtn.style.cssText = `
-      position: absolute;
-      top: -40px;
-      right: 0;
+      position: fixed;
+      top: 20px;
+      right: 20px;
       width: 40px;
       height: 40px;
       border: none;
@@ -85,7 +85,7 @@ export class ImagePreviewModal {
     closeBtn.addEventListener('click', () => this.hide())
 
     this.modal.appendChild(this.previewImage)
-    this.modal.appendChild(closeBtn)
+    document.body.appendChild(closeBtn)
 
     // 创建缩放提示窗口
     this.scaleTooltip = document.createElement('div')
