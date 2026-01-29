@@ -2,7 +2,7 @@
 export const BIG_DELTA_LIMIT = 2000
 
 export const CHANGE_LANGUAGE_EVENT = 'change-language'
-export const defaultLanguage = 'en-US'
+export const defaultLanguage = 'zh-CN'
 
 // Image
 export const IMAGE_UPLOADER_MIME_TYPES = [
