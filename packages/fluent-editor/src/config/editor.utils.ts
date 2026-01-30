@@ -204,3 +204,14 @@ export function isInside(position, dom) {
 
 // Internet Explorer 6-11
 export const isPureIE = !!document.documentMode
+
+/**
+* 检测剪贴板数据是否来自 Outlook 客户端
+*/
+export const isOutlookDesktop = (e) => {
+  const types = e.clipboardData?.types || [];
+  const html = e.clipboardData?.getData('text/html') || '';
+
+  // RTF + Office 命名空间 或 RTF + Mso 样式类
+  return types.includes('text/rtf') && (/schemas-microsoft-com:office/.test(html) || /class="?Mso\w+/i.test(html));
+}

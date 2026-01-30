@@ -14,6 +14,7 @@ import {
   imageUrlToFile,
   insideTable,
   isNullOrUndefined,
+  isOutlookDesktop,
   omit,
   replaceDeltaImage,
   splitWithBreak,
@@ -124,7 +125,7 @@ class CustomClipboard extends Clipboard {
     const files = Array.from(e.clipboardData.files || [])
     const msExcelCheck = /<meta.*?Microsoft Excel\s[\d].*?>/
 
-    if (html.search(msExcelCheck) === -1 && files.length > 0) {
+    if (html.search(msExcelCheck) === -1 && files.length > 0 && !isOutlookDesktop(e)) {
       this.quill.uploader.upload(range, files)
     }
     else {
@@ -345,7 +346,7 @@ class CustomClipboard extends Clipboard {
             resolve(originalUrls[index])
           })
         }
-        else if (this.quill.options.uploadOption.imageUploadToServer) {
+        else if (this.quill.options.uploadOption?.imageUploadToServer) {
           const range = this.getImgSelection(pastedDelta, imageIndexs[index])
           this.quill.uploader.upload(range, [imageFile])
         }
