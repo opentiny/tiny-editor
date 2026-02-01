@@ -27,7 +27,7 @@
     "quill-cursors": "^4.0.3",
     "quill-header-list": "0.0.2",
     "quill-markdown-shortcuts": "^0.0.10",
-    "quill-table-up": "^3.0.1",
+    "quill-table-up": "^3.3.0",
     "quill-toolbar-tip": "^0.0.13",
     "simple-mind-map": "0.14.0-fix.1",
     "simple-mind-map-plugin-themes": "^1.0.1",

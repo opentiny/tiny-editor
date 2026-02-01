@@ -117,8 +117,8 @@ importers:
         specifier: ^0.0.10
         version: 0.0.10
       quill-table-up:
-        specifier: ^3.0.1
-        version: 3.1.2(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
+        specifier: ^3.3.0
+        version: 3.3.0(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
       quill-toolbar-tip:
         specifier: ^0.0.13
         version: 0.0.13(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
@@ -4880,6 +4880,11 @@ packages:
 
   quill-table-up@3.1.2:
     resolution: {integrity: sha512-MAnDgUNGJPco2siDMDWzeQwDjDd8baF03xrh8inV2kajztwQP7A1nJkaf4SL/pHIJkpkytJh/7319vyH2wsZTA==}
+    peerDependencies:
+      quill: ^2.0.3
+
+  quill-table-up@3.3.0:
+    resolution: {integrity: sha512-B/EiCy5eXGgQ24WE1SBk9JW5roJuTENH6ZcnipfZm/AbK9BolEUfWujZXtqqXNs28oNvtJlXyTz5SLH+gn1dXA==}
     peerDependencies:
       quill: ^2.0.3
 
@@ -11247,6 +11252,11 @@ snapshots:
       quill: 2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)
 
   quill-table-up@3.1.2(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)):
+    dependencies:
+      '@floating-ui/dom': 1.7.4
+      quill: 2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)
+
+  quill-table-up@3.3.0(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)):
     dependencies:
       '@floating-ui/dom': 1.7.4
       quill: 2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)
