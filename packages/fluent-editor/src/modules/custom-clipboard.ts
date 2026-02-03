@@ -336,10 +336,11 @@ class CustomClipboard extends Clipboard {
     return Promise.all(
       files.map(async (imageFile, index) => {
         const netImgExp = /^((http|https)\:)?\/\/([\s\S]+)$/
+        const imageUrl = originalUrls[index]?.src ?? originalUrls[index]
         if (
           !placeholders[index]
           && originalUrls[index]
-          && netImgExp.test(originalUrls[index])
+          && netImgExp.test(imageUrl)
         ) {
           // 不是占位图的普通url图片直接返回url
           return new Promise((resolve) => {
