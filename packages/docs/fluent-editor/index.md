@@ -10,7 +10,7 @@ hero:
   actions:
     - theme: brand
       text: 开始
-      link: /docs/quick-start
+      link: /docs/guide/quick-start
     - theme: alt
       text: GitHub
       link: https://github.com/opentiny/tiny-editor
