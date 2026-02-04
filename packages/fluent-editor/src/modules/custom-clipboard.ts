@@ -336,7 +336,11 @@ class CustomClipboard extends Clipboard {
     return Promise.all(
       files.map(async (imageFile, index) => {
         const netImgExp = /^((http|https)\:)?\/\/([\s\S]+)$/
-        const imageUrl = originalUrls[index]?.src ?? originalUrls[index]
+        let imageUrl = originalUrls[index]
+        // 粘贴 Outlook 中的网络图
+        if (originalUrls[index]?.src && originalUrls[index]?.src !== '//:0') {
+          imageUrl = originalUrls[index].src
+        }
         if (
           !placeholders[index]
           && originalUrls[index]
@@ -352,7 +356,7 @@ class CustomClipboard extends Clipboard {
           this.quill.uploader.upload(range, [imageFile])
         }
         else {
-          // 占位图或者跨域图需要手动转换成url格式
+          // 占位图或者跨域图或 Outlook 中的本地图需要手动转换成url格式
           return imageFileToUrl(imageFile)
         }
       }),
