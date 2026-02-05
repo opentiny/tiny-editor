@@ -1,7 +1,7 @@
 # 协同编辑
 
 <p align="center">
-<img src="/Tiny-editor-demo.png" alt="Tiny-editor-demo">
+<img src="../../public/Tiny-editor-demo.png" alt="Tiny-editor-demo">
 </p>
 
 <p><b>TinyEditor 支持多人实时协作编辑，支持多种连接协议（如 WebSocket、WebRTC），可自定义后端持久化，适用于多场景的在线协同编辑需求。
@@ -11,7 +11,7 @@
 
 整个协同编辑系统由三部分组成：前端 `TinyEditor`、中间层协作引擎 `Yjs` 和后端服务（用于数据同步和持久化）。前端编辑器将操作传递给 `Yjs`，`Yjs` 通过不同的连接协议（如 `WebSocket` 或 `WebRTC`）实现多端同步, 并支持将数据持久化到后端数据库（如 `MongoDB`）.
 
-<img src="/Collab-arch.png" alt="Tiny-editor-demo">
+<img src="../../public/Collab-arch.png" alt="Tiny-editor-demo">
 
 下面是一个完整的协同编辑演示：
 
