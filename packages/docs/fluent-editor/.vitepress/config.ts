@@ -21,7 +21,7 @@ export default defineConfig({
   themeConfig: {
     logo: '/logo.svg',
     nav: [
-      { text: '文档', link: '/docs/quick-start', activeMatch: '/docs/' },
+      { text: '文档', link: '/docs/guide/quick-start', activeMatch: '/docs/' },
       {
         text: '生态',
         items: [
