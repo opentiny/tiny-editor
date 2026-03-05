@@ -8,8 +8,7 @@
 
 测试公式内容：e=mc^2
 
-:::demo src=demos/formula.vue
-:::
+<demo vue="../../demos/formula.vue" />
 
 ## 化学公式
 
@@ -17,8 +16,7 @@
 
 测试公式: `\ce{x Na(NH4)HPO4 ->[\Delta] (NaPO3)_x + x NH3 ^ + x H2O}`
 
-:::demo src=demos/formula-chemistry.vue
-:::
+<demo vue="../../demos/formula-chemistry.vue"/>
 
 ## 可编辑公式
 
@@ -50,5 +48,4 @@ import 'mathlive/fonts.css'
 `0.104.0` 及以上版本的 `mathlive` 存在公式编辑面板闪退问题，请使用 `0.103.0` 及以下版本。
 :::
 
-:::demo src=demos/formula-mathlive.vue
-:::
+<demo vue="../../demos/formula-mathlive.vue"/>

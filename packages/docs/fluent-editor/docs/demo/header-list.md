@@ -12,8 +12,7 @@ npm install quill-header-list
 
 创建一个元素用于存放标题列表，并将其传入`header-list`的`container`属性。
 
-:::demo src=demos/header-list.vue
-:::
+<demo vue="../../demos/header-list.vue" />
 
 ## 设置滚动容器
 
@@ -21,8 +20,7 @@ npm install quill-header-list
 
 当页面中存在`fixed`元素处于顶部时，你可能会需要进行额外的滚动 offset(比如此文档页面)，否则会导致滚动后的标题被`fixed`元素遮挡。可以设置`topOffset`额外滚动距离。
 
-:::demo src=demos/header-list-container.vue
-:::
+<demo vue="../../demos/header-list-container.vue" />
 
 ## 参数选项
 

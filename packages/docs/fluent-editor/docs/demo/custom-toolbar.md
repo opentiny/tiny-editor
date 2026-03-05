@@ -14,5 +14,4 @@
 
 Quill 支持的工具栏: [https://quilljs.com/docs/modules/toolbar](https://quilljs.com/docs/modules/toolbar)
 
-:::demo src=demos/custom-toolbar.vue
-:::
+<demo vue="../../demos/custom-toolbar.vue" />

@@ -6,15 +6,13 @@
 
 通过配置 `counter` 为 true，可以开启字符统计功能。
 
-:::demo src=demos/counter.vue
-:::
+<demo vue="../../demos/counter.vue" />
 
 ## 最大字符数
 
 默认最大字符数为 500，通过配置 `count` 属性，可以自定义最大字符数。
 
-:::demo src=demos/counter-count.vue
-:::
+<demo vue="../../demos/counter-count.vue" />
 
 ## API
 

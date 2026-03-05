@@ -4,15 +4,13 @@
 
 点击图片可显示图片相关工具
 
-:::demo src=demos/image-toolbar.vue
-:::
+<demo vue="../../demos/image-toolbar.vue" />
 
 ## 工具栏按钮配置
 
 可通过配置项 `modules.image.toolbar.buttons` 对工具栏按钮进行配置。默认存在 `align-left`、`align-center`、`align-right`、`copy`、`download` 五个按钮，可以自行增加按钮或者通过设置 `false` 关闭某个按钮。
 
-:::demo src=demos/image-toolbar-button.vue
-:::
+<demo vue="../../demos/image-toolbar-button.vue" />
 
 ## 配置
 

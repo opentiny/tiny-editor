@@ -4,8 +4,7 @@
 
 默认会处理视频与图片格式，其他格式统一被处理为文件显示
 
-:::demo src=demos/file-upload.vue
-:::
+<demo vue="../../demos/file-upload.vue" />
 
 ## 服务器端上传
 
@@ -17,8 +16,7 @@
 
 所以，如果上传四张图片，最终的结果应该是： edge 浏览器图标、chrome 浏览器图标、edge 浏览器图标、chrome 浏览器图标
 
-:::demo src=demos/file-upload-handle.vue
-:::
+<demo vue="../../demos/file-upload-handle.vue" />
 
 ## Options
 
