@@ -4,5 +4,4 @@
 
 本示例增加点赞、点踩两个工具栏图标，点赞可以给文本设置绿色，点踩可以给文本设置红色。
 
-:::demo src=demos/add-toolbar-item.vue
-:::
+<demo vue="../../demos/add-toolbar-item.vue" />

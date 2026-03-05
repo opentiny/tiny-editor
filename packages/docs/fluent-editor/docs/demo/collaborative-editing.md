@@ -15,8 +15,7 @@
 
 下面是一个完整的协同编辑演示：
 
-:::demo src=demos/collaborative-editing.vue
-:::
+<demo vue="../../demos/collaborative-editing.vue" />
 
 ## 快速开始
 

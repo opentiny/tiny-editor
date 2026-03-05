@@ -51,6 +51,7 @@
     "postcss": "^8.5.3",
     "vite": "^6.0.3",
     "vitepress": "^1.5.0",
+    "vitepress-demo-plugin": "1.5.0",
     "vitepress-plugin-llms": "^1.1.3"
   }
 }

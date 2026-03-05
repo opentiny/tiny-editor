@@ -13,5 +13,4 @@
 ]
 ```
 
-:::demo src=demos/basic-usage.vue
-:::
+<demo vue="../../demos/basic-usage.vue" />

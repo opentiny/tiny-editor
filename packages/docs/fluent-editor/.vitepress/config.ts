@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 import packageJson from '@opentiny/fluent-editor/package.json' with { type: 'json'}
 import { demoPreviewPlugin } from '@vitepress-code-preview/plugin'
 import { defineConfig, loadEnv } from 'vitepress'
+import { vitepressDemoPlugin } from 'vitepress-demo-plugin'
 import llmstxt from 'vitepress-plugin-llms'
 import { sidebar } from './sidebar'
 
@@ -99,6 +100,12 @@ export default defineConfig({
           const content = originDemoClose(...args)
           return `${content}</div>`
         }
+      })
+      md.use(vitepressDemoPlugin, {
+        playground: { show: true },
+        codeTransformer: (code) => {
+          return code.replace(/import\.meta\.env\.BASE_URL/g, `'${process.env.VITEPRESS_BASE || '/'}'`)
+        },
       })
     },
   },

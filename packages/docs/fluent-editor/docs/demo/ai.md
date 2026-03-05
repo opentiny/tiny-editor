@@ -8,8 +8,7 @@
 该功能依赖于大模型的 API Key，无法在官网的 Demo 中进行体验。如果你想体验该功能，可以本地启动 TinyEditor 项目，并使用 Ollama 启动本地大模型；或者配置线上大模型的 host 和 apiKey。
 :::
 
-:::demo src=demos/ai.vue
-:::
+<demo vue="../../demos/ai.vue" />
 
 ## API
 
