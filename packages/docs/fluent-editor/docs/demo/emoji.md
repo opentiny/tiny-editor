@@ -14,8 +14,7 @@ npm i @floating-ui/dom @emoji-mart/data emoji-mart
 
 > `emojiData`、`EmojiPicker`、`emojiPickerPosition` 支持通过 window 传入
 
-:::demo src=demos/emoji.vue
-:::
+<demo vue="../../demos/emoji.vue" />
 
 ## Options
 

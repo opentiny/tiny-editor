@@ -23,36 +23,31 @@ npm install simple-mind-map simple-mind-map-plugin-themes
 
 通过配置工具栏按钮 `mind-map`，并启用 `mind-map`模块: `'mind-map': true` 可以开启思维导图功能。
 
-:::demo src=demos/mind-map.vue
-:::
+<demo vue="../../demos/mind-map.vue" />
 
 ## 背景样式
 
 思维导图模块支持配置背景样式，可以配置背景颜色、图片等设置。
 
-:::demo src=demos/mind-map-background.vue
-:::
+<demo vue="../../demos/mind-map-background.vue" />
 
 ## 调整大小
 
 思维导图模块支持调整思维导图的大小，拖动调整手柄可以改变思维导图的尺寸。
 
-:::demo src=demos/mind-map-resize.vue
-:::
+<demo vue="../../demos/mind-map-resize.vue" />
 
 ## 连线样式
 
 思维导图模块支持配置连线样式，可以配置连线颜色、样式等设置。其中曲线只在logicalStructure逻辑结构图和mindMap思维导图两种结构时生效。
 
-:::demo src=demos/mind-map-line.vue
-:::
+<demo vue="../../demos/mind-map-line.vue" />
 
 ## 主题样式
 
 思维导图模块支持配置主题样式，传入主题名称即可。需要注意的是设置了主题后改变的是节点，连线，背景等相关样式，所以设置了主题和背景样式和连线样式后，背景样式和连线样式会覆盖与其相关的主题样式。
 
-:::demo src=demos/mind-map-theme.vue
-:::
+<demo vue="../../demos/mind-map-theme.vue" />
 
 ## 配置
 

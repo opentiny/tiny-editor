@@ -23,29 +23,25 @@ npm install @logicflow/core @logicflow/extension
 
 通过配置工具栏按钮 `flow-chart`，并启用 `flow-chart`模块: `'flow-chart': true` 可以开启流程图功能。
 
-:::demo src=demos/flow-chart.vue
-:::
+<demo vue="../../demos/flow-chart.vue" />
 
 ## 网格样式
 
 流程图模块支持配置网格样式，可以配置网格大小、颜色、类型等设置。
 
-:::demo src=demos/flow-chart-grid.vue
-:::
+<demo vue="../../demos/flow-chart-grid.vue" />
 
 ## 背景样式
 
 流程图模块支持配置背景样式，可以配置背景颜色、图片等设置。
 
-:::demo src=demos/flow-chart-background.vue
-:::
+<demo vue="../../demos/flow-chart-background.vue" />
 
 ## 调整大小
 
 流程图模块支持调整流程图的大小，拖动调整手柄可以改变流程图的尺寸。
 
-:::demo src=demos/flow-chart-resize.vue
-:::
+<demo vue="../../demos/flow-chart-resize.vue" />
 
 ## 配置
 

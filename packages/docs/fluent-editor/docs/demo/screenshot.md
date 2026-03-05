@@ -11,8 +11,7 @@ import Html2Canvas from 'html2canvas'
 window.Html2Canvas = Html2Canvas
 ```
 
-:::demo src=demos/screenshot.vue
-:::
+<demo vue="../../demos/screenshot.vue" />
 
 ## 上传截图
 
@@ -20,8 +19,7 @@ window.Html2Canvas = Html2Canvas
 
 默认截图的格式是 Base64，你可以在 `screenshot.beforeCreateImage` 中处理截屏图片，将图片上传到服务器，再将服务器返回的图片 URL 显示到编辑器中。
 
-:::demo src=demos/screenshot-upload-to-server.vue
-:::
+<demo vue="../../demos/screenshot-upload-to-server.vue" />
 
 ## API
 

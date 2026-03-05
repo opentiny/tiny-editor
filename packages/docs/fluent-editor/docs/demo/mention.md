@@ -6,15 +6,12 @@
 
 通过配置 `mention` 模块，可以开启@提醒功能。
 
-:::demo src=demos/mention.vue
-:::
-
+<demo vue="../../demos/mention.vue" />
 ## 自定义列表样式
 
 通过配置 `renderMentionItem` 方法，可以自定义选项列表的样式。
 
-:::demo src=demos/mention-custom-list.vue
-:::
+<demo vue="../../demos/mention-custom-list.vue" />
 
 ## 跳转链接
 
@@ -22,8 +19,7 @@
 
 当编辑器处于可编辑状态时，链接跳转不可以，注意切换为只读状态。
 
-:::demo src=demos/mention-link.vue
-:::
+<demo vue="../../demos/mention-link.vue" />
 
 ## API
 

@@ -14,5 +14,4 @@ npm install quill-toolbar-tip
 
 > 注意注册模块名称请保持为`toolbar-tip`
 
-:::demo src=demos/toolbar-tip.vue
-:::
+<demo vue="../../demos/toolbar-tip.vue" />
