@@ -104,7 +104,7 @@ export default defineConfig({
       md.use(vitepressDemoPlugin, {
         playground: { show: true },
         codeTransformer: (code) => {
-          return code.replace(/import\.meta\.env\.BASE_URL/g, `'${process.env.VITEPRESS_BASE || '/'}'`)
+          return code.replace(/import\.meta\.env\.BASE_URL/g, `'${env.VITE_BASE_URL || '/tiny-editor/'}'`)
         },
       })
     },
