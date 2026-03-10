@@ -289,54 +289,34 @@ export class CustomClipboard extends Clipboard {
   }
 
   // 匹配rtf中的图片，存储为{hex, type}对象数组
-
-  // 分块处理大文件
-  extractImageDataFromRtf(rtfData, chunkSize = 100000) {
+  extractImageDataFromRtf(rtfData) {
     if (!rtfData || typeof rtfData !== 'string') {
       return []
     }
 
     const result = []
-    const imagePattern = /\{[\s\S]*?\\pict[\s\S]*?(\\pngblip|\\jpegblip)[\s\S]*?\}(?=[^}]*$|\{|$)/g
 
-    // 如果字符串太大，分块处理
-    if (rtfData.length > 500000) {
-      let position = 0
-      while (position < rtfData.length) {
-        const chunk = rtfData.slice(
-          position,
-          Math.min(position + chunkSize, rtfData.length),
-        )
+    // 更高效的正则表达式，避免灾难性回溯
+    // 匹配图片块，使用更精确的匹配模式
+    const imageBlockRegex = /\{[\s\S]*?\\pict[\s\S]*?(\\pngblip|\\jpegblip)[\s\S]*?(?:\\bliptag-?\d+(?:\\blipupi-?\d+)?)?(?:\\{\\\*\\blipuid\s*[\da-fA-F]+)?[\s}]*?([\da-fA-F\s]+?)\}/gi
 
-        // 确保我们在完整的花括号边界处切割
-        const lastBrace = chunk.lastIndexOf('}')
-        if (lastBrace > 0 && position + lastBrace < rtfData.length) {
-          processChunk(chunk.slice(0, lastBrace + 1))
-          position += lastBrace + 1
-        }
-        else {
-          processChunk(chunk)
-          position += chunkSize
-        }
+    let match
+    while ((match = imageBlockRegex.exec(rtfData)) !== null) {
+      const fullImageBlock = match[0]
+      const imageTypeMarker = match[1] // pngblip 或 jpegblip
+      const hexData = match[2] // 十六进制数据
+
+      if (!hexData) continue
+
+      let imageType = ''
+      if (imageTypeMarker.includes('pngblip')) {
+        imageType = 'image/png'
       }
-    }
-    else {
-      processChunk(rtfData)
-    }
+      else if (imageTypeMarker.includes('jpegblip')) {
+        imageType = 'image/jpeg'
+      }
 
-    function processChunk(chunk) {
-      const matches = chunk.matchAll(imagePattern)
-      for (const match of matches) {
-        const fullMatch = match[0]
-        const typeMarker = match[1]
-
-        const hexData = fullMatch.match(/([0-9a-fA-F\s]+)\}/)?.[1]
-        if (!hexData) continue
-
-        const imageType = typeMarker.includes('pngblip')
-          ? 'image/png'
-          : 'image/jpeg'
-
+      if (imageType) {
         result.push({
           hex: hexData.replace(/[^\da-fA-F]/g, ''),
           type: imageType,
