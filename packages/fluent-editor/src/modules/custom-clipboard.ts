@@ -289,34 +289,33 @@ export class CustomClipboard extends Clipboard {
   }
 
   // 匹配rtf中的图片，存储为{hex, type}对象数组
-  // 更安全的解析方法，避免正则表达式回溯问题
   extractImageDataFromRtf(rtfData) {
-    if (!rtfData || typeof rtfData !== 'string') {
+    if (!rtfData || rtfData.length > 5_000_000) {
       return []
     }
 
+    // 简化 header 匹配，只匹配必要的部分
+    const regexPicture = /{\\pict[^}]*?(?:\\pngblip|\\jpegblip)[^}]*?([\da-fA-F\s]+?)\}/g
+
     const result = []
-    const lines = rtfData.split(/(?=\{|\\pict)/g) // 按可能的图片开始位置分割
-    const imageStartRegex = /\{\\pict.*?(\\pngblip|\\jpegblip)/i
+    let match: RegExpExecArray | null
 
-    for (const block of lines) {
-      if (!block.includes('\\pict')) continue
+    while ((match = regexPicture.exec(rtfData)) !== null) {
+      const hexData = match[1]
+      if (!hexData) continue
 
-      const typeMatch = block.match(/\\(pngblip|jpegblip)/i)
-      if (!typeMatch) continue
-
-      // 提取十六进制数据（在最后一个}之前）
-      const hexMatch = block.match(/([0-9a-fA-F\s]+)\}/i)
-      if (!hexMatch) continue
-
-      const imageType = typeMatch[1].toLowerCase() === 'pngblip'
-        ? 'image/png'
-        : 'image/jpeg'
+      const fullMatch = match[0]
+      const imageType = fullMatch.includes('\\pngblip') ? 'image/png' : 'image/jpeg'
 
       result.push({
-        hex: hexMatch[1].replace(/[^\da-fA-F]/g, ''),
+        hex: hexData.replace(/[^\da-fA-F]/g, ''),
         type: imageType,
       })
+
+      // 防止无限循环
+      if (regexPicture.lastIndex === match.index) {
+        regexPicture.lastIndex++
+      }
     }
 
     return result
