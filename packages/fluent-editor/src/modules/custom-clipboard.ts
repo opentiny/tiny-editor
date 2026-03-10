@@ -289,39 +289,34 @@ export class CustomClipboard extends Clipboard {
   }
 
   // 匹配rtf中的图片，存储为{hex, type}对象数组
+  // 更安全的解析方法，避免正则表达式回溯问题
   extractImageDataFromRtf(rtfData) {
     if (!rtfData || typeof rtfData !== 'string') {
       return []
     }
 
     const result = []
+    const lines = rtfData.split(/(?=\{|\\pict)/g) // 按可能的图片开始位置分割
+    const imageStartRegex = /\{\\pict.*?(\\pngblip|\\jpegblip)/i
 
-    // 更高效的正则表达式，避免灾难性回溯
-    // 匹配图片块，使用更精确的匹配模式
-    const imageBlockRegex = /\{[\s\S]*?\\pict[\s\S]*?(\\pngblip|\\jpegblip)[\s\S]*?(?:\\bliptag-?\d+(?:\\blipupi-?\d+)?)?(?:\\{\\\*\\blipuid\s*[\da-fA-F]+)?[\s}]*?([\da-fA-F\s]+?)\}/gi
+    for (const block of lines) {
+      if (!block.includes('\\pict')) continue
 
-    let match
-    while ((match = imageBlockRegex.exec(rtfData)) !== null) {
-      const fullImageBlock = match[0]
-      const imageTypeMarker = match[1] // pngblip 或 jpegblip
-      const hexData = match[2] // 十六进制数据
+      const typeMatch = block.match(/\\(pngblip|jpegblip)/i)
+      if (!typeMatch) continue
 
-      if (!hexData) continue
+      // 提取十六进制数据（在最后一个}之前）
+      const hexMatch = block.match(/([0-9a-fA-F\s]+)\}/i)
+      if (!hexMatch) continue
 
-      let imageType = ''
-      if (imageTypeMarker.includes('pngblip')) {
-        imageType = 'image/png'
-      }
-      else if (imageTypeMarker.includes('jpegblip')) {
-        imageType = 'image/jpeg'
-      }
+      const imageType = typeMatch[1].toLowerCase() === 'pngblip'
+        ? 'image/png'
+        : 'image/jpeg'
 
-      if (imageType) {
-        result.push({
-          hex: hexData.replace(/[^\da-fA-F]/g, ''),
-          type: imageType,
-        })
-      }
+      result.push({
+        hex: hexMatch[1].replace(/[^\da-fA-F]/g, ''),
+        type: imageType,
+      })
     }
 
     return result
