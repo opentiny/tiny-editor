@@ -403,7 +403,7 @@ class CustomClipboard extends Clipboard {
     const regexPictureHeader
       = /{\\pict[\s\S]+?\\bliptag-?\d+(\\blipupi-?\d+)?({\\\*\\blipuid\s?[\da-fA-F]+)?[\s}]*?/
     const regexPicture = new RegExp(
-      `(?:(${regexPictureHeader.source}))([\\da-fA-F\\s]+)\\}`,
+      `(?:(${regexPictureHeader.source}))([\\da-fA-F\\s]+?)\\}`, // 非贪婪匹配
       'g',
     )
     const images = rtfData.match(regexPicture)
