@@ -290,31 +290,40 @@ export class CustomClipboard extends Clipboard {
 
   // 匹配rtf中的图片，存储为{hex, type}对象数组
   extractImageDataFromRtf(rtfData) {
-    if (!rtfData || rtfData.length > 5_000_000) {
+    if (!rtfData) {
       return []
     }
 
-    // 简化 header 匹配，只匹配必要的部分
-    const regexPicture = /{\\pict[^}]*?(?:\\pngblip|\\jpegblip)[^}]*?([\da-fA-F\s]+?)\}/g
+    // 简化正则，避免复杂的嵌套和回溯
+    const imageRegex = /\{\\pict[^}]*?(?:\\pngblip|\\jpegblip)[^}]*?(?:\\bliptag-?\d+(?:\\blipupi-?\d+)?)?(?:{\\\*\\blipuid\s*[\da-fA-F]+)?[\s}]*?([\da-fA-F\s]+?)\}/g
 
     const result = []
-    let match: RegExpExecArray | null
+    let match
 
-    while ((match = regexPicture.exec(rtfData)) !== null) {
+    while ((match = imageRegex.exec(rtfData)) !== null) {
+      const fullImage = match[0]
       const hexData = match[1]
+
       if (!hexData) continue
 
-      const fullMatch = match[0]
-      const imageType = fullMatch.includes('\\pngblip') ? 'image/png' : 'image/jpeg'
+      let imageType = ''
+      if (fullImage.includes('\\pngblip')) {
+        imageType = 'image/png'
+      }
+      else if (fullImage.includes('\\jpegblip')) {
+        imageType = 'image/jpeg'
+      }
 
-      result.push({
-        hex: hexData.replace(/[^\da-fA-F]/g, ''),
-        type: imageType,
-      })
+      if (imageType) {
+        result.push({
+          hex: hexData.replace(/[^\da-fA-F]/g, ''),
+          type: imageType,
+        })
+      }
 
       // 防止无限循环
-      if (regexPicture.lastIndex === match.index) {
-        regexPicture.lastIndex++
+      if (imageRegex.lastIndex === match.index) {
+        imageRegex.lastIndex++
       }
     }
 
