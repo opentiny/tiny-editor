@@ -23,6 +23,7 @@ export class CustomClipboard extends Clipboard {
   declare quill: FluentEditor
 
   prepareMatching(container: HTMLElement, nodeMatches) {
+    console.log(1111, 'prepareMatching');
     const elementMatchers = []
     const textMatchers = []
     this.matchers.forEach((pair) => {
@@ -56,6 +57,7 @@ export class CustomClipboard extends Clipboard {
   }
 
   onCaptureCopy(e, isCut = false) {
+    console.log(2222, 'onCaptureCopy');
     if (e.defaultPrevented) {
       return
     }
@@ -91,6 +93,8 @@ export class CustomClipboard extends Clipboard {
   }
 
   onCapturePaste(e: ClipboardEvent) {
+    console.log(333, 'onCapturePaste');
+    
     if (e.defaultPrevented || !this.quill.isEnabled()) {
       return
     }
@@ -251,7 +255,8 @@ export class CustomClipboard extends Clipboard {
         }
         else {
           const range = this.getImgSelection(pastedDelta, imageIndexs[index])
-          this.quill.uploader.upload(range, [imageFile])
+          const urls = await this.quill.uploader.getFileUrls([imageFile], range)
+          return urls[0] || undefined
         }
       }),
     )
