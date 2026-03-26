@@ -2,7 +2,7 @@
 import type { EmojiMartData } from '@emoji-mart/data'
 import type FluentEditor from '@opentiny/fluent-editor'
 
-import type { I18N } from '@opentiny/fluent-editor'
+import type { I18n } from '@opentiny/fluent-editor'
 // 这里实际导入的是一个 json 文件，包含了 emoji-mart 所需的所有表情数据，类型是 EmojiMartData
 import data from '@emoji-mart/data'
 // computePosition 函数用于计算 emoji picker显示的位置
@@ -22,7 +22,7 @@ const lang = ref('zh-CN')
 onMounted(async () => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
   const [
-    { default: FluentEditor, FULL_TOOLBAR, I18N, generateToolbarTip, generateTableUp },
+    { default: FluentEditor, FULL_TOOLBAR, generateToolbarTip, generateTableUp },
     { defaultCustomSelect, TableMenuContextmenu, TableSelection, TableUp },
     emojiMart,
   ] = await Promise.all([
@@ -34,20 +34,7 @@ onMounted(async () => {
   if (!editorRef.value) return
   FluentEditor.register({ 'modules/toolbar-tip': generateToolbarTip(QuillToolbarTip) }, true)
   FluentEditor.register({ 'modules/table-up': generateTableUp(TableUp) }, true)
-  I18N.register(
-    {
-      'zh-CN': {
-        'replace bold': '替换粗体文本',
-        'replace italic': '替换斜体文本',
-      },
-      'en-US': {
-        'replace bold': 'Replace bold text',
-        'replace italic': 'Replace italic text',
-      },
-    },
-    // set false to add text to the existing language
-    false,
-  )
+
   editor = new FluentEditor(editorRef.value, {
     theme: 'snow',
     modules: {
@@ -59,12 +46,23 @@ onMounted(async () => {
         emojiPickerPosition: computePosition,
       },
       'i18n': {
-        lang: lang.value,
+        locale: lang.value,
+        messages: {
+          'zh-CN': {
+            'replace bold': '替换粗体文本',
+            'replace italic': '替换斜体文本',
+          },
+          'en-US': {
+            'replace bold': 'Replace bold text',
+            'replace italic': 'Replace italic text',
+          },
+        },
       },
       'toolbar-tip': {
         tipTextMap: {
-          bold: '_i18n"replace bold"',
-          italic: '_i18n"replace italic"',
+          // 对应的工具 key 名对应配置的 i18n key 名
+          bold: 'replace bold',
+          italic: 'replace italic',
         },
         defaultTooltipOptions: {
           tipHoverable: false,
@@ -82,7 +80,7 @@ onMounted(async () => {
 })
 function switchLanguage() {
   lang.value = lang.value === 'zh-CN' ? 'en-US' : 'zh-CN';
-  (editor.getModule('i18n') as I18N).changeLanguage({ lang: lang.value })
+  (editor.getModule('i18n') as I18n).setLocale(lang.value)
 }
 </script>
 

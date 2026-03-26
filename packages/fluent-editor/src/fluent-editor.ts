@@ -1,6 +1,5 @@
+import I18n from 'quill-i18n'
 import { FontStyle, LineHeightStyle, SizeStyle, TextIndentStyle } from './attributors'
-import { EN_US } from './config/i18n/en-us'
-import { ZH_CN } from './config/i18n/zh-cn'
 import FluentEditor from './core/fluent-editor'
 import { EmojiBlot, SoftBreak, StrikeBlot, Video } from './formats'
 import { AI } from './modules/ai' // AI
@@ -12,7 +11,6 @@ import { DividerBlot } from './modules/divider' // 分割线
 import { EmojiModule } from './modules/emoji'
 import { FileModule } from './modules/file' // 文件
 import { FlowChartModule } from './modules/flow-chart' // 流程图
-import I18N from './modules/i18n'
 import { LinkBlot } from './modules/link' // 超链接
 import { MathliveModule } from './modules/mathlive' // latex公式
 import { Mention } from './modules/mention' // @提醒
@@ -24,13 +22,6 @@ import { ColorPicker, Picker } from './modules/toolbar/better-picker'
 import SnowTheme from './themes/snow'
 import Icons from './ui/icons'
 
-I18N.register(
-  {
-    'en-US': EN_US,
-    'zh-CN': ZH_CN,
-  },
-  true,
-)
 FluentEditor.register(
   {
     'attributors/style/font': FontStyle,
@@ -52,7 +43,7 @@ FluentEditor.register(
     'modules/counter': Counter,
     'modules/emoji': EmojiModule,
     'modules/file': FileModule,
-    'modules/i18n': I18N,
+    'modules/i18n': I18n,
     'modules/image': BlotFormatter,
     'modules/mathlive': MathliveModule,
     'modules/ai': AI,

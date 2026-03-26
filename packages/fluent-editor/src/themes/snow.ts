@@ -1,7 +1,8 @@
 import type { ThemeOptions } from 'quill/core/theme'
 import type TypeToolbar from 'quill/modules/toolbar'
 import type TypeIconPicker from 'quill/ui/icon-picker'
-import { CHANGE_LANGUAGE_EVENT, inputFile, isNullOrUndefined } from '../config'
+import { I18N_LOCALE_CHANGE } from 'quill-i18n'
+import { inputFile, isNullOrUndefined } from '../config'
 import FluentEditor from '../core/fluent-editor'
 import { CustomImageSpec } from '../modules/custom-image/specs/custom-image-spec'
 import { LinkTooltip } from '../modules/link'
@@ -162,7 +163,7 @@ class SnowTheme extends OriginSnowTheme {
   constructor(public quill: FluentEditor, options: ThemeOptions) {
     super(quill, options)
 
-    this.quill.emitter.on(CHANGE_LANGUAGE_EVENT, () => {
+    this.quill.on(I18N_LOCALE_CHANGE, () => {
       this.i18nTextToolbar()
     })
   }

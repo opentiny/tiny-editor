@@ -93,15 +93,15 @@ test('header collaborative-editing test', async () => {
   await typeSync(p1, p2, 'Title')
   const levels = [1, 2, 3, 4, 5, 6]
   for (const lv of levels) {
-    await p1.locator('.ql-editor').click()
+    await p1.locator('.ql-editor').first().click()
     await selectAll(p1)
     if (lv <= 2) {
-      await p1.getByRole('button', { name: 'Normal' }).click()
-      await p1.getByRole('button', { name: `Heading ${lv}` }).click()
+      await p1.locator('.ql-toolbar .ql-picker.ql-header').click()
+      await p1.locator('.ql-toolbar').getByRole('button', { name: `Heading ${lv}` }).click()
     }
     else {
-      await p1.getByRole('button', { name: `Heading ${lv - 1}` }).click()
-      await p1.getByRole('button', { name: `Heading ${lv}` }).click()
+      await p1.locator('.ql-toolbar .ql-picker.ql-header').click()
+      await p1.locator('.ql-toolbar').getByRole('button', { name: `Heading ${lv}` }).click()
     }
     await expect.poll(() => headingMatched(p2, lv, 'Title')).toBeTruthy()
   }
@@ -121,7 +121,7 @@ test('size collaborative-editing test', async () => {
     if (next === current) {
       continue
     }
-    await p1.getByRole('button', { name: current }).click()
+    await p1.locator('.ql-toolbar .ql-size.ql-picker').click()
     await p1.getByRole('button', { name: next }).click()
 
     const sizeMatch = next.match(/\d+px/)
@@ -147,18 +147,18 @@ test('font collaborative-editing test', async () => {
   await selectAll(p1)
 
   await p1.getByRole('button', { name: 'Sans Serif' }).click()
-  await p1.getByRole('button', { name: 'serif', exact: true }).click()
+  await p1.getByRole('button', { name: '宋体', exact: true }).click()
 
   await expect
-    .poll(async () => (await p2.locator('.ql-editor span[style*="font-family: serif"]').count()) > 0)
+    .poll(async () => (await p2.locator('.ql-editor span[style*="font-family: 宋体"]').count()) > 0)
     .toBeTruthy()
 })
 
 test('line-height collaborative-editing test', async () => {
   await typeSync(p1, p2, 'fdsafdsa')
-  await p1.getByRole('button', { name: '1', exact: true }).click()
-  await p1.getByRole('button', { name: '1.15' }).click()
-  await expect.poll(async () => (await p2.locator('.ql-editor p[style*="line-height: 1.15"]').count()) > 0).toBeTruthy()
+  await p1.locator('.ql-toolbar .ql-picker.ql-line-height').click()
+  await p1.getByRole('button', { name: '1.5' }).click()
+  await expect.poll(async () => (await p2.locator('.ql-editor p[style*="line-height: 1.5"]').count()) > 0).toBeTruthy()
 })
 
 const formatTypes = ['bold', 'italic', 'underline', 'strike']
@@ -287,7 +287,7 @@ test('formula collaborative-editing test', async () => {
 
 test('table-up collaborative-editing test', async () => {
   await p1.locator('.ql-table-up > .ql-picker-label').click()
-  await p1.locator('div:nth-child(29)').first().click()
+  await p1.locator('.table-up-select-box__item[data-row="2"][data-col="2"]').first().click()
   await expect.poll(async () => (await p2.locator('.ql-editor div.ql-table-wrapper').count()) > 0).toBeTruthy()
 })
 

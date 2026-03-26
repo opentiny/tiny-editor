@@ -1,7 +1,6 @@
+import type { I18n } from 'quill-i18n'
 import type FluentEditor from '../../../core/fluent-editor'
 import type FlowChartPlaceholderBlot from '../formats/flow-chart-blot'
-import { CHANGE_LANGUAGE_EVENT } from '../../../config'
-import { I18N } from '../../../modules/i18n'
 import { registerFlowChartI18N } from '../i18n/index'
 
 class FlowChartContextMenuHandler {
@@ -12,12 +11,12 @@ class FlowChartContextMenuHandler {
   }
 
   constructor(private quill: FluentEditor, private blot: FlowChartPlaceholderBlot) {
-    const i18nModule = this.quill.getModule('i18n') as I18N
-    registerFlowChartI18N(I18N)
-    this.lang = i18nModule.options.lang
+    const i18nModule = this.quill.getModule('i18n') as I18n
+    registerFlowChartI18N(i18nModule)
+    this.lang = i18nModule.getLocale()
     this.texts = this.resolveTexts()
-    this.quill.emitter.on(CHANGE_LANGUAGE_EVENT, (lang: string) => {
-      this.lang = lang
+    this.quill.on('i18n-locale-change', (event: { locale: string, oldLocale: string }) => {
+      this.lang = event.locale
       this.texts = this.resolveTexts()
       this.updateContextMenuItems()
     })
@@ -25,12 +24,12 @@ class FlowChartContextMenuHandler {
 
   resolveTexts() {
     return {
-      copy: I18N.parserText('flowChart.contextMenu.copy', this.lang),
-      cut: I18N.parserText('flowChart.contextMenu.cut', this.lang),
-      paste: I18N.parserText('flowChart.contextMenu.paste', this.lang),
-      deleteContent: I18N.parserText('flowChart.contextMenu.deleteContent', this.lang),
-      deleteNode: I18N.parserText('flowChart.contextMenu.deleteNode', this.lang),
-      deleteEdge: I18N.parserText('flowChart.contextMenu.deleteEdge', this.lang),
+      copy: this.quill.getLangText('flowChart.contextMenu.copy'),
+      cut: this.quill.getLangText('flowChart.contextMenu.cut'),
+      paste: this.quill.getLangText('flowChart.contextMenu.paste'),
+      deleteContent: this.quill.getLangText('flowChart.contextMenu.deleteContent'),
+      deleteNode: this.quill.getLangText('flowChart.contextMenu.deleteNode'),
+      deleteEdge: this.quill.getLangText('flowChart.contextMenu.deleteEdge'),
     }
   }
 

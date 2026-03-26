@@ -1,7 +1,7 @@
 import type { Constructor } from '../../config/types'
 import type FluentEditor from '../../fluent-editor'
-import { CHANGE_LANGUAGE_EVENT } from '../../config'
-import { isString } from '../../utils/is'
+import { I18N_LOCALE_CHANGE } from 'quill-i18n'
+import { isObject, isString } from '../../utils/is'
 
 export function generateToolbarTip(QuillToolbarTip: Constructor) {
   return class extends QuillToolbarTip {
@@ -11,7 +11,7 @@ export function generateToolbarTip(QuillToolbarTip: Constructor) {
       }
       super(quill, options)
 
-      this.quill.emitter.on(CHANGE_LANGUAGE_EVENT, () => {
+      this.quill.on(I18N_LOCALE_CHANGE, () => {
         this.destroyAllTips()
         this.options = this.resolveOptions(options)
         this.createToolbarTip()
@@ -127,9 +127,35 @@ export function generateToolbarTip(QuillToolbarTip: Constructor) {
         },
       }
       const inputTipTextMap = Object.entries(options.tipTextMap).reduce((pre, [key, value]) => {
-        pre[key] = isString(value) ? this.quill.getLangText(value) : value
+        if (isString(value)) {
+          pre[key] = { msg: this.quill.getLangText(value) }
+        }
+        else if (value && isObject(value)) {
+          const isNewConfig = 'values' in value || 'onShow' in value || 'msg' in value || 'content' in value
+          if (!isNewConfig) {
+            pre[key] = {
+              values: Object.fromEntries(
+                Object.entries(value).map(([k, v]) => [k, isString(v) ? this.quill.getLangText(v as string) : v]),
+              ),
+            }
+          }
+          else {
+            const config = { ...value } as any
+            if (isString(config.msg)) config.msg = this.quill.getLangText(config.msg)
+            if (isString(config.content)) config.content = this.quill.getLangText(config.content)
+            if (config.values) {
+              config.values = Object.fromEntries(
+                Object.entries(config.values).map(([k, v]) => [k, isString(v) ? this.quill.getLangText(v as string) : v]),
+              )
+            }
+            pre[key] = config
+          }
+        }
+        else {
+          pre[key] = value
+        }
         return pre
-      }, {})
+      }, {} as Record<string, any>)
       return {
         ...result,
         tipTextMap: {

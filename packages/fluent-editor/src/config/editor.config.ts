@@ -102,7 +102,7 @@ export const FULL_TOOLBAR = [
   ],
   ['bold', 'italic', 'strike', 'underline', 'divider'],
   [{ color: [] }, { background: [] }],
-  [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
+  [{ align: ['', 'center', 'right'] }, { align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
   [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
   [{ script: 'sub' }, { script: 'super' }],
   [{ indent: '-1' }, { indent: '+1' }],

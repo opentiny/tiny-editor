@@ -1,7 +1,6 @@
 import type FluentEditor from '../../../core/fluent-editor'
 import type MindMapPlaceholderBlot from '../formats/mind-map-blot'
-import { CHANGE_LANGUAGE_EVENT } from '../../../config'
-import { I18N } from '../../../modules/i18n'
+import { type I18n, I18N_LOCALE_CHANGE } from 'quill-i18n'
 import { registerMindMapI18N } from '../i18n'
 
 class MindMapContextMenuHandler {
@@ -12,12 +11,12 @@ class MindMapContextMenuHandler {
   }
 
   constructor(private quill: FluentEditor, private blot: MindMapPlaceholderBlot) {
-    const i18nModule = this.quill.getModule('i18n') as I18N
-    registerMindMapI18N(I18N)
-    this.lang = i18nModule.options.lang
+    const i18nModule = this.quill.getModule('i18n') as I18n
+    registerMindMapI18N(i18nModule)
+    this.lang = i18nModule.getLocale()
     this.texts = this.resolveTexts()
-    this.quill.emitter.on(CHANGE_LANGUAGE_EVENT, (lang: string) => {
-      this.lang = lang
+    this.quill.on(I18N_LOCALE_CHANGE, (event: { locale: string, oldLocale: string }) => {
+      this.lang = event.locale
       this.texts = this.resolveTexts()
       this.updateContextMenuItems()
     })
@@ -25,10 +24,12 @@ class MindMapContextMenuHandler {
 
   resolveTexts() {
     return {
-      copy: I18N.parserText('mindMap.contextMenu.copy', this.lang),
-      cut: I18N.parserText('mindMap.contextMenu.cut', this.lang),
-      paste: I18N.parserText('mindMap.contextMenu.paste', this.lang),
-      delete: I18N.parserText('mindMap.contextMenu.deleteContent', this.lang),
+      copy: this.quill.getLangText('mindMap.contextMenu.copy'),
+      cut: this.quill.getLangText('mindMap.contextMenu.cut'),
+      paste: this.quill.getLangText('mindMap.contextMenu.paste'),
+      deleteContent: this.quill.getLangText('mindMap.contextMenu.deleteContent'),
+      deleteNode: this.quill.getLangText('mindMap.contextMenu.deleteNode'),
+      deleteIcon: this.quill.getLangText('mindMap.contextMenu.deleteIcon'),
     }
   }
 

@@ -3,7 +3,7 @@ import type BaseTheme from 'quill/themes/base'
 import type Picker from 'quill/ui/picker'
 import type { Constructor } from '../../config/types'
 import type FluentEditor from '../../core/fluent-editor'
-import { CHANGE_LANGUAGE_EVENT } from '../../config'
+import { I18N_LOCALE_CHANGE } from 'quill-i18n'
 import { isFunction } from '../../utils/is'
 
 interface QuillTheme extends BaseTheme {
@@ -25,8 +25,8 @@ export function generateTableUp(QuillTableUp: Constructor) {
         ]),
       )
 
-      this.quill.emitter.on(CHANGE_LANGUAGE_EVENT, () => {
-        this.options.texts = this.resolveTexts(options.texts)
+      this.quill.on(I18N_LOCALE_CHANGE, () => {
+        this.refreshUI()
         const toolbar = this.quill.getModule('toolbar') as Toolbar
         if (toolbar && (this.quill.theme as QuillTheme).pickers) {
           const [, select] = (toolbar.controls as [string, HTMLElement][] || []).find(([name]) => name === this.statics.toolName) || []
@@ -48,36 +48,32 @@ export function generateTableUp(QuillTableUp: Constructor) {
       })
     }
 
-    resolveTexts(options: Record<string, string> = {}) {
-      return Object.assign({
-        fullCheckboxText: this.quill.getLangText('fullCheckboxText'),
-        customBtnText: this.quill.getLangText('customBtnText'),
-        confirmText: this.quill.getLangText('confirmText'),
-        cancelText: this.quill.getLangText('cancelText'),
-        rowText: this.quill.getLangText('rowText'),
-        colText: this.quill.getLangText('colText'),
-        notPositiveNumberError: this.quill.getLangText('notPositiveNumberError'),
-        custom: this.quill.getLangText('custom'),
-        clear: this.quill.getLangText('clear'),
-        transparent: this.quill.getLangText('transparent'),
-        perWidthInsufficient: this.quill.getLangText('perWidthInsufficient'),
-        CopyCell: this.quill.getLangText('CopyCell'),
-        CutCell: this.quill.getLangText('CutCell'),
-        InsertTop: this.quill.getLangText('InsertTop'),
-        InsertRight: this.quill.getLangText('InsertRight'),
-        InsertBottom: this.quill.getLangText('InsertBottom'),
-        InsertLeft: this.quill.getLangText('InsertLeft'),
-        MergeCell: this.quill.getLangText('MergeCell'),
-        SplitCell: this.quill.getLangText('SplitCell'),
-        DeleteRow: this.quill.getLangText('DeleteRow'),
-        DeleteColumn: this.quill.getLangText('DeleteColumn'),
-        DeleteTable: this.quill.getLangText('DeleteTable'),
-        BackgroundColor: this.quill.getLangText('BackgroundColor'),
-        BorderColor: this.quill.getLangText('BorderColor'),
-      }, Object.entries(options).reduce((pre, [key, value]) => {
-        pre[key] = this.quill.getLangText(value)
-        return pre
-      }, {} as Record<string, string>))
+    resolveOptions(options: Partial<any> = {}) {
+      const { texts, ...rest } = options || {}
+      const resolvedOptions = super.resolveOptions(rest)
+      resolvedOptions.texts = super.resolveTexts(this.createTextResolver(texts))
+      return resolvedOptions
+    }
+
+    resolveTexts(options: Record<string, string> | ((key: string) => string) = {}) {
+      return super.resolveTexts(this.createTextResolver(options))
+    }
+
+    createTextResolver(options: Record<string, string> | ((key: string) => string) = {}) {
+      const textResolver = isFunction(options) ? options : null
+      const textMap = textResolver ? {} : options
+
+      return (key: string) => {
+        if (textResolver) {
+          const customText = textResolver.call(this, key)
+          if (customText !== undefined) return customText
+        }
+        else if (textMap[key] !== undefined) {
+          return textMap[key]
+        }
+
+        return this.quill.getLangText(key)
+      }
     }
   }
 }

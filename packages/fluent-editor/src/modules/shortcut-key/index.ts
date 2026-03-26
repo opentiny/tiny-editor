@@ -4,8 +4,9 @@ import type { Context } from 'quill/modules/keyboard'
 import type TypeToolbar from 'quill/modules/toolbar'
 import type FluentEditor from '../../fluent-editor'
 import Quill from 'quill'
+import { I18N_LOCALE_CHANGE } from 'quill-i18n'
 import QuillShortcutKey, { defaultShortKey, searchAndSort } from 'quill-shortcut-key'
-import { CHANGE_LANGUAGE_EVENT } from '../../config'
+import { isString } from '../../utils/is'
 
 export interface ShortCutKeyCustomOptions { isMenuItemsAdd: boolean }
 export type ShortCutKeyInputOptions = QuillShortcutKeyInputOptions & ShortCutKeyCustomOptions
@@ -15,7 +16,7 @@ export class ShortCutKey extends QuillShortcutKey {
   constructor(public quill: FluentEditor, options: Partial<ShortCutKeyInputOptions>) {
     super(quill, options)
 
-    this.quill.emitter.on(CHANGE_LANGUAGE_EVENT, () => {
+    this.quill.on(I18N_LOCALE_CHANGE, () => {
       this.destroyMenuList()
       this.options = this.resolveOptions(options)
       this.menuSorter = searchAndSort.bind(this, this.getAllMenuItems()) as (searchText: string) => Menu
@@ -43,7 +44,7 @@ export class ShortCutKey extends QuillShortcutKey {
         const value = {
           ...item,
         }
-        if (item.title) {
+        if (item.title && isString(item.title)) {
           value.title = this.quill.getLangText(item.title)
         }
         if (item.type === 'group') {

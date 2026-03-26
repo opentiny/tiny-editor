@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import type { EmojiMartData } from '@emoji-mart/data'
 import type FluentEditor from '@opentiny/fluent-editor'
 import type { Range } from '@opentiny/fluent-editor'
+import data from '@emoji-mart/data'
+import { computePosition } from '@floating-ui/dom'
 import Html2Canvas from 'html2canvas'
 import katex from 'katex'
 import { onMounted, ref } from 'vue'
@@ -34,6 +37,7 @@ onMounted(async () => {
     { WebsocketProvider },
     { IndexeddbPersistence },
     { default: QuillCursors },
+    emojiMart,
   ] = await Promise.all([
     import('@opentiny/fluent-editor'),
     import('quill-table-up'),
@@ -43,6 +47,7 @@ onMounted(async () => {
     import('y-websocket'),
     import('y-indexeddb'),
     import('quill-cursors'),
+    import('emoji-mart'),
   ])
 
   if (!editorRef.value) return
@@ -63,7 +68,11 @@ onMounted(async () => {
     modules: {
       'toolbar': FULL_TOOLBAR,
       'file': true,
-      'emoji': true,
+      'emoji': {
+        emojiData: data as EmojiMartData,
+        EmojiPicker: emojiMart.Picker,
+        emojiPickerPosition: computePosition,
+      },
       'uploader': {
         mimetypes: ['image/*'],
         handler(range: Range, files: File[]) {

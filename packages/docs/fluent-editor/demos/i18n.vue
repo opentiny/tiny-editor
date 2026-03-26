@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { EmojiMartData } from '@emoji-mart/data'
 import type FluentEditor from '@opentiny/fluent-editor'
-import type { I18N } from '@opentiny/fluent-editor'
+import type { I18n } from '@opentiny/fluent-editor'
 
 // 这里实际导入的是一个 json 文件，包含了 emoji-mart 所需的所有表情数据，类型是 EmojiMartData
 import data from '@emoji-mart/data'
@@ -45,7 +45,7 @@ onMounted(async () => {
         emojiPickerPosition: computePosition,
       },
       'i18n': {
-        lang: lang.value,
+        locale: lang.value,
       },
       'toolbar-tip': {
         defaultTooltipOptions: {
@@ -64,7 +64,7 @@ onMounted(async () => {
 })
 function switchLanguage() {
   lang.value = lang.value === 'zh-CN' ? 'en-US' : 'zh-CN';
-  (editor.getModule('i18n') as I18N).changeLanguage({ lang: lang.value })
+  (editor.getModule('i18n') as I18n).setLocale(lang.value)
 }
 </script>
 

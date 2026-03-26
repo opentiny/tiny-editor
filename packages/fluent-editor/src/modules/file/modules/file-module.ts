@@ -24,7 +24,7 @@ export class FileModule {
       event.preventDefault()
       // 在只读模式下直接下载文件
       if (!this.quill.isEnabled()) {
-        this.downloadFile(fileDom)
+        this.downloadFile(fileDom as HTMLElement)
         return
       }
       if (this.fileBar) {

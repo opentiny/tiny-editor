@@ -11,7 +11,7 @@ test.describe('FlowChart.vue', () => {
   })
 
   test('should have flow-chart button in toolbar', async ({ page }) => {
-    const toolbar = page.locator('.ql-toolbar')
+    const toolbar = page.locator('.ql-toolbar').first()
     await expect(toolbar).toBeVisible()
 
     const flowChartButton = toolbar.locator('.ql-flow-chart')
@@ -31,18 +31,18 @@ test.describe('FlowChart.vue', () => {
   test('should contain initial flow chart nodes and edges', async ({ page }) => {
     await page.waitForTimeout(2000)
 
-    const flowChartContainer = page.locator('.ql-flow-chart-item')
+    const flowChartContainer = page.locator('.ql-flow-chart-item').first()
     await expect(flowChartContainer).toBeVisible()
 
-    const nodes = page.locator('.lf-node')
+    const nodes = flowChartContainer.locator('.lf-node')
     await expect(nodes).toHaveCount(2)
 
-    const edges = page.locator('.lf-edge')
+    const edges = flowChartContainer.locator('.lf-edge')
     await expect(edges).toHaveCount(1)
   })
 
   test('should activate flow-chart when button is clicked', async ({ page }) => {
-    const flowChartButton = page.locator('.ql-toolbar .ql-flow-chart')
+    const flowChartButton = page.locator('.ql-toolbar .ql-flow-chart').first()
     await expect(flowChartButton).toBeVisible()
 
     await flowChartButton.click()

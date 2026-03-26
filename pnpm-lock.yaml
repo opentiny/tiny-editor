@@ -117,11 +117,11 @@ importers:
         specifier: ^0.0.10
         version: 0.0.10
       quill-table-up:
-        specifier: ^3.3.0
-        version: 3.3.0(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
+        specifier: ^3.4.0
+        version: 3.4.0(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
       quill-toolbar-tip:
-        specifier: ^0.0.13
-        version: 0.0.13(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
+        specifier: 1.0.1-beta.1
+        version: 1.0.1-beta.1(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
       simple-mind-map:
         specifier: 0.14.0-fix.1
         version: 0.14.0-fix.1
@@ -198,9 +198,12 @@ importers:
       quill-easy-color:
         specifier: ^0.0.10
         version: 0.0.10(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
+      quill-i18n:
+        specifier: ^0.2.0
+        version: 0.2.0(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
       quill-shortcut-key:
-        specifier: ^0.0.5
-        version: 0.0.5(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
+        specifier: ^0.2.0
+        version: 0.2.0(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
     devDependencies:
       '@emoji-mart/data':
         specifier: ^1.2.1
@@ -1211,8 +1214,14 @@ packages:
   '@floating-ui/core@1.7.3':
     resolution: {integrity: sha512-sGnvb5dmrJaKEZ+LDIpguvdX3bDlEllmv4/ClQ9awcmCZrlx5jQyyMWFM5kBI+EyNOCDDiKk8il0zeuX3Zlg/w==}
 
+  '@floating-ui/core@1.7.4':
+    resolution: {integrity: sha512-C3HlIdsBxszvm5McXlB8PeOEWfBhcGBTZGkGlWc2U0KFY5IwG5OQEuQ8rq52DZmcHDlPLd+YFBK+cZcytwIFWg==}
+
   '@floating-ui/dom@1.7.4':
     resolution: {integrity: sha512-OOchDgh4F2CchOX94cRVqhvy7b3AFb+/rQXyswmzmGakRfkMgoWVjfnLWkRirfLEfuD4ysVW16eXzwt3jHIzKA==}
+
+  '@floating-ui/dom@1.7.5':
+    resolution: {integrity: sha512-N0bD2kIPInNHUHehXhMke1rBGs1dwqvC9O9KYMyyjK7iXt7GAhnro7UlcuYcGdS/yYOlq0MAVgrow8IbWJwyqg==}
 
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
@@ -3354,11 +3363,12 @@ packages:
   glob@11.0.3:
     resolution: {integrity: sha512-2Nim7dha1KVkaiF4q6Dj+ngPPMdfvLJEOpZk/jKiUAkqKebpGAWQXAq9z1xu9HKu5lWfqw/FASuccEjyznjPaA==}
     engines: {node: 20 || >=22}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   globals@13.24.0:
     resolution: {integrity: sha512-AhO5QUcj8llrbG09iWhPU2B204J1xnPeL8kQmVorSsy+Sjj1sk8gIyh6cUocGmH4L0UuhAJy+hJMRA4mgA4mFQ==}
@@ -4873,11 +4883,16 @@ packages:
     peerDependencies:
       quill: ^2.0.0
 
+  quill-i18n@0.2.0:
+    resolution: {integrity: sha512-aWhfqpeOZyqiecfuP6RVa4R+oKSJgnOzmZ3zxtYTldj20DiEuXm3vQOMtMlZGMFbziHt8HIOE8fpCFu7JxEHqw==}
+    peerDependencies:
+      quill: ^2.0.0
+
   quill-markdown-shortcuts@0.0.10:
     resolution: {integrity: sha512-2FFFqqo65JgDgAGSer7cFQTCeiSjJF4N8lRGXGv/xjppCxSwj42OnNdGPZ/zeeCxdUY/j1LW4AiSvPQaTIkY2A==}
 
-  quill-shortcut-key@0.0.5:
-    resolution: {integrity: sha512-7B1KLgkaN4e1a9+ZtT3Fui3I0bqrdeMW3jQaMYJ3W8dHEi4jg2pIwSKW3cFerqH0iSPnNE3pAhX0y9AeDg4vnA==}
+  quill-shortcut-key@0.2.0:
+    resolution: {integrity: sha512-f5KeT3VkVebwd9Cg/EsShvQcX7fVgzuQ+31XwpmaiO0y1MV1fqgZcwy4roMY7SUk57YJxuEhubKrXRHHrKwCFw==}
     peerDependencies:
       quill: ^2.0.0
 
@@ -4886,13 +4901,13 @@ packages:
     peerDependencies:
       quill: ^2.0.3
 
-  quill-table-up@3.3.0:
-    resolution: {integrity: sha512-B/EiCy5eXGgQ24WE1SBk9JW5roJuTENH6ZcnipfZm/AbK9BolEUfWujZXtqqXNs28oNvtJlXyTz5SLH+gn1dXA==}
+  quill-table-up@3.4.0:
+    resolution: {integrity: sha512-oU/0tVqyNqvXnCUTi9yZmdBzUU5w8D4rqMbGNvAMMjupglWVAGop7DrFTH09oUpzvz8uaPXx8vn9ETt4DxLhVg==}
     peerDependencies:
       quill: ^2.0.3
 
-  quill-toolbar-tip@0.0.13:
-    resolution: {integrity: sha512-E2fK1C2xUiBulIRabgYBS861gD1M+NSU6ngijchMgdQlYY2y5Bml2mOaDnGwxRmMu9SVx5gu6DlXDe0Fi3nPwg==}
+  quill-toolbar-tip@1.0.1-beta.1:
+    resolution: {integrity: sha512-OSYGt1qkAvbsM7U1VeC/UGc2+exUbohi1Zp3e1f0nOaMfxVuVwuneYpQnecT5Jwq3FLKlQRqbRGAUItHviTC7g==}
     peerDependencies:
       quill: ^2.0.0
 
@@ -6795,9 +6810,18 @@ snapshots:
     dependencies:
       '@floating-ui/utils': 0.2.10
 
+  '@floating-ui/core@1.7.4':
+    dependencies:
+      '@floating-ui/utils': 0.2.10
+
   '@floating-ui/dom@1.7.4':
     dependencies:
       '@floating-ui/core': 1.7.3
+      '@floating-ui/utils': 0.2.10
+
+  '@floating-ui/dom@1.7.5':
+    dependencies:
+      '@floating-ui/core': 1.7.4
       '@floating-ui/utils': 0.2.10
 
   '@floating-ui/utils@0.2.10': {}
@@ -11253,11 +11277,15 @@ snapshots:
     dependencies:
       quill: 2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)
 
+  quill-i18n@0.2.0(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)):
+    dependencies:
+      quill: 2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)
+
   quill-markdown-shortcuts@0.0.10:
     dependencies:
       quill: 1.3.7
 
-  quill-shortcut-key@0.0.5(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)):
+  quill-shortcut-key@0.2.0(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)):
     dependencies:
       quill: 2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)
 
@@ -11266,14 +11294,14 @@ snapshots:
       '@floating-ui/dom': 1.7.4
       quill: 2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)
 
-  quill-table-up@3.3.0(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)):
+  quill-table-up@3.4.0(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)):
     dependencies:
-      '@floating-ui/dom': 1.7.4
+      '@floating-ui/dom': 1.7.5
       quill: 2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)
 
-  quill-toolbar-tip@0.0.13(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)):
+  quill-toolbar-tip@1.0.1-beta.1(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)):
     dependencies:
-      '@floating-ui/dom': 1.7.4
+      '@floating-ui/dom': 1.7.5
       quill: 2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)
 
   quill@1.3.7:

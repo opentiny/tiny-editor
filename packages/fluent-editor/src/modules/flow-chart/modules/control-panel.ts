@@ -1,7 +1,6 @@
+import type { I18n } from 'quill-i18n'
 import type FluentEditor from '../../../core/fluent-editor'
 import type FlowChartPlaceholderBlot from '../formats/flow-chart-blot'
-import { CHANGE_LANGUAGE_EVENT } from '../../../config'
-import { I18N } from '../../../modules/i18n'
 import { registerFlowChartI18N } from '../i18n'
 import { backIcon, bezierIcon, contractIcon, fitIcon, forwardIcon, lineIcon, polyLineIcon, screenReduceIcon, screenTypeIcon, zoomInIcon, zoomOutIcon } from '../icons'
 
@@ -13,12 +12,12 @@ class FlowChartControlPanelHandler {
   }
 
   constructor(private quill: FluentEditor, private blot: FlowChartPlaceholderBlot) {
-    const i18nModule = this.quill.getModule('i18n') as I18N
-    registerFlowChartI18N(I18N)
-    this.lang = i18nModule.options.lang
+    const i18nModule = this.quill.getModule('i18n') as I18n
+    registerFlowChartI18N(i18nModule)
+    this.lang = i18nModule.getLocale()
     this.texts = this.resolveTexts()
-    this.quill.emitter.on(CHANGE_LANGUAGE_EVENT, (lang: string) => {
-      this.lang = lang
+    this.quill.on('i18n-locale-change', (event: { locale: string, oldLocale: string }) => {
+      this.lang = event.locale
       this.texts = this.resolveTexts()
       this.updateControlPanelTexts()
     })
@@ -26,15 +25,15 @@ class FlowChartControlPanelHandler {
 
   resolveTexts() {
     return {
-      exportTitle: I18N.parserText('flowChart.controlPanel.exportTitle', this.lang),
-      zoomOutTitle: I18N.parserText('flowChart.controlPanel.zoomOutTitle', this.lang),
-      zoomInTitle: I18N.parserText('flowChart.controlPanel.zoomInTitle', this.lang),
-      fitTitle: I18N.parserText('flowChart.controlPanel.fitTitle', this.lang),
-      backTitle: I18N.parserText('flowChart.controlPanel.backTitle', this.lang),
-      forwardTitle: I18N.parserText('flowChart.controlPanel.forwardTitle', this.lang),
-      setEdgeTypeTitle: I18N.parserText('flowChart.controlPanel.setEdgeTypeTitle', this.lang),
-      panelStatusTitle: I18N.parserText('flowChart.controlPanel.panelStatusTitle', this.lang),
-      screenTypeTitle: I18N.parserText('flowChart.controlPanel.screenTypeTitle', this.lang),
+      exportTitle: this.quill.getLangText('flowChart.controlPanel.exportTitle'),
+      zoomOutTitle: this.quill.getLangText('flowChart.controlPanel.zoomOutTitle'),
+      zoomInTitle: this.quill.getLangText('flowChart.controlPanel.zoomInTitle'),
+      fitTitle: this.quill.getLangText('flowChart.controlPanel.fitTitle'),
+      backTitle: this.quill.getLangText('flowChart.controlPanel.backTitle'),
+      forwardTitle: this.quill.getLangText('flowChart.controlPanel.forwardTitle'),
+      setEdgeTypeTitle: this.quill.getLangText('flowChart.controlPanel.setEdgeTypeTitle'),
+      panelStatusTitle: this.quill.getLangText('flowChart.controlPanel.panelStatusTitle'),
+      screenTypeTitle: this.quill.getLangText('flowChart.controlPanel.screenTypeTitle'),
     }
   }
 

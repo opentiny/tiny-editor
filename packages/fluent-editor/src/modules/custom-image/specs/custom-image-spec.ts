@@ -136,7 +136,7 @@ export class CustomImageSpec extends ImageSpec {
    */
   onImageDoubleClick = (event: MouseEvent) => {
     const target = event.target
-    const imageSrc = target.getAttribute('src') || target.getAttribute('data-image')
+    const imageSrc = (target as HTMLElement).getAttribute('src') || (target as HTMLElement).getAttribute('data-image')
 
     if (imageSrc) {
       const modal = getImagePreviewModal()

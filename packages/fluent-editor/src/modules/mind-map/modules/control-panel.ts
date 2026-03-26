@@ -1,7 +1,6 @@
 import type FluentEditor from '../../../core/fluent-editor'
 import type MindMapPlaceholderBlot from '../formats/mind-map-blot'
-import { CHANGE_LANGUAGE_EVENT } from '../../../config'
-import { I18N } from '../../../modules/i18n'
+import { type I18n, I18N_LOCALE_CHANGE } from 'quill-i18n'
 import { getAllConfigs } from '../config-utils'
 import { registerMindMapI18N } from '../i18n'
 import { backIcon, catalogOrganizationIcon, contractIcon, fishboneIcon, fitIcon, forwardIcon, insertChildNodeIcon, insertIconIcon, insertNodeIcon, insertParentNodeIcon, logicalStructureIcon, mindMapIcon, organizationStructureIcon, removeNodeIcon, screenReduceIcon, screenTypeIcon, setLayoutIcon, timelineIcon, zoomInIcon, zoomOutIcon } from '../icons'
@@ -14,12 +13,12 @@ class MindMapControlPanelHandler {
   }
 
   constructor(private quill: FluentEditor, private blot: MindMapPlaceholderBlot) {
-    const i18nModule = this.quill.getModule('i18n') as I18N
-    registerMindMapI18N(I18N)
-    this.lang = i18nModule.options.lang
+    const i18nModule = this.quill.getModule('i18n') as I18n
+    registerMindMapI18N(i18nModule)
+    this.lang = i18nModule.getLocale()
     this.texts = this.resolveTexts()
-    this.quill.emitter.on(CHANGE_LANGUAGE_EVENT, (lang: string) => {
-      this.lang = lang
+    this.quill.on(I18N_LOCALE_CHANGE, (event: { locale: string, oldLocale: string }) => {
+      this.lang = event.locale
       this.texts = this.resolveTexts()
       this.updateControlPanelTexts()
     })
@@ -50,10 +49,10 @@ class MindMapControlPanelHandler {
 
     return textKeys.reduce((acc, key) => {
       if (!key.includes('Title')) {
-        acc[key] = I18N.parserText(`mindMap.layout.${key.replace('Layout', '')}`, this.lang)
+        acc[key] = this.quill.getLangText(`mindMap.layout.${key.replace('Layout', '')}`)
       }
       else {
-        acc[key] = I18N.parserText(`mindMap.controlPanel.${key}`, this.lang)
+        acc[key] = this.quill.getLangText(`mindMap.controlPanel.${key}`)
       }
       return acc
     }, {} as Record<string, string>)

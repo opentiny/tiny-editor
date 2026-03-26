@@ -74,7 +74,10 @@ export const EN_US = {
   'file': 'File',
   'mind-map': 'Mind Map',
   'flow-chart': 'Flow Chart',
-  'link': 'Hyperlink',
+  'link': {
+    '': 'Hyperlink',
+    'enter-link': 'Enter link: ',
+  },
   'code': 'Inline Code',
   'table': 'Table',
   'table-up': 'Table',

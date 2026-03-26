@@ -1,7 +1,7 @@
 import type { AnyFunction } from '../config'
 import type FluentEditor from '../fluent-editor'
 import Quill from 'quill'
-import { CHANGE_LANGUAGE_EVENT } from '../config'
+import { I18N_LOCALE_CHANGE } from 'quill-i18n'
 
 export interface ICounterOption {
   format?: 'text' | 'html'
@@ -19,7 +19,7 @@ export default class Counter {
     this.options = this.resolveOptions(options)
     this.container = quill.addContainer('ql-counter')
     quill.on(Quill.events.TEXT_CHANGE, this.renderCount)
-    this.quill.emitter.on(CHANGE_LANGUAGE_EVENT, () => {
+    this.quill.on(I18N_LOCALE_CHANGE, () => {
       this.options = this.resolveOptions(options)
       this.renderCount()
     })

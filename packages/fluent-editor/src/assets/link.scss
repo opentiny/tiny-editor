@@ -12,7 +12,7 @@
       z-index: 1;
 
       &[data-mode='link']::before {
-        content: none;
+        content: attr(data-before-title);
       }
 
       &.ql-flip {
@@ -117,5 +117,3 @@
     }
   }
 }
-// 编辑器正文
-@include linkTooltip;

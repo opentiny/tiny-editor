@@ -84,10 +84,10 @@ export class FileUploader extends Uploader {
     if (Array.isArray(mimetypes)) {
       return this.filterFromArray(mimetypes, kind)
     }
-    const map = mimetypes || {}
+    const map = (mimetypes || {}) as any
     const fromKind = map[kind]
-    if (fromKind?.length) return fromKind
-    if (map.file?.length && kind !== 'file') return map.file
+    if (fromKind?.length) return fromKind as string[]
+    if (map.file?.length && kind !== 'file') return map.file as string[]
     return []
   }
 
@@ -96,7 +96,7 @@ export class FileUploader extends Uploader {
     if (typeof maxSize === 'number') {
       return maxSize
     }
-    const map = maxSize || {}
+    const map = (maxSize || {}) as any
     const fromKind = map[kind]
     if (typeof fromKind === 'number') return fromKind
     if (typeof map.file === 'number' && kind !== 'file') return map.file
@@ -108,7 +108,7 @@ export class FileUploader extends Uploader {
     if (typeof multiple === 'boolean') {
       return multiple
     }
-    const map = multiple || {}
+    const map = (multiple || {}) as any
     const fromKind = map[kind]
     if (typeof fromKind === 'boolean') return fromKind
     if (typeof map.file === 'boolean' && kind !== 'file') return map.file

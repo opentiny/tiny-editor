@@ -1,5 +1,6 @@
+import type { I18nOptions } from 'quill-i18n'
 import type { ToolbarProps } from 'quill/modules/toolbar'
-import type { I18NOptions, ICounterOption, MentionOption, ShortCutKeyInputOptions } from '../../modules'
+import type { ICounterOption, MentionOption, ShortCutKeyInputOptions } from '../../modules'
 import type { BlotFormatterOptionsInput } from '../../modules/custom-image/options'
 import type { FileUploaderOptions } from '../../modules/custom-uploader'
 import type { EmojiModuleOptions } from '../../modules/emoji'
@@ -40,7 +41,7 @@ export interface IEditorModules {
   'uploader'?: boolean | Partial<FileUploaderOptions>
   'shortcut-key'?: boolean | Partial<ShortCutKeyInputOptions>
   'mention'?: boolean | MentionOption
-  'i18n'?: boolean | Partial<I18NOptions>
+  'i18n'?: boolean | Partial<I18nOptions>
   'counter'?: boolean | ICounterOption
   'emoji'?: boolean | EmojiModuleOptions
   'file'?: boolean

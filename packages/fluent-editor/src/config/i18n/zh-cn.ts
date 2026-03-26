@@ -72,7 +72,10 @@ export const ZH_CN = {
   'file': '文件',
   'mind-map': '思维导图',
   'flow-chart': '流程图',
-  'link': '超链接',
+  'link': {
+    '': '超链接',
+    'enter-link': '输入链接： ',
+  },
   'divider': '分割线',
   'code': '行内代码',
   'table': '表格',

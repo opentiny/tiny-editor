@@ -1,9 +1,9 @@
 import type { Parchment as TypeParchment } from 'quill'
 import type FluentEditor from '../../../core/fluent-editor'
 import Quill, { Range } from 'quill'
+import { I18N_LOCALE_CHANGE } from 'quill-i18n'
 import Emitter from 'quill/core/emitter'
 import { BaseTooltip } from 'quill/themes/base'
-import { CHANGE_LANGUAGE_EVENT } from '../../../config'
 import { hadProtocol, isNullOrUndefined } from '../../../config/editor.utils'
 import { EN_US } from '../../../config/i18n/en-us'
 import { debounce } from '../../../utils/debounce'
@@ -35,7 +35,7 @@ export class LinkTooltip extends BaseTooltip {
     LinkBlot.autoProtocol = this.options.autoProtocol
     this.debouncedHideToolTip = debounce(this.hideToolTip, 300)
     this.debouncedShowToolTip = debounce(this.showToolTip, 300)
-    this.quill.emitter.on(CHANGE_LANGUAGE_EVENT, () => {
+    this.quill.on(I18N_LOCALE_CHANGE, () => {
       this.setTemplate()
     })
   }
@@ -47,8 +47,9 @@ export class LinkTooltip extends BaseTooltip {
       '<a class="ql-preview"><i class="icon-share"></i></a>',
       '<a class="ql-remove"><i class="icon-delete"></i></a>',
     ].join('')
+    this.root.setAttribute('data-before-title', this.quill.getLangText(`link.enter-${this.root.dataset.mode}`))
     this.textbox = this.root.querySelector('input[type="text"]')
-    this.listen()
+    this.bindRootEvents()
   }
 
   resolveOptions() {
@@ -113,16 +114,6 @@ export class LinkTooltip extends BaseTooltip {
 
   listen() {
     super.listen()
-    this.root.querySelector('a.ql-remove').addEventListener('click', (event) => {
-      if (!isNullOrUndefined(this.linkRange)) {
-        const range = this.linkRange
-        this.restoreFocus()
-        this.quill.formatText(range, 'link', false, Emitter.sources.API)
-        delete this.linkRange
-      }
-      event.preventDefault()
-      this.hide()
-    })
 
     this.quill.root.addEventListener(
       'mouseover',
@@ -160,20 +151,9 @@ export class LinkTooltip extends BaseTooltip {
       false,
     )
 
+    this.bindRootEvents()
     this.root.addEventListener('mouseleave', this.handleMouseLeave.bind(this), false)
 
-    this.root.querySelector('a.ql-preview').addEventListener('click', (event) => {
-      const link = LinkBlot.sanitize(this.textbox.value)
-      window.open(link, '_blank')
-      event.preventDefault()
-    })
-    this.root.querySelector('input[type="text"]').addEventListener('focus', () => {
-      this.isInputFocus = true
-    })
-    this.root.querySelector('input[type="text"]').addEventListener('blur', () => {
-      this.isInputFocus = false
-      this.save()
-    })
     this.quill.on(
       Emitter.events.SELECTION_CHANGE,
       (range, _oldRange, source) => {
@@ -214,6 +194,35 @@ export class LinkTooltip extends BaseTooltip {
         })
       },
     )
+  }
+
+  bindRootEvents() {
+    const removeClickHandler = (event: Event) => {
+      if (!isNullOrUndefined(this.linkRange)) {
+        const range = this.linkRange
+        this.restoreFocus()
+        this.quill.formatText(range, 'link', false, Emitter.sources.API)
+        delete this.linkRange
+      }
+      event.preventDefault()
+      this.hide()
+    }
+    this.root.querySelector('a.ql-remove').addEventListener('click', removeClickHandler)
+    const previewClickHandler = (event: Event) => {
+      const link = LinkBlot.sanitize(this.textbox.value)
+      window.open(link, '_blank')
+      event.preventDefault()
+    }
+    this.root.querySelector('a.ql-preview').addEventListener('click', previewClickHandler)
+    const inputFocusHandler = () => {
+      this.isInputFocus = true
+    }
+    this.root.querySelector('input[type="text"]').addEventListener('focus', inputFocusHandler)
+    const inputBlurHandler = () => {
+      this.isInputFocus = false
+      this.save()
+    }
+    this.root.querySelector('input[type="text"]').addEventListener('blur', inputBlurHandler)
   }
 
   save() {
@@ -321,6 +330,7 @@ export class LinkTooltip extends BaseTooltip {
       this.textbox.getAttribute(`data-${mode}`) || '',
     )
     this.root.setAttribute('data-mode', mode)
+    this.root.setAttribute('data-before-title', this.quill.getLangText(`link.enter-${this.root.dataset.mode}`))
   }
 
   show() {

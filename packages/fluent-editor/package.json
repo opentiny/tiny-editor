@@ -36,7 +36,8 @@
   "dependencies": {
     "quill": "^2.0.0",
     "quill-easy-color": "^0.0.10",
-    "quill-shortcut-key": "^0.0.5"
+    "quill-i18n": "^0.2.0",
+    "quill-shortcut-key": "^0.2.1"
   },
   "devDependencies": {
     "@emoji-mart/data": "^1.2.1",
