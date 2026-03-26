@@ -46,7 +46,7 @@ const DEFAULT_CONTENT = `
 </p>
 <p>这是<strong>粗体</strong></p>
 <p>这是<em>斜体</em></p>
-<p>这是<u class="ql-custom-strike">删除线</u></p>
+<p>这是<s class="ql-custom-strike">删除线</s></p>
 <p>这是<u>下划线</u></p>
 <p>这是上标X<sup>2</sup>和下标X<sub>2</sub></p>
 <p>
