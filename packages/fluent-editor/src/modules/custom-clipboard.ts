@@ -264,7 +264,8 @@ export class CustomClipboard extends Clipboard {
         }
         else {
           const range = this.getImgSelection(pastedDelta, imageIndexs[index])
-          this.quill.uploader.upload(range, [imageFile])
+          const urls = await this.quill.uploader.getFileUrls([imageFile], range)
+          return urls[0] || undefined
         }
       }),
     )
