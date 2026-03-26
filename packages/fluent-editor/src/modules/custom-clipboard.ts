@@ -22,6 +22,19 @@ const Delta = Quill.import('delta')
 export class CustomClipboard extends Clipboard {
   declare quill: FluentEditor
 
+  constructor(public quill: FluentEditor) {
+    super(quill)
+    // 解决 quill 组件在中文输入法的情景下开始输入placeholder不消失的问题
+    this.quill.root.addEventListener('input', () => {
+      if (this.quill.root.innerText !== '\\n' && this.quill.root.classList.contains('ql-blank')) {
+        this.quill.root.classList.toggle('ql-blank', false)
+      }
+      else {
+        this.quill.options.placeholder = this.quill.getLangText('editor-placeholder')
+      }
+    })
+  }
+
   prepareMatching(container: HTMLElement, nodeMatches) {
     const elementMatchers = []
     const textMatchers = []
