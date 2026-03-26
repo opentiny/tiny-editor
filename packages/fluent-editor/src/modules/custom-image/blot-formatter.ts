@@ -130,8 +130,8 @@ export class BlotFormatter {
       display: 'block',
       left: `${specRect.left - parentRect.left - 1 + parent.scrollLeft}px`,
       top: `${specRect.top - parentRect.top + parent.scrollTop}px`,
-      width: `${specRect.width}px`,
-      height: `${specRect.height}px`,
+      width: `${Math.min(specRect.width, parentRect.width)}px`,
+      height: `${Math.min(specRect.height, parentRect.height)}px`,
     })
   }
 
