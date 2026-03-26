@@ -8,6 +8,7 @@ export class ImagePreviewModal {
   private overlay: HTMLElement | null = null
   private previewImage: HTMLImageElement | null = null
   private scaleTooltip: HTMLElement | null = null
+  private closeBtn: HTMLButtonElement | null = null
   private currentScale: number = 1
   private minScale: number = 0.5
   private maxScale: number = 3
@@ -64,10 +65,10 @@ export class ImagePreviewModal {
     `
 
     // 创建关闭按钮
-    const closeBtn = document.createElement('button')
-    closeBtn.className = 'tiny-editor-image-preview-close'
-    closeBtn.innerHTML = '×'
-    closeBtn.style.cssText = `
+    this.closeBtn = document.createElement('button')
+    this.closeBtn.className = 'tiny-editor-image-preview-close'
+    this.closeBtn.innerHTML = '×'
+    this.closeBtn.style.cssText = `
       position: fixed;
       top: 20px;
       right: 20px;
@@ -82,10 +83,10 @@ export class ImagePreviewModal {
       line-height: 1;
       padding: 0;
     `
-    closeBtn.addEventListener('click', () => this.hide())
+    this.closeBtn.addEventListener('click', () => this.hide())
 
     this.modal.appendChild(this.previewImage)
-    document.body.appendChild(closeBtn)
+    document.body.appendChild(this.closeBtn)
 
     // 创建缩放提示窗口
     this.scaleTooltip = document.createElement('div')
@@ -117,7 +118,7 @@ export class ImagePreviewModal {
     })
 
     // 绑定滚轮缩放事件
-    document.addEventListener('wheel', (e) => this.onMouseWheel(e), { passive: false })
+    document.addEventListener('wheel', e => this.onMouseWheel(e), { passive: false })
 
     // 阻止模态框内的点击事件冒泡到遮罩层
     this.modal.addEventListener('click', (e) => {
@@ -226,6 +227,10 @@ export class ImagePreviewModal {
     this.modal.style.justifyContent = 'center'
     this.overlay.style.display = 'block'
 
+    if (this.closeBtn) {
+      this.closeBtn.style.display = 'block'
+    }
+
     // 防止页面滚动
     document.body.style.overflow = 'hidden'
   }
@@ -239,6 +244,9 @@ export class ImagePreviewModal {
       this.overlay.style.display = 'none'
       document.body.style.overflow = ''
       this.resetScale()
+      if (this.closeBtn) {
+        this.closeBtn.style.display = 'none'
+      }
     }
   }
 
@@ -253,12 +261,16 @@ export class ImagePreviewModal {
     if (this.modal && this.modal.parentNode) {
       this.modal.parentNode.removeChild(this.modal)
     }
+    if (this.closeBtn && this.closeBtn.parentNode) {
+      this.closeBtn.parentNode.removeChild(this.closeBtn)
+    }
     if (this.scaleTooltip && this.scaleTooltip.parentNode) {
       this.scaleTooltip.parentNode.removeChild(this.scaleTooltip)
     }
     this.modal = null
     this.overlay = null
     this.previewImage = null
+    this.closeBtn = null
     this.scaleTooltip = null
   }
 }
