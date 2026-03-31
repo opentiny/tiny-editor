@@ -91,12 +91,13 @@ export class LinkTooltip extends BaseTooltip {
     if (isTooltipShow) {
       return
     }
-
     if (this.isInputFocus) {
       this.save()
     }
     this.isHover = true
-    const linkNode = event.target as HTMLElement
+    const linkNode = event.target.tagName === 'IMG'
+      ? event.target.parentNode as HTMLElement
+      : event.target as HTMLElement
     const preview = LinkBlot.formats(linkNode)
     if (!preview || preview.startsWith('#')) {
       return
@@ -312,6 +313,8 @@ export class LinkTooltip extends BaseTooltip {
 
   // @ts-expect-error
   edit(mode: string = 'link', preview = null, range) {
+    console.log('1111 edit')
+
     this.linkRange = range || this.quill.selection.savedRange
     this.root.classList.remove('ql-hidden')
     this.root.classList.add('ql-editing')
