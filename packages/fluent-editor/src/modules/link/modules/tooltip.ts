@@ -313,8 +313,6 @@ export class LinkTooltip extends BaseTooltip {
 
   // @ts-expect-error
   edit(mode: string = 'link', preview = null, range) {
-    console.log('1111 edit')
-
     this.linkRange = range || this.quill.selection.savedRange
     this.root.classList.remove('ql-hidden')
     this.root.classList.add('ql-editing')
