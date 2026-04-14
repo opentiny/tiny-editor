@@ -45,7 +45,7 @@ onMounted(async () => {
 <template>
   <div>
     <p>
-      主要针对从 excel 粘贴内容时，quill-table-up从3.5.0版本新增的选项 pasteStyleSheet，配置为 true 会将粘贴的 html 中 style 标签的样式也进行解析。
+      主要针对从 Excel 粘贴内容时，quill-table-up从3.5.0版本新增的选项 pasteStyleSheet，配置为 true 会将粘贴的 html 中 style 标签的样式也进行解析。
       如果你希望保留粘贴 html 中通过标签选择器设置的样式，可以将 pasteDefaultTagStyle 也设置为 true。
     </p>
     <p> 请注意：如果开启了配置 pasteStyleSheet，可能会对粘贴时的解析性能造成一定影响，因为会对整个粘贴的文档进行额外的解析。</p>

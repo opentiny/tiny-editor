@@ -20,6 +20,6 @@ npm install quill-table-up
 
 <demo vue="../../demos/table-up-shortcut.vue" />
 
-## 表格剪切板
+## 表格剪粘板
 
 <demo vue="../../demos/table-up-clipboard.vue" />
