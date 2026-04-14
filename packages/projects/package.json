@@ -15,7 +15,7 @@
     "@tailwindcss/vite": "^4.0.0",
     "quill-cursors": "^4.0.4",
     "quill-header-list": "0.0.2",
-    "quill-table-up": "^3.0.1",
+    "quill-table-up": "^3.5.0",
     "sass": "^1.90.0",
     "simple-mind-map": "0.14.0-fix.1",
     "simple-mind-map-plugin-themes": "^1.0.1",
