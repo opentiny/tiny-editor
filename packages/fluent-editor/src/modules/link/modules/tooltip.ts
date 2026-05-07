@@ -91,12 +91,18 @@ export class LinkTooltip extends BaseTooltip {
     if (isTooltipShow) {
       return
     }
-
     if (this.isInputFocus) {
       this.save()
     }
     this.isHover = true
-    const linkNode = event.target as HTMLElement
+    const target = event.target as HTMLElement | null
+    if (!target) {
+      return
+    }
+    const linkNode = target.closest(`a.${LinkBlot.className}`) as HTMLElement | null
+    if (!linkNode) {
+      return
+    }
     const preview = LinkBlot.formats(linkNode)
     if (!preview || preview.startsWith('#')) {
       return
