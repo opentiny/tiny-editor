@@ -18,6 +18,11 @@ export default defineConfig({
     ],
   },
   define: {
-    'process.env': { ...process.env },
+    'process.env': {
+      npm_package_devDependencies_vite: process.env.npm_package_devDependencies_vite,
+      npm_package_devDependencies_vitepress: process.env.npm_package_devDependencies_vitepress,
+      npm_package_dependencies_vue: process.env.npm_package_dependencies_vue,
+      npm_package_dependencies_quill: process.env.npm_package_dependencies_quill,
+    },
   },
 })
