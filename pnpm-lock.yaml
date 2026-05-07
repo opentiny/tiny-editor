@@ -117,11 +117,11 @@ importers:
         specifier: ^0.0.10
         version: 0.0.10
       quill-table-up:
-        specifier: ^3.4.0
-        version: 3.4.0(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
+        specifier: ^3.5.0
+        version: 3.5.1(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
       quill-toolbar-tip:
-        specifier: 1.0.1-beta.1
-        version: 1.0.1-beta.1(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
+        specifier: 1.1.0
+        version: 1.1.0(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
       simple-mind-map:
         specifier: 0.14.0-fix.1
         version: 0.14.0-fix.1
@@ -202,8 +202,8 @@ importers:
         specifier: ^0.2.0
         version: 0.2.0(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
       quill-shortcut-key:
-        specifier: ^0.2.0
-        version: 0.2.0(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
+        specifier: ^0.2.1
+        version: 0.2.1(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
     devDependencies:
       '@emoji-mart/data':
         specifier: ^1.2.1
@@ -311,8 +311,8 @@ importers:
         specifier: 0.0.2
         version: 0.0.2(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
       quill-table-up:
-        specifier: ^3.0.1
-        version: 3.1.2(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
+        specifier: ^3.5.0
+        version: 3.5.1(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
       sass:
         specifier: ^1.90.0
         version: 1.93.2
@@ -4891,23 +4891,18 @@ packages:
   quill-markdown-shortcuts@0.0.10:
     resolution: {integrity: sha512-2FFFqqo65JgDgAGSer7cFQTCeiSjJF4N8lRGXGv/xjppCxSwj42OnNdGPZ/zeeCxdUY/j1LW4AiSvPQaTIkY2A==}
 
-  quill-shortcut-key@0.2.0:
-    resolution: {integrity: sha512-f5KeT3VkVebwd9Cg/EsShvQcX7fVgzuQ+31XwpmaiO0y1MV1fqgZcwy4roMY7SUk57YJxuEhubKrXRHHrKwCFw==}
+  quill-shortcut-key@0.2.1:
+    resolution: {integrity: sha512-kWRuaj0RGg30XSyihhNja5NUZxxQ4L9D4JPMc6kuoP3BqbI5Frql4KuNVrUF002VPzE1mh2T3U2n6tV6vaISMw==}
     peerDependencies:
       quill: ^2.0.0
 
-  quill-table-up@3.1.2:
-    resolution: {integrity: sha512-MAnDgUNGJPco2siDMDWzeQwDjDd8baF03xrh8inV2kajztwQP7A1nJkaf4SL/pHIJkpkytJh/7319vyH2wsZTA==}
+  quill-table-up@3.5.1:
+    resolution: {integrity: sha512-0EMZiU5BRaYCVHGbR3eFoC+iHbtLYmnStY5WP/zYRsbvDrP1nUSZUDpJht74j1rubJg0XrML+EbDWzPr4x+U9A==}
     peerDependencies:
       quill: ^2.0.3
 
-  quill-table-up@3.4.0:
-    resolution: {integrity: sha512-oU/0tVqyNqvXnCUTi9yZmdBzUU5w8D4rqMbGNvAMMjupglWVAGop7DrFTH09oUpzvz8uaPXx8vn9ETt4DxLhVg==}
-    peerDependencies:
-      quill: ^2.0.3
-
-  quill-toolbar-tip@1.0.1-beta.1:
-    resolution: {integrity: sha512-OSYGt1qkAvbsM7U1VeC/UGc2+exUbohi1Zp3e1f0nOaMfxVuVwuneYpQnecT5Jwq3FLKlQRqbRGAUItHviTC7g==}
+  quill-toolbar-tip@1.1.0:
+    resolution: {integrity: sha512-cxC8T7Vy0N7iCioy6HJqbHHqY90QgyUyvIZlalJFQw7c2bu/dMKlsYiM/hY8MPD6ehVk9Q42cHtk1OLHdQulWw==}
     peerDependencies:
       quill: ^2.0.0
 
@@ -11285,21 +11280,16 @@ snapshots:
     dependencies:
       quill: 1.3.7
 
-  quill-shortcut-key@0.2.0(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)):
+  quill-shortcut-key@0.2.1(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)):
     dependencies:
       quill: 2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)
 
-  quill-table-up@3.1.2(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)):
-    dependencies:
-      '@floating-ui/dom': 1.7.4
-      quill: 2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)
-
-  quill-table-up@3.4.0(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)):
+  quill-table-up@3.5.1(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)):
     dependencies:
       '@floating-ui/dom': 1.7.5
       quill: 2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)
 
-  quill-toolbar-tip@1.0.1-beta.1(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)):
+  quill-toolbar-tip@1.1.0(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)):
     dependencies:
       '@floating-ui/dom': 1.7.5
       quill: 2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji)
