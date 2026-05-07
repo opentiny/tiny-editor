@@ -95,9 +95,14 @@ export class LinkTooltip extends BaseTooltip {
       this.save()
     }
     this.isHover = true
-    const linkNode = event.target.tagName === 'IMG'
-      ? event.target.parentNode as HTMLElement
-      : event.target as HTMLElement
+    const target = event.target as HTMLElement | null
+    if (!target) {
+      return
+    }
+    const linkNode = target.closest(`a.${LinkBlot.className}`) as HTMLElement | null
+    if (!linkNode) {
+      return
+    }
     const preview = LinkBlot.formats(linkNode)
     if (!preview || preview.startsWith('#')) {
       return
