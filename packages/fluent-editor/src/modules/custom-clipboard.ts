@@ -12,6 +12,7 @@ import {
   isNullOrUndefined,
   omit,
   replaceDeltaImage,
+  replaceStrWhiteSpace,
   splitWithBreak,
 } from '../config/editor.utils'
 import { isString } from '../utils/is'
@@ -452,22 +453,6 @@ function rebuildDelta(delta, cellLine) {
   }, new Delta())
 
   return buildedDelta
-}
-
-function replaceStrWhiteSpace(str) {
-  const isWhiteSpace = value => /^(\u3000|\u0020){1}$/.test(value) // 空白字符
-  let textWithWhiteSpace = ''
-  let beginHasChar = false
-  for (const char of str) {
-    if (isWhiteSpace(char) && !beginHasChar) {
-      textWithWhiteSpace += '\u00A0'
-    }
-    else {
-      textWithWhiteSpace += char
-      beginHasChar = true
-    }
-  }
-  return textWithWhiteSpace
 }
 
 function replaceDeltaWhiteSpace(delta, rootBgColor?) {
