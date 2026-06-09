@@ -49,6 +49,7 @@
     "mongodb": "^6.0.0",
     "ws": "^8.0.0",
     "y-mongodb-provider": "0.2.1",
+    "y-protocols": "^1.0.6",
     "yjs": "^13.6.15"
   },
   "devDependencies": {
