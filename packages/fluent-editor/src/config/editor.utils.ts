@@ -105,6 +105,49 @@ export function replaceDeltaImage(delta, imageUrls, imagePlaceholder) {
   }, new Delta())
 }
 
+const WHITE_SPACE_CHAR_RE = /^[\u3000\u0020]$/
+const WHITE_SPACE_OR_NBSP_RE = /^[\u3000\u0020\u00A0]$/
+
+/**
+ * 将连续空格转为不间断空格，以便 innerHTML 输出 &nbsp; 并在预览中保留间距。
+ * - 行首空白：全部转为 \u00A0
+ * - 正文内连续空白：保留第一个普通空格，其余转为 \u00A0
+ */
+export function replaceStrWhiteSpace(str: string) {
+  let textWithWhiteSpace = ''
+  let beginHasChar = false
+  let consecutiveSpaces = 0
+  for (const char of str) {
+    if (WHITE_SPACE_CHAR_RE.test(char)) {
+      consecutiveSpaces += 1
+      if (!beginHasChar) {
+        textWithWhiteSpace += '\u00A0'
+      }
+      else if (consecutiveSpaces === 1) {
+        textWithWhiteSpace += char
+      }
+      else {
+        textWithWhiteSpace += '\u00A0'
+      }
+    }
+    else {
+      consecutiveSpaces = 0
+      textWithWhiteSpace += char
+      beginHasChar = true
+    }
+  }
+  return textWithWhiteSpace
+}
+
+/** 空格键是否应插入不间断空格（与 replaceStrWhiteSpace 规则一致） */
+export function shouldInsertNbspOnSpace(prefix: string) {
+  if (!prefix) {
+    return true
+  }
+  const lastChar = prefix.slice(-1)
+  return WHITE_SPACE_OR_NBSP_RE.test(lastChar)
+}
+
 export function splitWithBreak(insertContent: string) {
   const lines = []
   const insertStr = insertContent

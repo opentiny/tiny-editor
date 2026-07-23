@@ -2,7 +2,7 @@ import type { ThemeOptions } from 'quill/core/theme'
 import type TypeToolbar from 'quill/modules/toolbar'
 import type TypeIconPicker from 'quill/ui/icon-picker'
 import { I18N_LOCALE_CHANGE } from 'quill-i18n'
-import { inputFile, isNullOrUndefined } from '../config'
+import { inputFile, isNullOrUndefined, shouldInsertNbspOnSpace } from '../config'
 import FluentEditor from '../core/fluent-editor'
 import { CustomImageSpec } from '../modules/custom-image/specs/custom-image-spec'
 import { LinkTooltip } from '../modules/link'
@@ -21,6 +21,23 @@ OriginSnowTheme.DEFAULTS = {
     'keyboard': {
       bindings: {
         ...shortKey,
+        preserveWhiteSpace: {
+          key: ' ',
+          collapsed: true,
+          handler(this: { quill: FluentEditor }, range, context) {
+            if (!shouldInsertNbspOnSpace(context.prefix)) {
+              return true
+            }
+            this.quill.insertText(
+              range.index,
+              '\u00A0',
+              context.format,
+              FluentEditor.sources.USER,
+            )
+            this.quill.setSelection(range.index + 1, FluentEditor.sources.SILENT)
+            return false
+          },
+        },
       },
     },
     'toolbar': {
