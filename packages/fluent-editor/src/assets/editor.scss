@@ -125,6 +125,10 @@
       content: counter(list-1, lower-alpha) '. ';
     }
 
+    li.ql-indent-1 .ql-ui:before {
+      content: counter(list-1, decimal) '. ' !important;
+    }
+
     li.ordered.ql-indent-1 {
       counter-reset: list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
     }
@@ -135,6 +139,10 @@
 
     li.ordered.ql-indent-2::before {
       content: counter(list-2, lower-roman) '. ';
+    }
+
+    li.ql-indent-2 .ql-ui:before {
+      content: counter(list-2, decimal) '. ' !important;
     }
 
     li.ordered.ql-indent-2 {
@@ -149,6 +157,10 @@
       content: counter(list-3, decimal) '. ';
     }
 
+    li.ql-indent-3 .ql-ui:before {
+      content: counter(list-3, decimal) '. ' !important;
+    }
+
     li.ordered.ql-indent-3 {
       counter-reset: list-4 list-5 list-6 list-7 list-8 list-9;
     }
@@ -159,6 +171,10 @@
 
     li.ordered.ql-indent-4::before {
       content: counter(list-4, lower-alpha) '. ';
+    }
+
+    li.ql-indent-4 .ql-ui:before {
+      content: counter(list-4, decimal) '. ' !important;
     }
 
     li.ordered.ql-indent-4 {
@@ -173,6 +189,10 @@
       content: counter(list-5, lower-roman) '. ';
     }
 
+    li.ql-indent-5 .ql-ui:before {
+      content: counter(list-5, decimal) '. ' !important;
+    }
+
     li.ordered.ql-indent-5 {
       counter-reset: list-6 list-7 list-8 list-9;
     }
@@ -183,6 +203,10 @@
 
     li.ordered.ql-indent-6::before {
       content: counter(list-6, decimal) '. ';
+    }
+
+    li.ql-indent-6 .ql-ui:before {
+      content: counter(list-6, decimal) '. ' !important;
     }
 
     li.ordered.ql-indent-6 {
@@ -197,6 +221,10 @@
       content: counter(list-7, lower-alpha) '. ';
     }
 
+    li.ql-indent-7 .ql-ui:before {
+      content: counter(list-7, decimal) '. ' !important;
+    }
+
     li.ordered.ql-indent-7 {
       counter-reset: list-8 list-9;
     }
@@ -209,6 +237,10 @@
       content: counter(list-8, lower-roman) '. ';
     }
 
+    li.ql-indent-8 .ql-ui:before {
+      content: counter(list-8, decimal) '. ' !important;
+    }
+
     li.ordered.ql-indent-8 {
       counter-reset: list-9;
     }
@@ -219,6 +251,10 @@
 
     li.ordered.ql-indent-9::before {
       content: counter(list-9, decimal) '. ';
+    }
+
+    li.ql-indent-9 .ql-ui:before {
+      content: counter(list-9, decimal) '. ' !important;
     }
 
     li.ql-direction-rtl {
