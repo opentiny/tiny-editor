@@ -17,7 +17,7 @@ jobs:
           ref: ${{ github.ref_name }}
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@eae0cfeb286e66ffb5155f1a79b90583a127a68b  # v2
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -88,7 +88,7 @@ jobs:
 
       - name: Release
         if: ${{ steps.parse_tag.outputs.dist_tag == 'latest' }}
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844  # v1
         with:
           tag_name: ${{ github.ref_name }}
           generate_release_notes: true
