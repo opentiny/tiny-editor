@@ -336,6 +336,10 @@ export function matchInline(node, delta, scroll) {
 export function matchWordShapeImage(node, delta) {
   if (node) {
     const imageUrl = node.attributes.src?.nodeValue
+    // 无有效地址时不插入，避免与 <img> 重复生成空图
+    if (!imageUrl) {
+      return delta
+    }
     delta = new Delta().insert({ image: imageUrl })
   }
   return delta

@@ -15,6 +15,7 @@ import {
   insideTable,
   isNullOrUndefined,
   isOutlookDesktop,
+  normalizeOutlookPasteImages,
   omit,
   replaceDeltaImage,
   splitWithBreak,
@@ -136,7 +137,7 @@ class CustomClipboard extends Clipboard {
       if (html.search(msExcelCheck) !== -1) {
         result.html = renderStyles(html)
       }
-      if (msWordCheck1.test(html) || msWordCheck2.test(html)) {
+      if (msWordCheck1.test(html) || msWordCheck2.test(html) || isOutlookDesktop(e)) {
         // TODO: 当word文档包含heading时text/rtf读取为空，无法获取hex图片，待修复。可参考ckeditor5/issues/2493
         result.rtf = e.clipboardData.getData('text/rtf')
       }
@@ -150,6 +151,8 @@ class CustomClipboard extends Clipboard {
     const formats = this.quill.getFormat(range.index)
     let pastedDelta = this.convert({ text, html }, formats)
     pastedDelta = replaceDeltaWhiteSpace(pastedDelta, rootBgColor)
+    // Outlook：v:imagedata 与 <img alt=image> 会生成重复图片，需先去重
+    pastedDelta = normalizeOutlookPasteImages(pastedDelta)
     const deltaLength = pastedDelta.ops.length
 
     let loadingTipsContainer
@@ -260,10 +263,9 @@ class CustomClipboard extends Clipboard {
 
       setTimeout(() => {
         this.quill.updateContents(delta, Quill.sources.USER)
-        this.quill.setSelection(
-          delta.length() - linePos.length - linePos.fix,
-          Quill.sources.SILENT,
-        )
+        // 光标应落在粘贴内容之后：原位置 + 粘贴内容长度
+        const newSelectionIndex = linePos.index + (pastedContent.length ? pastedContent.length() : 0)
+        this.quill.setSelection(newSelectionIndex, Quill.sources.SILENT)
         this.quill.scrollIntoView()
         if (loadingTipsContainer) {
           loadingTipsContainer.remove()
@@ -352,8 +354,8 @@ class CustomClipboard extends Clipboard {
           })
         }
         else if (this.quill.options.uploadOption?.imageUploadToServer) {
-          const range = this.getImgSelection(pastedDelta, imageIndexs[index])
-          this.quill.uploader.upload(range, [imageFile])
+          // 粘贴场景只替换 delta 中的图片地址，避免再走 uploader.upload 插入第二张图
+          return imageFileToUrl(imageFile)
         }
         else {
           // 占位图或者跨域图或 Outlook 中的本地图需要手动转换成url格式
@@ -461,7 +463,7 @@ class CustomClipboard extends Clipboard {
         catch (_err) {
           if (clipboardFiles.length !== 0) {
             // 跨域获取图片失败时从剪切板获取图片
-            const clipboardFile = clipboardFiles[0]
+            const clipboardFile = clipboardFiles.shift()
             const imageType
               = clipboardFile.type?.indexOf('image') === -1
                 ? 'image/png'
@@ -498,6 +500,10 @@ class CustomClipboard extends Clipboard {
       }
       if (typeof op.insert === 'string') {
         length += op.insert.length
+      }
+      else if (typeof op.insert === 'object') {
+        // 图片、提及等 embed 长度为 1
+        length += 1
       }
       return true
     })

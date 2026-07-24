@@ -91,6 +91,50 @@ export function omit(obj, uselessKeys) {
   )
 }
 
+export function getPasteImageSrc(image) {
+  if (!image) return ''
+  return typeof image === 'string' ? image : (image.src || '')
+}
+
+/**
+ * Outlook/Word 粘贴图常见无效 src：file://、cid:、sanitize 后的 //:0
+ */
+export function isInvalidPasteImageSrc(src) {
+  if (!src) return true
+  return src === '//:0' || /^file:/i.test(src) || /^cid:/i.test(src)
+}
+
+/**
+ * Outlook 粘贴时 v:imagedata 与 <img alt=image> 常成对出现，
+ * 去掉连续的无效重复图，并清除无意义的 alt="image"。
+ */
+export function normalizeOutlookPasteImages(delta) {
+  let prevWasInvalidImage = false
+  return delta.reduce((newDelta, op) => {
+    if (!op.insert?.image || op.insert.image.hasExisted) {
+      newDelta.insert(op.insert, op.attributes)
+      prevWasInvalidImage = false
+      return newDelta
+    }
+
+    const src = getPasteImageSrc(op.insert.image)
+    const invalid = isInvalidPasteImageSrc(src)
+    // 连续无效图视为 Outlook 的 v:imagedata + img 重复，丢弃后者
+    if (invalid && prevWasInvalidImage) {
+      return newDelta
+    }
+
+    let attributes = op.attributes
+    if (attributes?.alt === 'image') {
+      attributes = { ...attributes }
+      delete attributes.alt
+    }
+    newDelta.insert(op.insert, attributes)
+    prevWasInvalidImage = invalid
+    return newDelta
+  }, new Delta())
+}
+
 /**
  * 将delta中的图片替换成制定的图片数组，用于图片上传到服务器的场景
  * @param delta 原始delta
@@ -102,10 +146,20 @@ export function replaceDeltaImage(delta, imageUrls, imagePlaceholder) {
   let imageIndex = 0
   return delta.reduce((newDelta, op) => {
     if (op.insert.image && !op.insert.image.hasExisted) {
-      const attributes = imagePlaceholder[imageIndex]
+      const imageUrl = imageUrls[imageIndex]
+      // 替换失败时丢弃无效占位图，避免留下 //:0 + alt=image
+      if (!imageUrl && isInvalidPasteImageSrc(getPasteImageSrc(op.insert.image))) {
+        imageIndex++
+        return newDelta
+      }
+      let attributes = imagePlaceholder[imageIndex]
         ? { ...op.attributes, width: 'auto', height: 225 } // 占位图片应该固定大小
         : op.attributes
-      newDelta.insert({ image: imageUrls[imageIndex] }, attributes)
+      if (attributes?.alt === 'image') {
+        attributes = { ...attributes }
+        delete attributes.alt
+      }
+      newDelta.insert({ image: imageUrl }, attributes)
       imageIndex++
     }
     else {
