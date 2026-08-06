@@ -26,6 +26,9 @@ onMounted(async () => {
           [{ header: [false, 1, 2, 3, 4, 5, 6] }, 'header-list'],
         ],
         handlers: {
+          header(value: string | false) {
+            this.quill.format('header', value === false ? false : Number(value))
+          },
           'header-list': HeaderList.toolbarHandle,
         },
       },
