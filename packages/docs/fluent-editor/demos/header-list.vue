@@ -9,13 +9,18 @@ const headerListRef = ref<HTMLElement>()
 
 onMounted(async () => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
-  const [{ default: FluentEditor, DEFAULT_TOOLBAR }, { default: HeaderList }] = await Promise.all([
+  const [
+    { default: FluentEditor, DEFAULT_TOOLBAR },
+    { default: HeaderList, HeaderWithID },
+  ] = await Promise.all([
     import('@opentiny/fluent-editor'),
     import('quill-header-list'),
   ])
 
   if (!editorRef.value) return
   FluentEditor.register({ 'modules/header-list': HeaderList }, true)
+
+  HeaderWithID.idKey = 'id'
 
   editor = new FluentEditor(editorRef.value, {
     theme: 'snow',
