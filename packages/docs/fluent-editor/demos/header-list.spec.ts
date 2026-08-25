@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 
 test('has toolbar, headings and toggles header list panel', async ({ page }) => {
-  await page.goto('http://localhost:5173/tiny-editor/docs/demo/header-list')
+  await page.goto('/tiny-editor/docs/demo/header-list')
 
   const block = page.locator('.vp-raw').nth(0)
   const toolbar = block.locator('.ql-toolbar').first()
