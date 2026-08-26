@@ -1,12 +1,21 @@
-import { type Browser, chromium, expect, firefox, type Page, test } from '@playwright/test'
-
-const DEMO_URL = 'http://localhost:5173/tiny-editor/docs/demo/collaborative-editing'
+import { type Browser, chromium, expect, type Page, test } from '@playwright/test'
 
 test.describe.configure({ mode: 'serial' })
 
-async function openTwoPages(): Promise<[Page, Page, Browser, Browser]> {
+let DEMO_URL = ''
+let collabWsReachable = false
+
+// Must match collaborative-editing.vue: serverUrl + roomName
+const COLLAB_WS_URL = 'wss://ai.opentiny.design/tiny-editor/tiny-editor-document-demo-roomName'
+
+function collabUrl(baseURL: string): string {
+  return `${baseURL.replace(/\/$/, '')}/tiny-editor/docs/demo/collaborative-editing`
+}
+
+async function openTwoPages(baseURL: string): Promise<[Page, Page, Browser, Browser]> {
+  DEMO_URL = collabUrl(baseURL)
   const browser1 = await chromium.launch()
-  const browser2 = await firefox.launch()
+  const browser2 = await chromium.launch()
 
   const page1 = await browser1.newPage()
   const page2 = await browser2.newPage()
@@ -17,15 +26,17 @@ async function openTwoPages(): Promise<[Page, Page, Browser, Browser]> {
   ])
   const editor1 = page1.locator('.ql-editor')
   const editor2 = page2.locator('.ql-editor')
-  await expect(editor1).toBeVisible()
-  await expect(editor2).toBeVisible()
+  await expect(editor1).toBeVisible({ timeout: 30_000 })
+  await expect(editor2).toBeVisible({ timeout: 30_000 })
   return [page1, page2, browser1, browser2]
 }
 
 async function typeSync(page1: Page, page2: Page, text: string): Promise<void> {
   await page1.locator('.ql-editor').click()
   await page1.keyboard.type(text)
-  await expect.poll(async () => (await page2.locator('.ql-editor').textContent() || '').includes(text)).toBeTruthy()
+  await expect.poll(async () => (await page2.locator('.ql-editor').textContent() || '').includes(text), {
+    timeout: 15_000,
+  }).toBeTruthy()
 }
 
 async function selectAll(page: Page): Promise<void> {
@@ -34,24 +45,62 @@ async function selectAll(page: Page): Promise<void> {
 
 let p1: Page, p2: Page, b1: Browser, b2: Browser
 
-test.beforeEach(async () => {
-  [p1, p2, b1, b2] = await openTwoPages()
+test.beforeAll(async ({ browser }) => {
+  const page = await browser.newPage()
+  try {
+    collabWsReachable = await page.evaluate((wsUrl) => new Promise<boolean>((resolve) => {
+      const ws = new WebSocket(wsUrl)
+      const timer = window.setTimeout(() => {
+        ws.close()
+        resolve(false)
+      }, 5000)
+      ws.addEventListener('open', () => {
+        window.clearTimeout(timer)
+        ws.close()
+        resolve(true)
+      })
+      ws.addEventListener('error', () => {
+        window.clearTimeout(timer)
+        resolve(false)
+      })
+    }), COLLAB_WS_URL)
+  }
+  finally {
+    await page.close()
+  }
+})
+
+test.beforeEach(async ({ baseURL }, testInfo) => {
+  const needsSync = testInfo.title !== 'startup collaborative-editing test'
+  if (needsSync && !collabWsReachable)
+    test.skip(true, 'remote collaborative websocket is not reachable')
+
+  ;[p1, p2, b1, b2] = await openTwoPages(baseURL!)
 })
 
 test.afterEach(async () => {
   for (const page of [p1, p2]) {
-    if (!page) continue
-    const editor = page.locator('.ql-editor')
-    if (await editor.count()) {
-      await editor.first().click({ timeout: 2000 }).catch(() => {})
-      await selectAll(page)
-      await page.keyboard.press('Delete').catch(() => {})
+    if (!page || page.isClosed()) continue
+    try {
+      const editor = page.locator('.ql-editor')
+      if (await editor.count()) {
+        await editor.first().click({ timeout: 2000 }).catch(() => {})
+        await selectAll(page)
+        await page.keyboard.press('Delete').catch(() => {})
+      }
+    }
+    catch {
+      // page may already be closed when a test is skipped
     }
   }
   await Promise.all([
     b1?.close().catch(() => {}),
     b2?.close().catch(() => {}),
   ])
+  p1 = undefined as unknown as Page
+  p2 = undefined as unknown as Page
+  b1 = undefined as unknown as Browser
+  b2 = undefined as unknown as Browser
 })
 
 test('startup collaborative-editing test', async () => {

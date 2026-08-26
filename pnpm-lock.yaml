@@ -204,6 +204,9 @@ importers:
       quill-shortcut-key:
         specifier: ^0.2.1
         version: 0.2.1(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
+      quill-table-up:
+        specifier: ^3.5.0
+        version: 3.5.1(quill@2.0.3(patch_hash=dnirvjhpzdmsvdidsclwslxxji))
     devDependencies:
       '@emoji-mart/data':
         specifier: ^1.2.1

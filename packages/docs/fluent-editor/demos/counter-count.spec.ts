@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 
 test('has toolbar and custom max character counter', async ({ page }) => {
-  await page.goto('http://localhost:5173/tiny-editor/docs/demo/counter')
+  await page.goto('/tiny-editor/docs/demo/counter')
 
   const toolbar = page.locator('.ql-toolbar').nth(1)
   const editor = page.locator('.ql-editor').nth(1)

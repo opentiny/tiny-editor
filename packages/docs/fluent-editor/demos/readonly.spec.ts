@@ -17,7 +17,7 @@ const initialHtml = [
 ].join('')
 
 test('renders readonly editor without toolbar', async ({ page }) => {
-  await page.goto('http://localhost:5173/tiny-editor/docs/demo/readonly')
+  await page.goto('/tiny-editor/docs/demo/readonly')
 
   const block = page.locator('.vp-raw').first()
   const editor = page.locator('#editor-readonly .ql-editor')

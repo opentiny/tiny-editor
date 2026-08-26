@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 
 test.describe('AddToolbarItem.vue', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/tiny-editor/docs/demo/add-toolbar-item')
+    await page.goto('/tiny-editor/docs/demo/add-toolbar-item')
   })
 
   test('should render the editor', async ({ page }) => {
@@ -36,8 +36,9 @@ test.describe('AddToolbarItem.vue', () => {
     await page.keyboard.type(' Bad')
 
     const editorHtml = await editor.innerHTML()
-    expect(editorHtml).toContain('<span style="color: rgb(92, 179, 0);"> Good</span>')
-    expect(editorHtml).toContain('<span style="color: rgb(242, 48, 48);"> Bad</span>')
+    // Quill stores a leading space in inline formats as &nbsp;
+    expect(editorHtml).toContain('<span style="color: rgb(92, 179, 0);">&nbsp;Good</span>')
+    expect(editorHtml).toContain('<span style="color: rgb(242, 48, 48);">&nbsp;Bad</span>')
   })
 
   // 添加更多测试用例
