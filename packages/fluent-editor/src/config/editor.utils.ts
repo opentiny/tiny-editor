@@ -42,10 +42,7 @@ export function imageFileToUrl(imageFile) {
  */
 export function imageUrlToFile(imageUrl, isErrorImage?: boolean) {
   return new Promise((resolve, reject) => {
-    fetch(imageUrl, {
-      method: 'get',
-      mode: 'no-cors',
-    })
+    fetch(imageUrl)
       .then(res => res.blob())
       .then((blob) => {
         if (!blob.type.includes('image') || !blob.type) {
@@ -86,17 +83,32 @@ export function omit(obj, uselessKeys) {
  * @param delta 原始delta
  * @param imageUrls 图片数组
  * @param imagePlaceholder 标识是否是占位图的数组，与图片数组一一对应
+ * @param imageIndexs 需要替换的图片在 delta.ops 中的下标；不传则替换全部新图片
  * @return 替换之后的delta
  */
-export function replaceDeltaImage(delta, imageUrls, imagePlaceholder) {
+export function replaceDeltaImage(delta, imageUrls, imagePlaceholder, imageIndexs?) {
+  const indexSet = Array.isArray(imageIndexs) ? new Set(imageIndexs) : null
   let imageIndex = 0
+  let opIndex = -1
   return delta.reduce((newDelta, op) => {
-    if (op.insert.image && !op.insert.image.hasExisted) {
+    opIndex++
+    const image = typeof op.insert === 'object' ? op.insert?.image : null
+    if (image && !image.hasExisted) {
+      if (indexSet && !indexSet.has(opIndex)) {
+        newDelta.insert(op.insert, op.attributes)
+        return newDelta
+      }
+      const nextUrl = imageUrls[imageIndex]
       const attributes = imagePlaceholder[imageIndex]
         ? { ...op.attributes, width: 'auto', height: 225 } // 占位图片应该固定大小
         : op.attributes
-      newDelta.insert({ image: imageUrls[imageIndex] }, attributes)
       imageIndex++
+      if (nextUrl) {
+        newDelta.insert({ image: nextUrl }, attributes)
+      }
+      else {
+        newDelta.insert(op.insert, op.attributes)
+      }
     }
     else {
       newDelta.insert(op.insert, op.attributes)
