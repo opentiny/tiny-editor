@@ -10,11 +10,17 @@ import {
   hexToRgbA,
   imageUrlToFile,
   isNullOrUndefined,
-  omit,
   replaceDeltaImage,
   replaceStrWhiteSpace,
   splitWithBreak,
 } from '../config/editor.utils'
+import {
+  getClipboardImageFiles,
+  getPasteImageSrc,
+  isExcelHtml,
+  isUsablePasteImageSrc,
+  shouldUploadFilesOnly,
+} from '../config/paste-image'
 import { isString } from '../utils/is'
 
 const Clipboard = Quill.import('modules/clipboard') as typeof TypeClipboard
@@ -126,28 +132,20 @@ export class CustomClipboard extends Clipboard {
       }
     }
 
-    const html = e.clipboardData.getData('text/html')
-    const text = e.clipboardData.getData('text/plain')
-    const files = Array.from(e.clipboardData.files || [])
-    const msExcelCheck = /<meta.*?Microsoft Excel\s[\d].*?>/
+    const html = e.clipboardData.getData('text/html') || ''
+    const text = e.clipboardData.getData('text/plain') || ''
+    const allFiles = Array.from(e.clipboardData.files || [])
+    const imageFiles = getClipboardImageFiles(e.clipboardData, allFiles)
+    const files = allFiles.length ? allFiles : imageFiles
+    const rtf = e.clipboardData.getData('text/rtf') || null
 
-    if (html.search(msExcelCheck) === -1 && files.length > 0) {
+    if (shouldUploadFilesOnly(html, files)) {
       this.quill.uploader.upload(range, files)
+      return
     }
-    else {
-      const msWordCheck1
-        = /<meta\s*name="?generator"?\s*content="?microsoft\s*word\s*\d+"?\/?>/i
-      const msWordCheck2 = /xmlns:o="urn:schemas-microsoft-com/i
-      const result = { html, text, files, rtf: null }
-      if (html.search(msExcelCheck) !== -1) {
-        result.html = renderStyles(html)
-      }
-      if (msWordCheck1.test(html) || msWordCheck2.test(html)) {
-        // TODO: 当word文档包含heading时text/rtf读取为空，无法获取hex图片，待修复。可参考ckeditor5/issues/2493
-        result.rtf = e.clipboardData.getData('text/rtf')
-      }
-      this.onPaste(range, result)
-    }
+
+    const result = { html: isExcelHtml(html) ? renderStyles(html) : html, text, files: imageFiles, rtf }
+    this.onPaste(range, result)
   }
 
   onPaste(range, { html, text, files: clipboardFiles, rtf }) {
@@ -164,19 +162,15 @@ export class CustomClipboard extends Clipboard {
       loadingTipsContainer.innerHTML = this.quill.getLangText('pasting')
     }
 
-    const linePos = { index: range.index, length: range.length, fix: 0 }
-    const [line, offset] = this.quill.getLine(range.index)
+    const linePos = { index: range.index, length: range.length }
 
     const handlePasteContent = (content: any) => {
-      const pastedContent = content
-
       const oldDelta = new Delta().retain(linePos.index).delete(linePos.length)
-      const delta = oldDelta.concat(pastedContent)
+      const delta = oldDelta.concat(content)
 
       setTimeout(() => {
         this.quill.updateContents(delta, Quill.sources.USER)
-        // 光标位置应该在粘贴内容之后：原光标位置 + 粘贴内容长度
-        const newSelectionIndex = linePos.index + (pastedContent.length ? pastedContent.length() : 0)
+        const newSelectionIndex = linePos.index + (content.length ? content.length() : 0)
         this.quill.setSelection(
           newSelectionIndex,
           Quill.sources.SILENT,
@@ -190,7 +184,7 @@ export class CustomClipboard extends Clipboard {
 
     ;(async () => {
       try {
-        const [files, placeholders, originalUrls, imageIndexs] = this.flipFilesArray(
+        const [files, placeholders, imageIndexs] = this.flipFilesArray(
           await this.extractFilesFromDelta(
             pastedDelta,
             clipboardFiles,
@@ -200,74 +194,52 @@ export class CustomClipboard extends Clipboard {
 
         if (files.length === 0) {
           handlePasteContent(pastedDelta)
+          return
         }
-        else {
-          if (this.quill.options.editorPaste && this.quill.options.editorPaste.observers.length !== 0) {
-            // 设置editorPaste回调的情况
-            this.quill.options.editorPaste.emit({
-              files,
-              callback: ({ code, message, data }) => {
-                if (code === 0) {
-                  const { imageUrls } = data
-                  pastedDelta = replaceDeltaImage(
-                    pastedDelta,
-                    imageUrls,
-                    placeholders,
-                  )
-                  handlePasteContent(pastedDelta)
-                }
-                else {
-                  console.error('error message:', message)
-                }
-              },
-            })
-          }
-          else {
-            // 没有originalUrls 也没有文件粘贴
-            if (files[0] !== undefined || originalUrls.length === 0) {
-              // 没有设置editorPaste回调的情况下，File格式的占位图需要手动转换成url格式，插入到编辑器中
-              const imageUrls = await this.files2urls(
-                files,
-                placeholders,
-                originalUrls,
-                pastedDelta,
-                imageIndexs,
-              )
-              pastedDelta = replaceDeltaImage(
-                pastedDelta,
-                imageUrls,
-                placeholders,
-              )
-            }
-            handlePasteContent(pastedDelta)
-          }
+
+        if (this.quill.options.editorPaste && this.quill.options.editorPaste.observers.length !== 0) {
+          this.quill.options.editorPaste.emit({
+            files,
+            callback: ({ code, message, data }) => {
+              if (code === 0) {
+                const { imageUrls } = data
+                pastedDelta = replaceDeltaImage(
+                  pastedDelta,
+                  imageUrls,
+                  placeholders,
+                  imageIndexs,
+                )
+                handlePasteContent(pastedDelta)
+              }
+              else {
+                console.error('error message:', message)
+              }
+            },
+          })
+          return
         }
+
+        const imageUrls = await this.files2urls(files, pastedDelta, imageIndexs)
+        pastedDelta = replaceDeltaImage(
+          pastedDelta,
+          imageUrls,
+          placeholders,
+          imageIndexs,
+        )
+        handlePasteContent(pastedDelta)
       }
       catch (_e) {
-        throw new Error('Paste failed.')
+        handlePasteContent(pastedDelta)
       }
     })()
   }
 
-  files2urls(files: File[], placeholders, originalUrls, pastedDelta, imageIndexs) {
+  files2urls(files: File[], pastedDelta, imageIndexs) {
     return Promise.all(
       files.map(async (imageFile, index) => {
-        const netImgExp = /^((http|https)\:)?\/\/([\s\S]+)$/
-        if (
-          !placeholders[index]
-          && originalUrls[index]
-          && netImgExp.test(originalUrls[index])
-        ) {
-          // 不是占位图的普通url图片直接返回url
-          return new Promise((resolve) => {
-            resolve(originalUrls[index])
-          })
-        }
-        else {
-          const range = this.getImgSelection(pastedDelta, imageIndexs[index])
-          const urls = await this.quill.uploader.getFileUrls([imageFile], range)
-          return urls[0] || undefined
-        }
+        const range = this.getImgSelection(pastedDelta, imageIndexs[index])
+        const urls = await this.quill.uploader.getFileUrls([imageFile], range)
+        return urls[0]
       }),
     )
   }
@@ -275,20 +247,17 @@ export class CustomClipboard extends Clipboard {
   flipFilesArray(filesArr) {
     const files = []
     const placeholders = []
-    const originalUrls = []
     const imageIndexs = []
     filesArr.forEach((item: any) => {
-      if (item) {
-        const [file, placeholder, originalUrl, imageIndex] = item
-        files.push(file)
-        placeholders.push(placeholder)
-        originalUrls.push(originalUrl)
-        if (imageIndex === 0 || imageIndex) {
-          imageIndexs.push(imageIndex)
-        }
+      if (!item) {
+        return
       }
+      const [file, placeholder, imageIndex] = item
+      files.push(file)
+      placeholders.push(placeholder)
+      imageIndexs.push(imageIndex)
     })
-    return [files, placeholders, originalUrls, imageIndexs]
+    return [files, placeholders, imageIndexs]
   }
 
   // 将图片从hex转为base64
@@ -344,47 +313,48 @@ export class CustomClipboard extends Clipboard {
   }
 
   extractFilesFromDelta(delta, clipboardFiles, hexImages?) {
+    const pendingFiles = [...(clipboardFiles || [])]
+    const pendingHexImages = [...(hexImages || [])]
     let index = -1
     return Promise.all(
       delta.map(async (op) => {
         index++
-        const image = op.insert.image
+        const image = typeof op.insert === 'object' ? op.insert?.image : null
         if (!image || image.hasExisted) {
+          return
+        }
+
+        const src = getPasteImageSrc(image)
+        if (isUsablePasteImageSrc(src)) {
           return
         }
 
         let file
         let isPlaceholderImage = false
-        let imageIndex
+        const imageIndex = index
         try {
           // hex 图片存在则为 file:/// 协议本地图片，使用 hex 图片转为 base64 读取
-          const hexImage = hexImages.length && hexImages.shift()
+          const hexImage = pendingHexImages.length && pendingHexImages.shift()
           const newImage
             = hexImage
               && `data:${hexImage.type};base64,${this.convertHexToBase64(
                 hexImage.hex,
               )}`
-          imageIndex = index
-          file = await imageUrlToFile(newImage || image.src || image)
+          if (newImage) {
+            file = await imageUrlToFile(newImage)
+          }
+          else if (pendingFiles.length) {
+            file = pendingFiles.shift()
+          }
+          else if (src) {
+            file = await imageUrlToFile(src)
+          }
         }
         catch (_err) {
-          if (clipboardFiles.length !== 0) {
-            // 跨域获取图片失败时从剪切板获取图片
-            const clipboardFile = clipboardFiles[0]
-            const imageType
-              = clipboardFile.type?.indexOf('image') === -1
-                ? 'image/png'
-                : clipboardFile.type
-            const blob = clipboardFile.slice(0, clipboardFile.size, imageType)
-            file = new File([blob], `image-CORS-${new Date().getTime()}.png`, {
-              type: imageType,
-            })
-          }
-          else if (image.src.startsWith('http')) {
-            // 什么都不做
+          if (pendingFiles.length) {
+            file = pendingFiles.shift()
           }
           else {
-            // 剪切板中无图片，用失败占位图替换
             const errorImagePlaceholderJpg
               = this.quill.getLangText('img-error') === 'Image Copy Error'
                 ? ERROR_IMAGE_PLACEHOLDER_EN
@@ -394,7 +364,10 @@ export class CustomClipboard extends Clipboard {
           }
         }
 
-        return [file, isPlaceholderImage, image, imageIndex]
+        if (!file) {
+          return
+        }
+        return [file, isPlaceholderImage, imageIndex]
       }),
     )
   }
@@ -420,39 +393,6 @@ export class CustomClipboard extends Clipboard {
     }
     return range
   }
-}
-
-function rebuildDelta(delta, cellLine) {
-  const { cell: cellId, colspan, row: rowId, rowspan } = cellLine
-  const buildedDelta = delta.reduce((newDelta, op) => {
-    if (op.insert && typeof op.insert === 'string') {
-      const lines = splitWithBreak(op.insert)
-
-      lines.forEach((text) => {
-        if (text === '\n') {
-          // 对换行增加 table-cell-line 格式，以避免表格断开
-          newDelta.insert('\n', {
-            ...op.attributes,
-            'table-cell-line': { row: rowId, cell: cellId, rowspan, colspan },
-          })
-        }
-        else {
-          text = text.endsWith('\r') ? text.slice(0, -1) : text
-          newDelta.insert(
-            text,
-            omit(op.attributes, ['table', 'table-cell-line']),
-          )
-        }
-      })
-    }
-    else {
-      newDelta.insert(op.insert, op.attributes)
-    }
-
-    return newDelta
-  }, new Delta())
-
-  return buildedDelta
 }
 
 function replaceDeltaWhiteSpace(delta, rootBgColor?) {

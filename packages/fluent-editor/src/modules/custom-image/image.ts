@@ -27,7 +27,7 @@ export class CustomImage extends Embed {
 
   static create(value: ImageValue) {
     const node = super.create(value) as HTMLElement
-    const url = typeof value === 'string' ? value : value.src
+    const url = typeof value === 'string' ? value : value?.src
     if (url) {
       const imgURL = this.sanitize(url)
       if (!imgURL?.startsWith('data:image')) {

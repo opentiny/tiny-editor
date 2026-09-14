@@ -120,6 +120,7 @@ export class FileUploader extends Uploader {
     const accept = this.getAccept(inferredKind)
     const maxSize = this.getMaxSize(inferredKind)
     const mimeOk = accept.some((type) => {
+      if (type === '*') return true
       // 简单区分：带 '/' 的按 MIME，其他按后缀
       if (type.includes('/')) {
         return (file.type || 'text/plain').match(type.replaceAll('*', '.*'))
