@@ -97,7 +97,18 @@ jobs:
   publish:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
+      - name: Setup Node for trusted publishing
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install OIDC-capable npm
+        run: npm install --global npm@11.6.0
+
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
@@ -111,11 +122,8 @@ jobs:
       # 步骤8: 发布组件到NPM
       - name: Publish @opentiny/fluent-editor
         run: |
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
           echo "ls"
           ls
           cd packages/fluent-editor/dist
           ls
           npm publish --tag ${{ inputs.tag }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
