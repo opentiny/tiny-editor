@@ -60,10 +60,7 @@ jobs:
       - name: Setup Node for trusted publishing
         uses: actions/setup-node@v4
         with:
-          node-version: 24
-
-      - name: Install OIDC-capable npm
-        run: npm install --global npm@11.6.0
+          node-version: '>=24.19.0 <25'
 
       - name: Download build artifact
         uses: actions/download-artifact@v4
