@@ -53,7 +53,15 @@ jobs:
   publish:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
+      - name: Setup Node for trusted publishing
+        uses: actions/setup-node@v4
+        with:
+          node-version: '>=24.19.0 <25' # OIDC 需要 Node >=22.14.0 和 npm >=11.5.1；Node 24.5.0 起内置 npm >=11.5.1
+
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
@@ -79,12 +87,9 @@ jobs:
           echo "publish tag: ${{ steps.parse_tag.outputs.dist_tag }}"
       - name: Publish @opentiny/fluent-editor
         run: |
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
           cd packages/fluent-editor/dist
           ls
           npm publish --tag ${{ steps.parse_tag.outputs.dist_tag }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Release
         if: ${{ steps.parse_tag.outputs.dist_tag == 'latest' }}
