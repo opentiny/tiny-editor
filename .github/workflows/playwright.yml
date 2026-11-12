@@ -17,7 +17,8 @@ concurrency:
 jobs:
   test:
     timeout-minutes: 60
-    runs-on: ubuntu-latest
+    # Playwright 1.56.1 不支持 Ubuntu 26.04，固定已验证的运行环境
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
